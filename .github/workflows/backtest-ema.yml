@@ -1,0 +1,117 @@
+# `ema_trend` ön-kayıtlı backtest koşusu — ELLE tetiklenen, SALT OKUNUR iş.
+#
+# Neden `backtest.yml`den ayrı: o, tek bir pencereyi tek bir komutla koşar. Bu koşu ise
+# ön-kayıtta (docs/backtest.md > 6d) sabitlenmiş bir SIRA gerektirir — dönem A, A'dan
+# ölçülen embargo, sonra dönem B — ve o sırayı workflow girdilerine bırakmak, sıranın
+# koşudan koşuya değişebilmesi demekti. Sıra `scripts/backtest_ema.py`dedir ve bu dosya
+# yalnızca onu çağırır.
+#
+# `cron` YOKTUR ve bilinçli olarak yoktur: periyodik bir backtest, docs/backtest.md > 7'nin
+# yasakladığı "sonucu görüp tekrar koşma"yı otomatikleştirirdi.
+#
+# `permissions: contents: read` — bu iş yazamaz. Gerçek defterin (kural 1) bir backtest
+# tarafından değiştirilmesi niyetle değil YETKİYLE imkânsızdır; sonuç dosyaları artifact
+# olarak çıkar ve depoya insan eliyle girer.
+name: backtest-ema
+
+on:
+  workflow_dispatch:
+    inputs:
+      history_bars:
+        description: "Anlık görüntü derinliği (4H'de 12000 bar ≈ 5.5 yıl)"
+        required: false
+        default: "12000"
+      funding_periods:
+        description: "Funding geçmişi derinliği (8 saatlik periyot; 6000 ≈ 5.5 yıl)"
+        required: false
+        default: "6000"
+      b_end:
+        description: "Dönem B sonu (ISO); boş = koşu anı"
+        required: false
+        default: ""
+      symbols:
+        description: "Virgülle sembol listesi; boş = katmanın 13 sembolü"
+        required: false
+        default: ""
+      skip_singles:
+        description: "Yalnızca portföy koşusu (coin tablosu ÜRETİLMEZ) — hata ayıklama"
+        required: false
+        default: "false"
+
+concurrency:
+  group: backtest-ema
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    # 2 dönem × (1 portföy + 13 tek sembol) = 28 koşu ve ilk koşu ~10.000 barlık geçmişi
+    # sembol başına indirir (OKX history-candles istek başına 100 bar). Önbellek ısındıktan
+    # sonra süre indirmeden değil motordan gelir.
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Mum önbelleği koşular arasında TAŞINIR (docs/backtest.md > 5f): `data/` depoya
+      # girmez ve runner her koşuda sıfırdan kurulur, yani önbelleksiz her koşu 4 yıllık
+      # veriyi baştan indirir. Önbellek ölçümü DEĞİŞTİREMEZ: `core/data.py` yalnızca
+      # EKSİK barları çeker ve kapanmamış barı zaten atar (kural 12); bayat bir önbellek
+      # eksik bar üretir, yanlış bar değil — ve eksik bar B-2 kapısında görünür.
+      - name: Restore market data cache
+        uses: actions/cache@v4
+        with:
+          path: data/cache
+          key: market-data-ema-${{ github.run_id }}
+          restore-keys: |
+            market-data-ema-
+            market-data-base-
+
+      - name: Run pre-registered backtest
+        run: |
+          python scripts/backtest_ema.py \
+            --history-bars "${{ inputs.history_bars }}" \
+            --funding-periods "${{ inputs.funding_periods }}" \
+            ${{ inputs.b_end != '' && format('--b-end "{0}"', inputs.b_end) || '' }} \
+            ${{ inputs.symbols != '' && format('--symbols "{0}"', inputs.symbols) || '' }} \
+            ${{ inputs.skip_singles == 'true' && '--skip-singles' || '' }} \
+            --out "backtests/ema" \
+            --results "backtests/ema/backtest_ema_trend.json" \
+            --csv "backtests/ema/backtest_ema_trend.csv" \
+            --site-json "backtests/ema/site.json" \
+            --log-level INFO
+
+      # Sonuç dosyaları log'a da BASILIR ve bu bir kolaylık değil, tek çıkış yolu:
+      # iş salt okunurdur (contents: read), yani sonuç runner'dan ya artifact ya da log
+      # ile çıkar — ve artifact'in blob deposu her ağ politikasından indirilemiyor.
+      # Log'a basılan iki dosya, depoya elle kopyalama olmadan girebilen tam kayıttır;
+      # kırılımlar (yükün en büyük parçası) yalnızca artifact'te kalır.
+      - name: Print result files
+        if: always()
+        run: |
+          echo "=== COIN TABLOSU (CSV) ==="
+          cat backtests/ema/backtest_ema_trend.csv || echo "(yok)"
+          echo "=== SITE YÜKÜ (JSON, kırılımlar hariç) ==="
+          cat backtests/ema/site.json || echo "(yok)"
+
+      - name: Upload results and ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backtest-ema
+          path: backtests/ema
+          if-no-files-found: warn
+          retention-days: 14

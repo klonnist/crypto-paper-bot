@@ -1,0 +1,101 @@
+# Adım 0b — `ema_trend` dönem A yol teşhisi: ELLE tetiklenen, SALT OKUNUR iş.
+#
+# Neden `backtest-ema.yml`den ayrı: o, ön-kayıtlı bir SIRAYI (A → embargo → B) koşar ve
+# karara giren sayıları üretir. Bu iş ise karar üretmez — yalnızca A'nın yol
+# istatistiğini (MFE/MAE, çıkış sebebine göre tutuş süresi, çıkış sonrası devam) ölçer.
+# İkisini tek workflow'a koymak, bir teşhis koşusunun yanlışlıkla dönem B'yi de
+# koşturması demekti; B, varyantların OOS penceresidir ve bu aşamada okunamaz.
+#
+# `cron` YOKTUR: periyodik bir teşhis, docs/backtest.md > 7'nin yasakladığı "sonucu görüp
+# tekrar koşma"yı otomatikleştirirdi.
+#
+# `permissions: contents: read` — bu iş yazamaz (backtest-ema.yml ile aynı gerekçe:
+# gerçek defterin bir teşhis tarafından değiştirilmesi niyetle değil YETKİYLE imkânsız).
+# Sonuç log'a basılır; artifact'in blob deposu her ağ politikasından indirilemiyor.
+name: diagnose-ema-exits
+
+on:
+  workflow_dispatch:
+    inputs:
+      history_bars:
+        description: "Anlık görüntü derinliği (4H'de 12000 bar ≈ 5.5 yıl)"
+        required: false
+        default: "12000"
+      funding_periods:
+        description: "Funding geçmişi derinliği (8 saatlik periyot; 6000 ≈ 5.5 yıl)"
+        required: false
+        default: "6000"
+      models:
+        description: "Virgülle model listesi; boş = katmanın 4 modeli (determinizm için ÖNERİLEN)"
+        required: false
+        default: ""
+
+concurrency:
+  group: diagnose-ema-exits
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    # Tek portföy koşusu; süre pratikte ilk indirmeden gelir (sembol başına ~10.000 bar,
+    # OKX history-candles istek başına 100 bar).
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Önbellek ölçümü DEĞİŞTİREMEZ: `core/data.py` yalnızca EKSİK barları çeker ve
+      # kapanmamış barı zaten atar (kural 12). Bayat bir önbellek eksik bar üretir,
+      # yanlış bar değil — ve eksik bar hem B-2'de hem determinizm kapısında görünür.
+      - name: Restore market data cache
+        uses: actions/cache@v4
+        with:
+          path: data/cache
+          key: market-data-ema-diag-${{ github.run_id }}
+          restore-keys: |
+            market-data-ema-diag-
+            market-data-ema-
+            market-data-base-
+
+      - name: Run period A path diagnostic
+        run: |
+          python scripts/diagnose_ema_exits.py \
+            --history-bars "${{ inputs.history_bars }}" \
+            --funding-periods "${{ inputs.funding_periods }}" \
+            ${{ inputs.models != '' && format('--models "{0}"', inputs.models) || '' }} \
+            --out "backtests/ema-diag-a" \
+            --results "backtests/ema-diag-a/diagnostic_full.json" \
+            --summary "backtests/ema-diag-a/diagnostic_summary.json" \
+            --log-level INFO
+
+      # Özet yük log'a basılır: sonucun bu depoya girmesi pratikte log'dan okunmasına
+      # bağlı (artifact her ortamdan indirilemiyor). Pozisyon satırları özet yükte
+      # YOKTUR — 369 satırlık yol dizisi log'da okunabilir bir boyda değil; o dizi tam
+      # yükte ve artifact'te durmaya devam eder.
+      - name: Print summary payload
+        if: always()
+        run: |
+          echo "=== TEŞHİS ÖZETİ (JSON, pozisyon satırları hariç) ==="
+          cat backtests/ema-diag-a/diagnostic_summary.json || echo "(yok)"
+
+      - name: Upload diagnostic and ledgers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnose-ema-exits
+          path: backtests/ema-diag-a
+          if-no-files-found: warn
+          retention-days: 14

@@ -1,0 +1,86 @@
+# Kayma varsayımının ölçümü — ELLE tetiklenen, SALT OKUNUR iş.
+#
+# Neden bir workflow gerekiyor: `scripts/measure_slippage.py` Bybit'in emir defterini
+# CANLI okur (anlık spread ve derinlik). Bu, geriye dönük üretilemeyen tek veri tipidir
+# (karar 42'nin 4. testi: "anlık spread ve order book derinliği geriye dönük
+# uygulanamaz") — yani ölçüm ancak ağ erişimi olan bir yerde, o an, koşturulabilir.
+#
+# Neden `measure-vwap.yml`e eklenmiyor: o iş model 14'ün sinyal frekansını ölçer ve
+# kendi girdileri vardır. İki ayrı kalibrasyon sorusunu tek işe koymak, birini koşmak
+# için diğerini de koşmak demekti.
+#
+# `cron` YOKTUR ve bilinçli olarak yoktur: bu bir kalibrasyon sorusudur, periyodik bir
+# ölçüm değil. Üstelik periyodik koşmak, `docs/backtest.md > 7`nin yasakladığı "sonucu
+# görüp tekrar koşma"yı otomatikleştirirdi.
+#
+# `permissions: contents: read` — bu iş YAZAMAZ. Script zaten deftere ve `config.yaml`a
+# dokunmaz (CLAUDE.md kural 1/2/3/7), ama niyetle değil YETKİYLE imkânsız olması
+# `backtest.yml`in kurduğu desendir.
+#
+# Çıktı yalnızca adımın log'undadır. Karara giren sayılar `docs/`a ELLE yazılır — bir
+# ölçüm aracının çıktısını otomatik commit etmek, ölçümü yorumdan önce depoya sokardı.
+name: measure-slippage
+
+on:
+  workflow_dispatch:
+    inputs:
+      layer:
+        description: "Katman (SABİT evreni olan biri olmalı; base'in yok)"
+        required: false
+        default: "scalp"
+      venue:
+        description: "Kitabı okunacak borsa (bybit = maliyeti ödeyen taraf)"
+        required: false
+        default: "bybit"
+        type: choice
+        options: ["bybit", "okx"]
+      samples:
+        description: "Sembol başına anlık görüntü sayısı (medyan raporlanır)"
+        required: false
+        default: "20"
+      interval:
+        description: "Örnekler arası bekleme (saniye)"
+        required: false
+        default: "30"
+      notional:
+        description: "Emir boyunu sabitle (USDT); boş = defterden medyan"
+        required: false
+        default: ""
+
+# Ölçüm turlarıyla YARIŞMAZ: kendi grubu, kendi kuyruğu.
+concurrency:
+  group: measure-slippage
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    # samples × interval + ağ payı. 20 × 30s = 10 dk; tavan bunun üç katı.
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Emir boyu DEFTERDEN gelir (sembol başına medyan notional), o yüzden checkout'un
+      # taşıdığı `ledgers_scalp/` şart. Defteri olmayan sembolde script uydurmaz, uyarır.
+      - name: Measure slippage assumption
+        run: |
+          python scripts/measure_slippage.py \
+            --layer "${{ inputs.layer }}" \
+            --venue "${{ inputs.venue }}" \
+            --samples "${{ inputs.samples }}" \
+            --interval "${{ inputs.interval }}" \
+            ${{ inputs.notional != '' && format('--notional "{0}"', inputs.notional) || '' }}

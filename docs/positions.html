@@ -1,0 +1,810 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0d0d0d">
+<link rel="icon" href="data:,">
+<title>Pozisyonlar & işlemler — Paper Trading</title>
+<!--
+  YOĞUN GÖRÜNÜM: açık pozisyonların ve kapanmış işlemlerin tamamı, İKİ KATMAN
+  (4 saatlik `base` ve 15 dakikalık `scalp`) tek sayfada, model filtresiyle.
+
+  Neden iki katman aynı sayfada ama aynı İSTATİSTİKTE değil: bu sayfa bir sıralama
+  tablosu değil, bir DEFTER GÖRÜNÜMÜDÜR — "şu anda ne açık, bugüne kadar ne kapandı"
+  sorusunu cevaplar. Katmanlar arası kıyas yapılmaz (CLAUDE.md > Katmanlar), bu yüzden
+  katman her satırda etiketiyle durur ve ölçüm şeridi KATMAN BAŞINA AYRI bir kart
+  verir; iki katmanın ortalama R'si hiçbir görünümde tek bir sayıda toplanmaz.
+
+  Sayfa ORTALAMA R ve KAZANMA ORANINI HESAPLAMAZ: ikisini de yükten okur
+  (shared.js::statsSlice -> core/metrics.py). Aynı sayının iki yerde hesaplanması,
+  bugün hizalansa bile yarın ayrışır ve aynı model iki sayfada iki farklı kazanma
+  oranı gösterirdi — okuyucuya iki ayrı ölçüm gibi gelirdi (kural 7).
+
+  Tablo bir DOLUM defteridir: kısmi çıkışlar ve fraksiyonel hedefler ayrı satır olarak
+  GÖRÜNÜR ama istatistiğe GİRMEZ ve "DİLİM" etiketiyle durur. Tamamlanmış bir işlem
+  değil, aynı pozisyonun bir dilimidirler; ölçüm onları pozisyon başına birleştirir
+  (core/metrics.py::merge_fills), bu yüzden işlem sayısı satır sayısından az olabilir.
+
+  Ortak tasarım dili ve yardımcılar kardeş dosyalarda: shared.css, shared.js. Harici
+  framework yok, build adımı yok, CDN yok.
+
+  MOBİL: 480px altında tablolar kart düzenine DÖNER (yatay kaydırma değil) — kritik
+  kolon ekran dışına taşarsa sayfa o sayıyı hiç göstermemiş olur. 480px ile tam
+  genişliğin arasındaki ekranlarda tablo KENDİ konteynerinde kayar, sayfa değil.
+-->
+<link rel="stylesheet" href="shared.css">
+<style>
+  /* Yalnızca bu sayfaya özgü: yoğun tablonun kırılımı ve durum rozetleri. */
+
+  /* Tablo ile kart AYNI veriyi iki düzende verir; hangisinin görüneceğine yalnızca
+     genişlik karar verir. Eşik 480px: altında hiçbir tablo düzeni 15 kolonu sayıları
+     kırpmadan veremez, üstünde tablo konteyneri kendi içinde kayar. */
+  .wide { display: none; }
+  .tablewrap {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--hair); border-radius: var(--radius); background: var(--surface);
+  }
+  .tablewrap > table.grid { min-width: 100%; }
+  .tablewrap table.grid th { position: sticky; top: 0; background: var(--surface); z-index: 1; }
+  /* Model adı satırın kimliğidir: sarmaz, kırpılmaz. */
+  table.grid td.model-cell { white-space: nowrap; color: var(--ink); font-weight: 600; }
+  table.grid td.state-cell { white-space: nowrap; }
+  /* Sonuç kolonu: KAZANÇ/KAYIP ayrımı renkle DEĞİL, önce sözle verilir — renk körlüğünde
+     tek başına renk bir sonuç bildiremez. */
+  .outcome { display: inline-flex; align-items: baseline; gap: 6px; white-space: nowrap; }
+  .outcome b { font-size: 10px; letter-spacing: 0.06em; font-weight: 700; }
+  .outcome span { color: var(--ink-muted); font-size: 11px; }
+
+  .filters { display: flex; flex-wrap: wrap; gap: 10px 12px; align-items: flex-end; }
+  .filters .field select { max-width: min(92vw, 320px); }
+  .summary { margin-bottom: 10px; }
+
+  /* Ölçüm kartı KATMAN BAŞINADIR: `layer=all` iken iki kart yan yana değil ALT ALTA
+     durur ve her biri kendi başlığını taşır. Yan yana koymak, iki katmanın sayılarını
+     aynı satırda kıyaslanacak bir çift gibi gösterirdi (CLAUDE.md > Katmanlar). */
+  .measure { margin-bottom: 12px; }
+  .measure-h { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: baseline; margin-bottom: 6px; }
+  .measure-h b { font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+  .measure-h span { color: var(--ink-muted); font-size: 11px; }
+  .measure-note { margin-top: -2px; }
+
+  @media (min-width: 480px) {
+    .wide { display: block; }
+    .narrow { display: none; }
+  }
+</style>
+</head>
+
+<body>
+<div class="wrap wide-page">
+
+  <header class="top">
+    <h1>Pozisyonlar &amp; işlemler <span>— iki katman, tüm modeller</span></h1>
+    <p class="sub" id="stamp">yükleniyor…</p>
+    <div class="chips" id="chips"></div>
+    <nav class="nav">
+      <a href="index.html">← Genel bakış</a>
+      <a href="positions.html" aria-current="page">Pozisyonlar &amp; işlemler</a>
+      <a href="backtest.html">Backtest (ema_trend)</a>
+    </nav>
+    <div id="banner"></div>
+  </header>
+
+  <main>
+    <section id="sec-filters">
+      <h2>Filtre</h2>
+      <div class="filters" id="filters"></div>
+    </section>
+
+    <section id="sec-open">
+      <h2>Açık pozisyonlar</h2>
+      <p class="note" id="open-note"></p>
+      <div id="open-host"></div>
+    </section>
+
+    <section id="sec-closed">
+      <h2>Kapanmış işlemler</h2>
+      <p class="note" id="closed-note"></p>
+      <div id="closed-summary"></div>
+      <div class="controls" id="closed-filters"></div>
+      <div id="closed-host"></div>
+      <div class="pager" id="closed-pager"></div>
+    </section>
+  </main>
+
+  <footer>
+    Veri kaynağı: <a href="data/metrics.json">data/metrics.json</a> (4 saatlik katman) ve
+    <a href="data/metrics_scalp.json">data/metrics_scalp.json</a> (15 dakikalık katman) —
+    her turda <code>main.py</code> üretir, koşu workflow'u defterlerle birlikte commit eder.
+    Denetim izinin kendisi <code>ledgers/</code> ve <code>ledgers_scalp/</code> altındaki
+    <code>trades.csv</code> dosyalarıdır; bu sayfa onların son penceresini çizer.
+    Tüm zamanlar UTC. <span id="foot-extra"></span>
+  </footer>
+
+</div>
+
+<script src="shared.js"></script>
+<script>
+"use strict";
+
+/* ------------------------------------------------------------------ *
+ * Katmanlar. İkisi AYRI yüktür ve ayrı turlarda koşar (config.yaml >
+ * layers): biri okunamıyorsa (katman henüz hiç koşmadı, fork) sayfa
+ * diğerini gösterir ve eksikliği SÖYLER — sessizce boş bir tablo,
+ * "hiç işlem yok" ile "dosya yok"u aynı görüntüye indirirdi.
+ * ------------------------------------------------------------------ */
+const LAYERS = [
+  { key: "base",  file: "data/metrics.json",       label: "4 saat",  note: "ana yarışma" },
+  { key: "scalp", file: "data/metrics_scalp.json", label: "15 dk",   note: "scalp katmanı" },
+];
+
+const TRADE_PAGE_SIZE = 50;
+
+let PAYLOADS = {};        // katman -> yük
+let MISSING = [];         // okunamayan katmanlar
+let POSITIONS = [];       // tüm açık pozisyonlar (katman etiketli)
+let TRADES = [];          // tüm kapanmış işlem satırları (katman etiketli)
+let MODEL_INDEX = [];     // {layer, model, is_replica, is_benchmark}
+let TRADE_WINDOW = [];    // {layer, model, total, shown} — yükün penceresi
+let STYLE = {};           // model -> {color, ...}; docs/shared.js::assignStyles
+
+const view = { layer: "all", model: "all", dir: "all", outcome: "all", from: "", to: "", page: 0 };
+
+/* ------------------------------------------------------------------ *
+ * Yükleme — iki yük paralel okunur, biri düşerse diğeri çizilir.
+ * ------------------------------------------------------------------ */
+Promise.all(LAYERS.map((layer) =>
+  fetchPayload(layer.file)
+    .then((d) => ({ layer, data: d }))
+    .catch(() => ({ layer, data: null }))
+)).then((results) => {
+  for (const { layer, data } of results) {
+    if (data) PAYLOADS[layer.key] = data; else MISSING.push(layer);
+  }
+  if (!Object.keys(PAYLOADS).length) {
+    el("stamp").textContent = "Hiçbir metrics yükü okunamadı.";
+    el("banner").innerHTML =
+      '<div class="banner">Sayfa veriyi <code>data/metrics.json</code> ve ' +
+      '<code>data/metrics_scalp.json</code> dosyalarından okur. Yerelde görmek için depo ' +
+      'kökünde <code>python -m http.server</code> çalıştırın (<code>file://</code> ile fetch ' +
+      'tarayıcı tarafından engellenir).</div>';
+    return;
+  }
+  collect();
+  readHash();
+  renderHeader();
+  renderFilters();
+  renderAll();
+  window.addEventListener("hashchange", () => { readHash(); renderFilters(); renderAll(); });
+});
+
+/* ------------------------------------------------------------------ *
+ * Toplama: iki yükü TEK listeye indirger ama katman etiketini her
+ * satırda taşır — satırın hangi ölçüm koşulundan geldiği kaybolursa
+ * iki katman farkında olmadan aynı istatistikte toplanırdı.
+ * ------------------------------------------------------------------ */
+function collect() {
+  POSITIONS = [];
+  TRADES = [];
+  MODEL_INDEX = [];
+  TRADE_WINDOW = [];
+  const styleModels = [], benchmarks = [], controls = [];
+
+  for (const layer of LAYERS) {
+    const d = PAYLOADS[layer.key];
+    if (!d) continue;
+    const replicaNames = d.replicas || [];
+    const benchNames = d.benchmarks || [];
+    const control = (d.acceptance || {}).control_model || null;
+
+    for (const m of (d.models || [])) {
+      const name = m.model || m.name;
+      MODEL_INDEX.push({
+        layer: layer.key,
+        model: name,
+        is_replica: !!m.is_replica || replicaNames.includes(name),
+        is_benchmark: !!m.is_benchmark || benchNames.includes(name),
+      });
+      styleModels.push(name);
+      if (benchNames.includes(name)) benchmarks.push(name);
+      if (name === control) controls.push(name);
+    }
+
+    for (const p of (d.open_positions || [])) POSITIONS.push({ ...p, layer: layer.key });
+
+    const section = (d.model_trades || {}).models || {};
+    const names = Object.keys(section);
+    if (names.length) {
+      for (const model of names) {
+        const entry = section[model] || {};
+        const rows = entry.trades || [];
+        for (const t of rows) TRADES.push({ ...t, model: t.model || model, layer: layer.key });
+        TRADE_WINDOW.push({
+          layer: layer.key, model,
+          total: num(entry.total) ?? rows.length, shown: rows.length,
+        });
+      }
+    } else {
+      // `model_trades` bölümünden önce üretilmiş bir yük: ortak akış sessizce boş
+      // gösterilmez, elde olan satırlar çizilir ve pencerenin eksik olduğu yazılır.
+      for (const t of (d.recent_trades || [])) TRADES.push({ ...t, layer: layer.key, partialWindow: true });
+    }
+  }
+
+  POSITIONS.sort((a, b) =>
+    (a.model || "").localeCompare(b.model || "") ||
+    String(b.opened_at || "").localeCompare(String(a.opened_at || "")));
+  TRADES.sort((a, b) => String(b.closed_at || "").localeCompare(String(a.closed_at || "")));
+  indexFills();
+  STYLE = assignStyles(styleModels, benchmarks, controls[0] || null);
+}
+
+const layerLabel = (key) => (LAYERS.find((l) => l.key === key) || {}).label || key;
+const modelKey = (row) => row.layer + "::" + row.model;
+
+/* Yükte üç alan bulunmayabilir (bu sayfadan ÖNCE üretilmiş bir metrics.json):
+   durum rozetleri, riske edilen tutar ve çıkışın alt sebebi. Eksikliği "—" ile
+   geçiştirmek, okuyucuya "bu pozisyonda yönetim yok" dedirtirdi; sayfa bunun yerine
+   yükün eski olduğunu söyler. */
+const hasExitState = () => POSITIONS.some((p) => "breakeven_done" in p);
+const hasLeverage = () => TRADES.some((t) => "leverage" in t);
+
+/* ------------------------------------------------------------------ *
+ * Adres çubuğu = görünüm durumu: filtrelenmiş bir görünüm
+ * paylaşılabilir ve geri tuşu çalışır olmalı.
+ * ------------------------------------------------------------------ */
+function readHash() {
+  const raw = (location.hash || "").replace(/^#/, "");
+  const params = new URLSearchParams(raw);
+  view.layer = params.get("layer") || "all";
+  view.model = params.get("model") || "all";
+  view.dir = params.get("dir") || "all";
+  view.outcome = params.get("outcome") || "all";
+  view.from = params.get("from") || "";
+  view.to = params.get("to") || "";
+  view.page = Math.max(0, parseInt(params.get("page") || "0", 10) || 0);
+}
+
+function writeHash(reset) {
+  if (reset) view.page = 0;
+  const params = new URLSearchParams();
+  for (const key of ["layer", "model", "dir", "outcome", "from", "to"]) {
+    if (view[key] && view[key] !== "all") params.set(key, view[key]);
+  }
+  if (view.page) params.set("page", String(view.page));
+  const next = params.toString();
+  // `replaceState` değil `hash`: geri tuşu filtre adımlarını geri almalı.
+  location.hash = next ? "#" + next : "";
+}
+
+/* ------------------------------------------------------------------ *
+ * Başlık
+ * ------------------------------------------------------------------ */
+function renderHeader() {
+  const parts = LAYERS.filter((l) => PAYLOADS[l.key]).map((l) =>
+    l.label + " katmanı son tur " + shortTs(PAYLOADS[l.key].as_of));
+  el("stamp").textContent = parts.join(" · ");
+
+  const chips = [];
+  for (const layer of LAYERS) {
+    const d = PAYLOADS[layer.key];
+    if (!d) continue;
+    const open = (d.open_positions || []).length;
+    const models = (d.models || []).length;
+    chips.push("<b>" + esc(layer.label) + "</b> " + models + " model · " + open + " açık pozisyon");
+  }
+  el("chips").innerHTML = chips.map((c) => '<span class="chip">' + c + "</span>").join("");
+
+  const warnings = MISSING.map((l) =>
+    l.label + " katmanının yükü (<code>" + esc(l.file) + "</code>) okunamadı: o katmanın " +
+    "satırları bu sayfada yok.");
+  const stale = [];
+  if (POSITIONS.length && !hasExitState()) {
+    stale.push("Yükte çıkış yönetimi durumu (başabaş/kısmi/takip) ve riske edilen tutar yok: " +
+      "bu alanlar <code>core/report.py</code>'ye bu sayfayla eklendi ve bir SONRAKİ turda gelir. " +
+      "Durum kolonu o zamana kadar boş kalır — uydurulmaz.");
+  }
+  el("banner").innerHTML = [...warnings, ...stale]
+    .map((text) => '<div class="banner">' + text + "</div>").join("");
+}
+
+/* ------------------------------------------------------------------ *
+ * Filtreler
+ * ------------------------------------------------------------------ */
+function renderFilters() {
+  const layers = LAYERS.filter((l) => PAYLOADS[l.key]);
+  const options = ['<option value="all">tüm modeller</option>'];
+  for (const layer of layers) {
+    const rows = MODEL_INDEX.filter((m) => m.layer === layer.key);
+    if (!rows.length) continue;
+    options.push('<optgroup label="' + esc(layer.label + " — " + layer.note) + '">');
+    for (const m of rows) {
+      const suffix = m.is_benchmark ? " (referans çıpası)" : m.is_replica ? " (dış sistem kopyası)" : "";
+      const key = m.layer + "::" + m.model;
+      options.push('<option value="' + esc(key) + '"' + (view.model === key ? " selected" : "") + ">" +
+        esc(m.model + suffix) + "</option>");
+    }
+    options.push("</optgroup>");
+  }
+
+  const layerSeg = layers.length > 1
+    ? '<div class="field"><span>katman</span><div class="seg" id="layer-seg">' +
+      [["all", "hepsi"], ...layers.map((l) => [l.key, l.label])].map(([key, label]) =>
+        '<button type="button" data-layer="' + esc(key) + '" aria-pressed="' +
+        (view.layer === key) + '">' + esc(label) + "</button>").join("") + "</div></div>"
+    : "";
+
+  el("filters").innerHTML =
+    layerSeg +
+    '<div class="field"><span>model</span><select id="model-select">' + options.join("") + "</select></div>" +
+    '<div class="field"><span>tarih (kapanış) başlangıç</span>' +
+      '<input type="date" id="from-date" value="' + esc(view.from) + '"></div>' +
+    '<div class="field"><span>bitiş</span>' +
+      '<input type="date" id="to-date" value="' + esc(view.to) + '"></div>' +
+    '<button type="button" class="linkbtn" id="reset">filtreleri sıfırla</button>';
+
+  const seg = el("layer-seg");
+  if (seg) {
+    seg.querySelectorAll("button[data-layer]").forEach((button) => {
+      button.addEventListener("click", () => {
+        view.layer = button.dataset.layer;
+        // Katman değişince başka bir katmanın modeli seçili kalamaz.
+        if (view.model !== "all" && view.layer !== "all" && !view.model.startsWith(view.layer + "::")) {
+          view.model = "all";
+        }
+        writeHash(true);
+      });
+    });
+  }
+  el("model-select").addEventListener("change", (ev) => {
+    view.model = ev.target.value;
+    if (view.model !== "all") view.layer = view.model.split("::")[0];
+    writeHash(true);
+  });
+  el("from-date").addEventListener("change", (ev) => { view.from = ev.target.value; writeHash(true); });
+  el("to-date").addEventListener("change", (ev) => { view.to = ev.target.value; writeHash(true); });
+  el("reset").addEventListener("click", () => {
+    view.layer = "all"; view.model = "all"; view.dir = "all"; view.outcome = "all";
+    view.from = ""; view.to = ""; writeHash(true);
+  });
+}
+
+const matchesScope = (row) =>
+  (view.layer === "all" || row.layer === view.layer) &&
+  (view.model === "all" || modelKey(row) === view.model);
+
+function renderAll() {
+  renderOpen();
+  renderClosed();
+}
+
+/* ================================================================== *
+ * AÇIK POZİSYONLAR
+ * ================================================================== */
+const OPEN_COLUMNS = [
+  "model", "sembol", "yön", "giriş", "anlık fiyat", "anlık K/Z", "anlık R",
+  "TP", "SL", "durum", "kaldıraç", "margin", "riske edilen", "funding", "açılış (UTC)",
+];
+
+/* Hedefler KALAN hedeflerdir: dolmuş bir kısmi TP pozisyondan düşülür
+   (core/portfolio.py), yani kolon "bundan sonra ne bekleniyor"u gösterir. */
+function targetHtml(position) {
+  const targets = position.take_profits || [];
+  if (!targets.length) return DASH;
+  return targets.map((tp) => {
+    const fraction = num(tp.fraction);
+    const text = price(tp.price) + (fraction !== null && fraction < 1 ? " (%" + (fraction * 100).toFixed(0) + ")" : "");
+    return '<span class="nw">' + esc(text) + "</span>";
+  }).join(" / ");
+}
+
+function stopHtml(position) {
+  if (position.stop_price == null) return DASH;   // stop'suz referans çıpası (kural 15)
+  const moved = position.stop_moved;
+  return '<span class="nw">' + esc(price(position.stop_price)) + "</span>" +
+    (moved ? ' <span class="tag" title="ilk stop: ' + esc(price(position.initial_stop_price)) +
+      '">taşındı</span>' : "");
+}
+
+/* Durum rozetleri: mekanizma BİLDİRİLMİŞSE görünür, TETİKLENMİŞSE yanar.
+   Bildirilmemiş bir mekanizmayı "kapalı" diye çizmek, üç aşamalı çıkış yönetimini
+   hiç kullanmayan bir modeli kullanıyormuş gibi gösterirdi (kural 13b: alanların
+   varsayılanı None'dır ve doldurmayan model bu yetenekten etkilenmez). */
+function stateHtml(position) {
+  if (!("breakeven_done" in position)) return DASH;
+  const badges = [];
+  if (position.breakeven_at_r != null) {
+    badges.push([position.breakeven_done, "BE",
+      "başabaş: " + fmt(position.breakeven_at_r, 1) + "R'da stop girişe çekilir"]);
+  }
+  if (position.partial_tp) {
+    const tp = position.partial_tp;
+    badges.push([position.partial_done, "KISMİ",
+      "kısmi çıkış: " + fmt(tp.r, 1) + "R'da %" + fmt((num(tp.fraction) || 0) * 100, 0)]);
+  }
+  if (position.trailing_atr != null) {
+    badges.push([true, "TAKİP", "ATR takip eden stop: " + fmt(position.trailing_atr, 1) + "×ATR"]);
+  } else if (position.trail_giveback_pct != null) {
+    badges.push([!!position.trailing_active,
+      "TAKİP", "geri verme takibi: kazancın en çok %" +
+      fmt((num(position.trail_giveback_pct) || 0) * 100, 0) + "'i (kısmi çıkıştan SONRA)"]);
+  }
+  if (!badges.length) return DASH;
+  return '<span class="badges">' + badges.map(([on, label, title]) =>
+    '<span class="badge ' + (on ? "on" : "off") + '" title="' + esc(title) + '">' +
+    esc(label) + "</span>").join("") + "</span>";
+}
+
+const modelCell = (row) =>
+  '<span class="swatch" style="background:' + esc((STYLE[row.model] || {}).color || "#898781") + '"></span>' +
+  esc(row.model) + '<span class="tag">' + esc(layerLabel(row.layer)) + "</span>";
+
+function renderOpen() {
+  const rows = POSITIONS.filter(matchesScope);
+  const host = el("open-host");
+  const unmarked = rows.some((p) => p.marked === false);
+
+  el("open-note").innerHTML =
+    "<b>" + rows.length + " açık pozisyon</b> — anlık K/Z ve anlık R, pozisyonun " +
+    "<code>as_of</code> barındaki kapanışla işaretlenmesinden gelir ve <b>çıkış maliyetini " +
+    "İÇERMEZ</b>: pozisyon kapanmadığı için çıkış fiyatı da komisyonu da bilinmez. " +
+    "<b>Anlık R</b> = anlık K/Z ÷ giriş anındaki 1R (ilk stop'tan); stop'suz referans " +
+    "pozisyonda tanımsızdır. Riske edilen tutar = <code>boyut × |giriş − ilk stop|</code>, " +
+    "margin = pozisyonun bağladığı teminat — ikisi farklı sorulardır." +
+    (unmarked ? " <b>*</b> işaretli fiyat: sembolün <code>as_of</code> barı anlık görüntüde " +
+      "yoktu, pozisyon giriş fiyatından işaretlendi." : "");
+
+  if (!rows.length) {
+    host.innerHTML = '<p class="empty">Bu filtreyle açık pozisyon yok.</p>';
+    return;
+  }
+
+  const table = '<div class="tablewrap wide"><table class="grid"><thead><tr>' +
+    OPEN_COLUMNS.map((c) => "<th>" + esc(c) + "</th>").join("") +
+    "</tr></thead><tbody>" + rows.map((p) => {
+      const cells = [
+        ["model-cell", modelCell(p)],
+        ["symcell", esc(p.symbol)],
+        ["", dirBadge(p.direction)],
+        ["", esc(price(p.entry_price))],
+        ["", esc(price(p.mark_price) + (p.marked === false ? " *" : ""))],
+        [signClass(p.pnl), esc(usd(p.pnl))],
+        [signClass(p.r), esc(fmtSigned(p.r))],
+        ["wrapcell", targetHtml(p)],
+        ["wrapcell", stopHtml(p)],
+        ["state-cell", stateHtml(p)],
+        ["", esc(p.leverage == null ? DASH : fmt(p.leverage, 2) + "×")],
+        ["", esc(fmt(p.margin))],
+        ["", esc(fmt(p.risk_amount))],
+        [signClass(p.funding), esc(usd(p.funding))],
+        ["", esc(fullTs(p.opened_at))],
+      ];
+      return '<tr class="data">' + cells.map(([cls, value]) =>
+        '<td class="' + cls + '">' + value + "</td>").join("") + "</tr>" +
+        (p.reason
+          ? '<tr><td class="reason-cell" colspan="' + OPEN_COLUMNS.length + '">' + esc(p.reason) + "</td></tr>"
+          : "");
+    }).join("") + "</tbody></table></div>";
+
+  const cards = '<div class="rows narrow">' + rows.map((p) => {
+    const fields = [
+      ["giriş", esc(price(p.entry_price))],
+      ["anlık fiyat", esc(price(p.mark_price) + (p.marked === false ? " *" : ""))],
+      ["anlık R", esc(fmtSigned(p.r))],
+      ["TP", targetHtml(p), true],
+      ["SL", stopHtml(p), true],
+      ["durum", stateHtml(p), true],
+      ["kaldıraç", esc(p.leverage == null ? DASH : fmt(p.leverage, 2) + "×")],
+      ["margin", esc(fmt(p.margin))],
+      ["riske edilen", esc(fmt(p.risk_amount))],
+      ["funding", esc(usd(p.funding))],
+      ["açılış (UTC)", esc(fullTs(p.opened_at))],
+    ];
+    return '<article class="row">' +
+      '<div class="row-top"><div>' +
+        '<span class="row-sym">' + esc(p.symbol) + "</span> " + dirBadge(p.direction) +
+        '<div class="row-model">' + modelCell(p) + "</div>" +
+      "</div>" +
+      '<div style="text-align:right">' +
+        '<div class="row-val ' + signClass(p.pnl) + '">' + esc(usd(p.pnl)) + "</div>" +
+        '<div class="row-val-sub ' + signClass(p.pnl_pct) + '">' + esc(fmtSigned(p.pnl_pct)) + "%</div>" +
+      "</div></div>" +
+      '<div class="row-grid">' + fields.map(([k, v, html]) =>
+        "<div><span>" + esc(k) + "</span> <b>" + (html ? v : '<span class="nw">' + v + "</span>") + "</b></div>"
+      ).join("") + "</div>" +
+      (p.reason ? '<div class="reason">' + esc(p.reason) + "</div>" : "") +
+      "</article>";
+  }).join("") + "</div>";
+
+  host.innerHTML = table + cards;
+}
+
+/* ================================================================== *
+ * KAPANMIŞ İŞLEMLER
+ * ================================================================== */
+const CLOSED_COLUMNS = [
+  "model", "sembol", "yön", "sonuç", "giriş", "çıkış", "miktar", "kaldıraç",
+  "K/Z", "komisyon", "funding", "R", "açılış (UTC)", "kapanış (UTC)",
+];
+
+/* Satır tamamlanmış bir işlem mi, yoksa bir pozisyonun DİLİMİ mi.
+   İki kaynağı var ve ikisi de gerekli:
+   - `exit_reason == "partial"`: üç aşamalı çıkışın kısmi dolumu (modeller 13/14/15).
+   - Aynı pozisyonun birden çok satırı: `avwap` iki TP seviyesi, `downtrend_rally`
+     yarım TP kullanır; bunlar "tp" kodu taşır, "partial" değil. Yalnızca ilk ölçüte
+     bakmak o modellerin dilimlerini tamamlanmış işlem gibi gösterirdi.
+   Pozisyonu KAPATAN son dolum tamamlanmış işlemdir; ondan öncekiler dilimdir.
+   `PARTIAL_FILLS` yüklenen pencere üzerinden kurulur (bkz. collect). */
+let PARTIAL_FILLS = new Set();
+const fillKey = (t) =>
+  [t.layer, t.model, t.symbol, t.direction, t.opened_at].join(" ");
+const rowId = (t) => fillKey(t) + " " + t.closed_at + " " + t.exit_reason;
+
+function indexFills() {
+  const byPosition = new Map();
+  for (const t of TRADES) {
+    if (!t.opened_at) continue;   // kimliği olmayan satır kendi başına bir pozisyondur
+    const key = fillKey(t);
+    if (!byPosition.has(key)) byPosition.set(key, []);
+    byPosition.get(key).push(t);
+  }
+  PARTIAL_FILLS = new Set();
+  for (const fills of byPosition.values()) {
+    if (fills.length < 2) continue;
+    // TRADES yeniden eskiye sıralı: pozisyonu kapatan dolum listenin BAŞINDADIR.
+    for (const t of fills.slice(1)) PARTIAL_FILLS.add(rowId(t));
+  }
+}
+
+const isPartial = (t) =>
+  (t.is_partial === true) || t.exit_reason === "partial" || PARTIAL_FILLS.has(rowId(t));
+
+/* KAZANÇ/KAYIP ölçütü net K/Z'dir, R değil: R'si olmayan bir işlem de (stop'suz
+   referans pozisyon) kazanmış ya da kaybetmiş olabilir. */
+function outcomeHtml(t) {
+  const pnl = num(t.pnl);
+  if (isPartial(t)) {
+    // Dilim bir sonuç DEĞİLDİR: kalanı hâlâ açıktı ve pozisyonun sonucu son dolumda
+    // belli olur. KAZANÇ/KAYIP yazmak, kârda gerçekleşen bir kısmi çıkışı tamamlanmış
+    // bir kazanç gibi gösterirdi.
+    return '<span class="outcome" title="Pozisyonun bir dilimi — istatistiğe dahil değil">' +
+      '<b class="badge info">DİLİM</b><span>' + esc(exitText(t)) +
+      ' · istatistiğe dahil değil</span></span>';
+  }
+  const label = pnl === null ? DASH : (pnl > 0 ? "KAZANÇ" : pnl < 0 ? "KAYIP" : "BAŞABAŞ");
+  return '<span class="outcome"><b class="' + signClass(pnl) + '">' + esc(label) + "</b>" +
+    '<span class="' + exitClass(t.exit_reason) + '">' + esc(exitText(t)) + "</span></span>";
+}
+
+function filteredTrades() {
+  return TRADES.filter((t) => {
+    if (!matchesScope(t)) return false;
+    if (view.dir !== "all" && t.direction !== view.dir) return false;
+    if (view.from && dayKey(t.closed_at) < view.from) return false;
+    if (view.to && dayKey(t.closed_at) > view.to) return false;
+    if (view.outcome === "partial") return isPartial(t);
+    if (view.outcome === "win") return !isPartial(t) && (num(t.pnl) || 0) > 0;
+    if (view.outcome === "loss") return !isPartial(t) && (num(t.pnl) || 0) < 0;
+    return true;
+  });
+}
+
+/* ------------------------------------------------------------------ *
+ * Ölçüm bu sayfada HESAPLANMAZ, yükten okunur (shared.js::statsSlice).
+ *
+ * Ortalama R ve kazanma oranı `core/metrics.py`nin tanımlarıdır: birim
+ * POZİSYONDUR, dolum değil — kısmi çıkış ve fraksiyonel TP satırları
+ * orada tek pozisyona indirgenir. Aynı hesabı burada ikinci kez kurmak,
+ * bugün hizalansa bile yarın ayrışırdı (birinin kısmi çıkışı sayması
+ * yeter) ve aynı model iki sayfada iki farklı kazanma oranı gösterirdi.
+ * Tablo defterin satırlarını çizer; şerit ölçümü söyler. İkisi farklı
+ * sorulardır ve sayfa ikisini ayrı ayrı yazar.
+ *
+ * KATMAN BAŞINA AYRI KART: `layer=all` iken iki katmanın R'sini tek
+ * ortalamada toplamak, dashboard'ın ayrı tablolarla engellediği
+ * katmanlar arası kıyası sayfanın ilk ekranında yapmak olurdu
+ * (CLAUDE.md > Katmanlar: "Katmanlar arası kıyas YAPILMAZ").
+ * ------------------------------------------------------------------ */
+function measurementCards() {
+  const cards = [];
+  for (const layer of LAYERS) {
+    const payload = PAYLOADS[layer.key];
+    if (!payload) continue;
+    if (view.layer !== "all" && view.layer !== layer.key) continue;
+    let model = null;
+    if (view.model !== "all") {
+      const parts = String(view.model).split("::");
+      if (parts[0] !== layer.key) continue;   // seçili model başka katmanda
+      model = parts[1];
+    }
+    const stats = statsSlice(payload, model, view.dir);
+    if (stats) cards.push({ layer, model, stats });
+  }
+  return cards;
+}
+
+/* Yükün cevaplayamadığı filtreler: ölçüm defterin TAMAMI üzerinden hesaplanır,
+   satır filtresini izlemez. Sessiz kalmak, okuyucuya "seçtiğim aralığın ortalaması"
+   dedirtirdi. */
+const rowOnlyFilterActive = () => view.outcome !== "all" || !!view.from || !!view.to;
+
+function renderMeasurement() {
+  const cards = measurementCards();
+  const host = el("closed-summary");
+  if (!cards.length) {
+    host.innerHTML = '<p class="empty">Bu kapsamda ölçüm yok.</p>';
+    return;
+  }
+  const dirText = view.dir === "all" ? "long + short" : view.dir;
+  host.innerHTML = cards.map(({ layer, model, stats }) => {
+    const measured = (num(stats.trades) || 0) > 0;
+    const scope = model
+      ? esc(model)
+      : "yarışmacı havuzu (" + (stats.models || []).length + " model)";
+    // Havuz çıpayı ve kopyayı DIŞARIDA bırakır (kural 15/15b): R'leri ya yoktur ya
+    // başka birimdedir. Tablo onların satırlarını yine gösterir; fark söylenmezse
+    // okuyucu şeridi tablonun özeti sanardı.
+    const caveat = model
+      ? ""
+      : " — çıpa ve dış sistem kopyası havuza girmez, tabloda görünür";
+    const tiles = [
+      ["işlem (pozisyon)", measured ? String(num(stats.trades)) : DASH, ""],
+      // İşlem yoksa net K/Z "0.00" DEĞİL "—"dir: sıfır, "işlem oldu ve tam başabaş
+      // bitti" demektir (core/metrics.py'nin nan kuralının aynısı).
+      ["net K/Z (USDT)", measured ? usd(stats.pnl) : DASH, measured ? signClass(stats.pnl) : ""],
+      ["ortalama R", fmtSigned(stats.avg_r), signClass(stats.avg_r)],
+      ["kazanma oranı", pct(stats.win_rate), ""],
+    ];
+    return '<div class="measure"><div class="measure-h"><b>' + esc(layer.label) +
+      '</b> <span>' + scope + " · " + esc(dirText) + esc(caveat) + "</span></div>" +
+      '<div class="strip summary">' + tiles.map(([k, v, cls]) =>
+        '<div><div class="tile-k">' + esc(k) + '</div><div class="tile-v ' + cls + '">' +
+        esc(v) + "</div></div>").join("") + "</div></div>";
+  }).join("") +
+  (rowOnlyFilterActive()
+    ? '<p class="note measure-note">Sonuç ve tarih filtreleri yalnızca <b>tabloyu</b> ' +
+      "daraltır: yukarıdaki ölçüm defterin tamamından gelir (<code>core/metrics.py</code>) " +
+      "ve bir alt kümenin ortalaması değildir.</p>"
+    : "");
+}
+
+function renderClosed() {
+  const rows = filteredTrades();
+  const partials = rows.filter(isPartial).length;
+  const scoped = TRADE_WINDOW.filter((w) =>
+    (view.layer === "all" || w.layer === view.layer) &&
+    (view.model === "all" || w.layer + "::" + w.model === view.model));
+  const total = scoped.reduce((sum, w) => sum + w.total, 0);
+  const shown = scoped.reduce((sum, w) => sum + w.shown, 0);
+  const windowPartial = TRADES.some((t) => t.partialWindow);
+
+  el("closed-note").innerHTML =
+    "Yeniden eskiye, " + TRADE_PAGE_SIZE + "'şer — bu tablo <b>dolum</b> defteridir. " +
+    "<b>Kısmi çıkış ve fraksiyonel hedef satırları ayrı satır olarak listelenir ve " +
+    "istatistiğe DAHİL EDİLMEZ</b>: tamamlanmış işlem değil, aynı pozisyonun dilimidirler. " +
+    "Yukarıdaki ölçüm onları pozisyon başına birleştirir (<code>core/metrics.py</code>), " +
+    "bu yüzden <b>işlem sayısı tablodaki satır sayısından az olabilir</b>. " +
+    "<b>R</b> = net K/Z ÷ dilimin gerçekleşen 1R'si (giriş anındaki ilk stop'tan); " +
+    "pozisyonun R'si dilimlerin ortalaması değil, Σpnl ÷ Σrisk'tir. " +
+    "Bu kapsamda <b>" + rows.length + "</b> satır var, <b>" + partials + "</b> tanesi kısmi. " +
+    (total > shown
+      ? "Defterde <b>" + total + "</b> satır var, yükte son <b>" + shown + "</b> tanesi; " +
+        "tamamı <code>ledgers*/&lt;model&gt;/trades.csv</code>'de."
+      : "Bu kapsamda defterdeki <b>" + total + "</b> satırın tamamı yükte.") +
+    (windowPartial
+      ? " <b>Uyarı:</b> yüklerden biri <code>model_trades</code> bölümünden önce üretilmiş; " +
+        "o katman için yalnızca ortak akışa giren son işlemler görünüyor."
+      : "") +
+    (hasLeverage() ? "" : " Kaldıraç kolonu bu yükte yok, bir sonraki turda gelir.");
+
+  renderMeasurement();
+  renderClosedFilters(rows.length);
+
+  const pages = Math.max(1, Math.ceil(rows.length / TRADE_PAGE_SIZE));
+  if (view.page >= pages) view.page = pages - 1;
+  const start = view.page * TRADE_PAGE_SIZE;
+  const page = rows.slice(start, start + TRADE_PAGE_SIZE);
+  const host = el("closed-host");
+
+  if (!page.length) {
+    host.innerHTML = '<p class="empty">Bu filtreyle kapanmış işlem yok.</p>';
+    el("closed-pager").innerHTML = "";
+    return;
+  }
+
+  const table = '<div class="tablewrap wide"><table class="grid"><thead><tr>' +
+    CLOSED_COLUMNS.map((c) => "<th>" + esc(c) + "</th>").join("") +
+    "</tr></thead><tbody>" + page.map((t) => {
+      const cells = [
+        ["model-cell", modelCell(t)],
+        ["symcell", esc(t.symbol)],
+        ["", dirBadge(t.direction)],
+        ["wrapcell", outcomeHtml(t)],
+        ["", esc(price(t.entry_price))],
+        ["", esc(price(t.exit_price))],
+        ["", esc(qty(t.qty))],
+        ["", esc(t.leverage == null ? DASH : fmt(t.leverage, 2) + "×")],
+        [signClass(t.pnl), esc(usd(t.pnl))],
+        ["", esc(fmt(t.fee))],
+        [signClass(t.funding), esc(usd(t.funding))],
+        [signClass(t.r), esc(fmtSigned(t.r))],
+        ["", esc(fullTs(t.opened_at))],
+        ["", esc(fullTs(t.closed_at))],
+      ];
+      return '<tr class="data">' + cells.map(([cls, value]) =>
+        '<td class="' + cls + '">' + value + "</td>").join("") + "</tr>" +
+        (t.reason
+          ? '<tr><td class="reason-cell" colspan="' + CLOSED_COLUMNS.length + '">' + esc(t.reason) + "</td></tr>"
+          : "");
+    }).join("") + "</tbody></table></div>";
+
+  const cards = '<div class="rows narrow">' + page.map((t) => {
+    const fields = [
+      ["giriş", esc(price(t.entry_price))],
+      ["çıkış", esc(price(t.exit_price))],
+      ["miktar", esc(qty(t.qty))],
+      ["kaldıraç", esc(t.leverage == null ? DASH : fmt(t.leverage, 2) + "×")],
+      ["komisyon", esc(fmt(t.fee))],
+      ["kayma", esc(fmt(t.slippage_cost))],
+      ["funding", esc(usd(t.funding))],
+      ["1R (USDT)", esc(fmt(t.risk_amount))],
+      ["açılış (UTC)", esc(fullTs(t.opened_at))],
+      ["kapanış (UTC)", esc(fullTs(t.closed_at))],
+    ];
+    return '<article class="row">' +
+      '<div class="row-top"><div>' +
+        '<span class="row-sym">' + esc(t.symbol) + "</span> " + dirBadge(t.direction) +
+        '<div class="row-model">' + modelCell(t) + "</div>" +
+        "<div>" + outcomeHtml(t) + "</div>" +
+      "</div>" +
+      '<div style="text-align:right">' +
+        '<div class="row-val ' + signClass(t.r) + '">' + esc(fmtSigned(t.r)) + "R</div>" +
+        '<div class="row-val-sub ' + signClass(t.pnl) + '">' + esc(usd(t.pnl)) + " USDT</div>" +
+      "</div></div>" +
+      '<div class="row-grid">' + fields.map(([k, v]) =>
+        "<div><span>" + esc(k) + '</span> <b><span class="nw">' + v + "</span></b></div>").join("") + "</div>" +
+      (t.reason ? '<div class="reason">' + esc(t.reason) + "</div>" : "") +
+      "</article>";
+  }).join("") + "</div>";
+
+  host.innerHTML = table + cards;
+
+  el("closed-pager").innerHTML =
+    '<button type="button" id="page-prev"' + (view.page === 0 ? " disabled" : "") + ">← daha yeni</button>" +
+    '<span class="count">' + (start + 1) + "–" + (start + page.length) + " / " + rows.length +
+    " · sayfa " + (view.page + 1) + "/" + pages + "</span>" +
+    '<button type="button" id="page-next"' + (view.page >= pages - 1 ? " disabled" : "") + ">daha eski →</button>";
+  const step = (delta) => {
+    view.page += delta;
+    writeHash(false);
+    el("sec-closed").scrollIntoView({ block: "start" });
+  };
+  el("page-prev").addEventListener("click", () => step(-1));
+  el("page-next").addEventListener("click", () => step(1));
+}
+
+function renderClosedFilters(count) {
+  const segment = (key, choices) => '<div class="seg" data-key="' + key + '">' +
+    choices.map(([value, label]) =>
+      '<button type="button" data-value="' + esc(value) + '" aria-pressed="' +
+      (view[key] === value) + '">' + esc(label) + "</button>").join("") + "</div>";
+
+  el("closed-filters").innerHTML =
+    segment("dir", [["all", "her yön"], ["long", "long"], ["short", "short"]]) +
+    segment("outcome", [["all", "hepsi"], ["win", "kazanç"], ["loss", "kayıp"], ["partial", "kısmi"]]) +
+    '<span class="pager count">' + count + " satır</span>";
+
+  el("closed-filters").querySelectorAll(".seg").forEach((seg) => {
+    seg.querySelectorAll("button[data-value]").forEach((button) => {
+      button.addEventListener("click", () => {
+        view[seg.dataset.key] = button.dataset.value;
+        writeHash(true);
+      });
+    });
+  });
+}
+</script>
+</body>
+</html>

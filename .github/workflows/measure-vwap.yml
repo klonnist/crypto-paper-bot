@@ -1,0 +1,80 @@
+# Model 14'ün sinyal frekansı ölçümü — TEK SEFERLİK, ELLE tetiklenen, SALT OKUNUR iş.
+#
+# Neden ayrı bir workflow: `run.yml` ve `run-scalp.yml` ölçümün kendisini koşar ve deftere
+# YAZAR. Bu iş hiçbir şeye yazmaz — defter, metrics, state, commit, push: hiçbiri yok.
+# Ölçüm turlarının workflow'una bir adım eklemek, bir kalibrasyon sorusunun turu
+# düşürebilmesi ve ölçümün kaydedilmesini geciktirmesi demekti (aynı gerekçe: bildirim
+# adımlarının defter commit'inden SONRA gelmesi).
+#
+# `cron` YOKTUR ve bilinçli olarak yoktur: bu bir kalibrasyon sorusudur, periyodik bir
+# ölçüm değil. Sorunun cevabı verildiğinde iş de kaldırılabilir.
+#
+# Çıktı iki yerdedir: adımın log'u (tablolar) ve artifact (ham z noktaları CSV). İkisi de
+# depoya girmez.
+name: measure-vwap
+
+on:
+  workflow_dispatch:
+    inputs:
+      days:
+        description: "Ölçüm penceresi (gün)"
+        required: false
+        default: "60"
+      stop_scales:
+        description: "Süpürülecek vwap.managed.atr_multiple değerleri"
+        required: false
+        default: "1.5,2.0,2.5,3.0,4.0,5.0"
+      bands:
+        description: "Ek band_mult süpürmesi (boş = yapma)"
+        required: false
+        default: ""
+      verify:
+        description: "Kaç barda vwap_signal.scan() ile karşılaştırılsın (0 = atla)"
+        required: false
+        default: "200"
+
+# Ölçüm turlarıyla YARIŞMAZ: kendi grubu, kendi kuyruğu. run.yml/run-scalp.yml'nin
+# concurrency grubuna girmek, bir kalibrasyon koşusunun bir ölçüm turunu iptal etmesi
+# demekti.
+concurrency:
+  group: measure-vwap
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Measure model 14 signal frequency
+        run: |
+          python scripts/measure_vwap_signal.py \
+            --days "${{ inputs.days }}" \
+            --stop-scales "${{ inputs.stop_scales }}" \
+            ${{ inputs.bands != '' && format('--bands "{0}"', inputs.bands) || '' }} \
+            --verify "${{ inputs.verify }}" \
+            --csv "measurement/z_points.csv" \
+            --log-level INFO
+
+      - name: Upload raw z points
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vwap-z-points
+          path: measurement/z_points.csv
+          if-no-files-found: warn
+          retention-days: 14

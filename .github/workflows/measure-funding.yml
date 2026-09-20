@@ -1,0 +1,108 @@
+# Fonlama veri yolunun ELLE tetiklenen, SALT OKUNUR işleri. İKİ adım, İKİ ayrı soru:
+#
+#   A) DERİNLİK PROBE'u (`scripts/probe_funding_depth.py`) — *dönem A'nın fonlama
+#      geçmişine OKX'in kendi yollarından ULAŞILABİLİYOR MU?* Bir dağılım göstermez,
+#      bir eşik önermez; yalnızca meta veri (durum, kayıt sayısı, zaman damgası) basar.
+#   B) DAĞILIM ÖLÇÜMÜ (`scripts/measure_funding.py`) — *hangi eşikte kaç olay var?*
+#
+# Sıra tesadüf değil: (B) bugün veri yolunda duruyor (karar 50) ve (A) tam olarak o
+# engelin teşhisidir. Bu yüzden probe VARSAYILAN OLARAK AÇIK, ölçüm VARSAYILAN OLARAK
+# KAPALIDIR — arşiv işi docs/backtest.md > 6f'nin kapılarını geçmeden (B)'yi koşturmak,
+# 60 günlük bir pencereyle 30 aylık bir soruyu cevaplamaya çalışmaktır.
+#
+# Neden probe üçüncü bir workflow değil: bu dosya zaten "fonlama verisi, salt okunur,
+# cron yok, contents: read" işidir ve probe tam olarak buradaki ölçümün önünü açmaya
+# çalışıyor. Ayrı bir dosya, bir soruyu onu cevaplayacak araçtan ayırırdı.
+#
+# `backtest-ema.yml`den ayrı kalmasının gerekçesi ise DEĞİŞMEDİ: o ön-kayıtlı bir SIRAYI
+# koşar (dönem A → embargo → dönem B) ve karara giren sayıları üretir. Buradaki iki adım
+# da karar üretmez ve dönem B'ye DOKUNMAZ — ölçüm betiği `--end` dönem A kesimini aşarsa
+# hata koduyla biter, probe ise yalnızca damga sayar, oran OKUMAZ (kaynağında oran alanının
+# adı bile geçmez; test: tests/test_probe_funding_depth.py).
+#
+# Hiçbir adım bir şeye YAZMAZ — defter, metrics, config, state, commit, push: hiçbiri yok.
+# `permissions: contents: read` bunu niyetle değil YETKİYLE garanti eder (aynı gerekçe
+# `backtest.yml`de).
+#
+# `cron` YOKTUR ve bilinçli olarak yoktur (docs/backtest.md > 7): periyodik bir dağılım
+# koşusu, "sonucu görüp tekrar koşma"yı otomatikleştirirdi.
+#
+# Çıktı YALNIZCA adımların log'udur. Depoya hiçbir dosya girmez.
+name: measure-funding
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_probe:
+        description: "A) Derinlik probe'unu koş (dönem A'ya ulaşılıyor mu?)"
+        type: boolean
+        required: false
+        default: true
+      probe_symbols:
+        description: "Probe'un sembolleri (boşlukla ayrılmış)"
+        required: false
+        default: "BTC-USDT-SWAP SUI-USDT-SWAP"
+      run_measure:
+        description: "B) Dağılım ölçümünü koş (arşiv kapıları geçilmeden ANLAMSIZDIR)"
+        type: boolean
+        required: false
+        default: false
+      window_periods:
+        description: "B'nin göreli eşik penceresi (periyot; 270 = 90 gün)"
+        required: false
+        default: "270"
+      symbols:
+        description: "B'nin evren alt kümesi (boşlukla ayrılmış; boş = ema katmanının 13 sembolü)"
+        required: false
+        default: ""
+
+# Ölçüm turlarıyla YARIŞMAZ: kendi grubu, kendi kuyruğu.
+concurrency:
+  group: measure-funding
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # A) Probe ÖNCE koşar ve kendi içinde de A-2'yi (OKX'in tarihsel veri portalı)
+      # A-1'den (sayfalama mekaniği) önce dener: portal erişilebilirse (a)/(b) ayrımı
+      # gereksizdir, çünkü portal zaten OKX-içi bir yoldur (docs/backtest.md > 6f).
+      #
+      # Belirsiz bir sonuçta (istek hata verdi) betik hata koduyla biter ve iş KIRMIZI
+      # olur. Bu bilinçli: belirsizlik "(a) borsa tabanı çıktı" diye okunamaz ve yeşil
+      # bir iş tam olarak öyle okunurdu.
+      - name: Probe funding history depth (A — read-only, metadata only)
+        if: ${{ inputs.run_probe }}
+        env:
+          # Girdi doğrudan komut metnine gömülmez: workflow_dispatch girdisi kabuk
+          # enjeksiyonu için bir kapıdır ve ortam değişkeni o kapıyı kapatır.
+          PROBE_SYMBOLS: ${{ inputs.probe_symbols }}
+        run: |
+          python scripts/probe_funding_depth.py --symbols $PROBE_SYMBOLS
+
+      # B) Dönem A sınırları betikte KAPIDIR (scripts/backtest_ema.py'den ithal edilir);
+      # workflow girdisi olarak açılmazlar. Açılsalardı dönem B'ye bakmak bir yazım
+      # hatası kadar kolay olurdu.
+      - name: Measure funding distribution (B — period A only)
+        if: ${{ inputs.run_measure }}
+        run: |
+          python scripts/measure_funding.py \
+            --window-periods "${{ inputs.window_periods }}" \
+            ${{ inputs.symbols != '' && format('--symbols {0}', inputs.symbols) || '' }}

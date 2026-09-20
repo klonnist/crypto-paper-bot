@@ -1,0 +1,150 @@
+# Backtest koşusu — ELLE tetiklenen, SALT OKUNUR iş (docs/backtest.md).
+#
+# Neden ayrı workflow: `run.yml` ve `run-scalp.yml` ölçümün kendisini koşar ve deftere
+# YAZAR. Bu iş hiçbir şeye yazmaz — defter, metrics, state, commit, push: hiçbiri yok.
+# Çıktı adımın log'u ve bir artifact'tır; ikisi de depoya girmez (`backtests/` gitignore'da).
+#
+# `cron` YOKTUR ve bilinçli olarak yoktur: backtest periyodik bir ölçüm değil, bir karar
+# öncesi denemedir. Periyodik koşmak, docs/backtest.md > 7'nin yasakladığı "sonucu görüp
+# tekrar koşma" alışkanlığını otomatikleştirirdi.
+#
+# `permissions: contents: read` — bu iş yazamaz. Gerçek defterin (kural 1, denetim izi)
+# bir backtest tarafından değiştirilmesi imkânsız olmalı, yalnızca niyetle değil YETKİYLE.
+name: backtest
+
+on:
+  workflow_dispatch:
+    inputs:
+      layer:
+        description: "Katman (base | scalp)"
+        required: true
+        default: "scalp"
+      start:
+        description: "Pencere başı (ISO) — bu bar İŞLENMEZ"
+        required: true
+      end:
+        description: "Pencere sonu (ISO) — bu bar işlenir"
+        required: true
+      models:
+        description: "Virgülle model listesi (boş = katmanın tamamı)"
+        required: false
+        default: ""
+      history_bars:
+        description: "Anlık görüntü derinliği (boş = config); yalnızca derinleştirir"
+        required: false
+        default: ""
+      embargo_bars:
+        description: "OOS boşluğu (boş = yok); IS kurulumlarının çözüldüğü barlar atlanır"
+        required: false
+        default: ""
+      verify_live:
+        description: "KAPI 0: karşılaştırılacak rapor dosyası (boş = atla)"
+        required: false
+        default: ""
+      # Aşağıdakiler harness'ın KOŞUL bayraklarıdır (docs/backtest.md > 5g): sonucu
+      # doğrudan kaydırırlar ve yalnızca dış bir referansla parite ya da dönem ataması
+      # için vardır. Workflow'un onları geçememesi, o koşuların yalnızca elle (yerelde)
+      # yapılabilmesi demekti — oysa veriye erişen yer burası.
+      symbols:
+        description: "Virgülle sembol listesi; katmanın evrenini DARALTIR (boş = tamamı)"
+        required: false
+        default: ""
+      fee_rate:
+        description: "Komisyon override'ı (boş = canlı config). Sonucu KAYDIRIR."
+        required: false
+        default: ""
+      slippage_base:
+        description: "Kayma override'ı (boş = canlı config). Sonucu KAYDIRIR."
+        required: false
+        default: ""
+      funding_periods:
+        description: "Funding geçmişi derinliği (boş = config); yalnızca derinleştirir"
+        required: false
+        default: ""
+      signal_cutoff:
+        description: "Bu bardan sonra yeni sinyal yok (dönem ataması); boş = kesim yok"
+        required: false
+        default: ""
+
+# Ölçüm turlarıyla YARIŞMAZ: kendi grubu. `run.yml`/`run-scalp.yml`in grubuna girmek, bir
+# backtest'in bir ölçüm turunu bekletmesi (ya da tersi) demekti.
+concurrency:
+  group: backtest
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      # fetch-depth: 0 ŞART — KAPI 0 canlı turların `emitted` kayıtlarını git GEÇMİŞİNDEN
+      # okur. `docs/data/metrics_*.json` her turda üzerine yazıldığı için dosyanın son hâli
+      # yalnızca son turu taşır; canlının bar bar ne ürettiği ancak commit geçmişindedir.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Mum önbelleği koşular arasında TAŞINIR. `data/` depoya girmez (çalışma zamanı
+      # verisi, denetim izi değil) ve runner her koşuda sıfırdan kurulur; önbelleksiz her
+      # backtest tüm pencereyi baştan indirir. OKX'in history-candles uç noktası istek
+      # başına 100 bar verdiği için uzun pencere = binlerce istek = saatler, ve pratikte
+      # `--history-bars`ın derinleştirebileceği sınırı ağ belirler, disk değil.
+      #
+      # Önbellek ölçümü DEĞİŞTİREMEZ: `core/data.py` yalnızca EKSİK barları çeker ve
+      # kapanmamış barı zaten atar (kural 12). Bayat bir önbellek eksik bar üretir, yanlış
+      # bar değil — ve eksik bar `missing_bars`/`unchecked_position_bars` ile B-2 kapısında
+      # görünür (docs/backtest.md > 3), sessizce geçmez.
+      #
+      # Anahtar her koşuda tazelenir, restore-keys ile en son önbellek geri yüklenir:
+      # "yükle, eksiği tamamla, yeniden kaydet" — rolling cache.
+      - name: Restore market data cache
+        uses: actions/cache@v4
+        with:
+          path: data/cache
+          key: market-data-${{ inputs.layer }}-${{ github.run_id }}
+          restore-keys: |
+            market-data-${{ inputs.layer }}-
+
+      - name: Run backtest
+        run: |
+          python scripts/backtest.py \
+            --layer "${{ inputs.layer }}" \
+            --start "${{ inputs.start }}" \
+            --end "${{ inputs.end }}" \
+            ${{ inputs.models != '' && format('--models "{0}"', inputs.models) || '' }} \
+            ${{ inputs.history_bars != '' && format('--history-bars {0}', inputs.history_bars) || '' }} \
+            ${{ inputs.embargo_bars != '' && format('--embargo-bars {0}', inputs.embargo_bars) || '' }} \
+            ${{ inputs.verify_live != '' && format('--verify-live "{0}"', inputs.verify_live) || '' }} \
+            ${{ inputs.symbols != '' && format('--symbols "{0}"', inputs.symbols) || '' }} \
+            ${{ inputs.fee_rate != '' && format('--fee-rate {0}', inputs.fee_rate) || '' }} \
+            ${{ inputs.slippage_base != '' && format('--slippage-base {0}', inputs.slippage_base) || '' }} \
+            ${{ inputs.funding_periods != '' && format('--funding-periods {0}', inputs.funding_periods) || '' }} \
+            ${{ inputs.signal_cutoff != '' && format('--signal-cutoff "{0}"', inputs.signal_cutoff) || '' }} \
+            --results-json "backtests/run/results.json" \
+            --out "backtests/run" \
+            --log-level INFO
+
+      # `if: always()` — geçerlilik kapısı ya da KAPI 0 düştüğünde koşu kırmızı döner ama
+      # defter ve manifest yine de yüklenir: düşen bir kapının SEBEBİ tam olarak orada.
+      - name: Upload backtest ledger and manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backtest-${{ inputs.layer }}
+          path: backtests/run
+          if-no-files-found: warn
+          retention-days: 14

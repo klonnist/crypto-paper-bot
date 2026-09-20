@@ -1,0 +1,523 @@
+# Evrensel ölçüm ayarları — tüm modeller için TEK kaynak (CLAUDE.md kural 6 ve 7).
+# Kodda hiçbir sabit hardcoded edilmez; her sayı buradan okunur. Bir değeri değiştirmek
+# tüm modelleri aynı anda ve birebir aynı biçimde etkiler — ölçümün adilliği buna bağlı.
+
+# --- Hesap ve risk ---
+initial_capital: 10000      # her stratejinin izole sanal hesabının başlangıç bakiyesi (USDT)
+risk_per_trade: 0.01        # işlem başına riske atılan sermaye oranı; boyutlandırma payı
+leverage_cap: 5             # azami kaldıraç; hiçbir koşulda aşılmaz (CLAUDE.md kural 11)
+max_positions: 5            # bir stratejinin eşzamanlı toplam pozisyon sayısı
+max_short_positions: 3      # bunların en fazla kaçı short olabilir
+
+# --- Maliyetler ---
+# fee_rate, ölçümün İŞLEM YAPILAN borsasının taker oranıdır — veri çekilen borsanın değil.
+# Veri OKX'ten gelir (bkz. exchange.*) çünkü orada evrenin tamamı tek kaynaktan ve aynı bar
+# çapasıyla okunabiliyor; ama defterin simüle ettiği hesap Bybit'te tutuluyor ve maliyeti
+# ödeyen taraf orası. İkisini karıştırmak, hiç ödenmeyen bir komisyonu ölçüme sokardı.
+#
+# Bybit USDT perpetual, standart (VIP0) kademe: maker %0.02, taker %0.055. Buradaki değer
+# TAKER'dır: modeller piyasa emriyle (entry_type="market") giriyor ve çıkıyor, yani her iki
+# bacak da taker. Maker oranı kullanmak hiç gerçekleşmeyen bir dolumu varsayıp sonuçları
+# optimist gösterirdi.
+fee_rate: 0.00055           # tek yön komisyon; giriş ve çıkışta ayrı ayrı uygulanır
+# slippage_base adı "slippage_long" değildir: bu oran yöne bakmaksızın HER dolumda
+# (long/short giriş, çıkış, TP) uygulanan temel kaymadır. Tek istisna short stop
+# dolumudur; orada slippage_short_stop devreye girer. Eski ad, short girişlerin
+# kaymasız dolduğu izlenimini veriyordu — tam da ölçtüğümüz long/short farkını kirletir.
+slippage_base: 0.0005       # her dolumda uygulanan temel kayma (short stop hariç)
+slippage_short_stop: 0.0015 # short stop dolumunda kayma (yukarı boşluklarda daha kötü dolar)
+maintenance_margin: 0.005   # likidasyon eşiği; kontrol stop/TP'den ÖNCE yapılır
+
+# Stop mesafesi tavanı (ölçüm karşılaştırılabilirliği, CLAUDE.md kural 14). Stop mesafesi
+# aynı zamanda maliyet ölçeğidir: dar stop = küçük R = R başına daha yüksek komisyon/kayma.
+# Veriye bağlı stop kuran modeller (örn. fitil tepesi) bu tavanı aşan işlemi ATLAR; stop'u
+# tavana çekmek modelin fikrini değiştirir, atlamak yalnızca ölçülemeyen işlemi eler.
+max_stop_atr_multiple: 3.0  # stop mesafesi ATR'nin bu katını aşarsa işlem açılmaz
+
+# Telafi edilen barlarda da sinyal üretilsin mi (core/engine.py > _trade_step).
+# Kapalıyken sinyal YALNIZCA `as_of` barında üretilir; atlanan turların barları yalnızca
+# pozisyon yönetimi (stop/TP/likidasyon/funding) için ilerletilir. Açıkken her telafi barı
+# kendi sinyalini de üretir ve tur, o barların her birinde ayrı ayrı koşulmuş gibi
+# sonuçlanır — barlar sırayla işlenir, her barın emri bir sonraki barın açılışından dolar
+# (kural 13) ve pozisyon limitleri her barda yeniden sorulur.
+#
+# Kökte KAPALI, çünkü 4 saatlik katmanın cron'u (run.yml, 4 saatte bir = bar başına
+# tam bir tur) güvenilir
+# tetikleniyor: telafi nadiren devreye girer, ama açık olsaydı devreye girdiği her turda
+# defterin kuralı sessizce değişirdi — aynı defterde biriken geçmişin bir kısmı "tur
+# başına tek sinyal", bir kısmı "bar başına tek sinyal" ile üretilmiş olurdu ve iki
+# dönemin işlem sıklığı kıyaslanamazdı. Scalp katmanında AÇIK (bkz. layers.scalp).
+signals_per_bar: false
+
+# --- Zaman ve sembol evreni ---
+timeframe: "4H"             # tek zaman dilimi; OKX bar kodu da bundan türetilir
+universe_size: 50           # 24s hacme göre ilk N USDT perpetual
+universe_refresh_days: 30   # evren bu süre dolmadan yeniden hesaplanmaz (kıyas sabit kalsın)
+
+# Rastgelelik kullanan her yol (retry jitter dâhil) bu tohumdan beslenir: koşular tekrarlanabilir.
+random_seed: 20240217
+
+# Aktif modeller. Adlar strategies/registry.py'deki kayıtlarla (ve sınıfların `name`
+# alanıyla) birebir eşleşir; yarışmaya giren kümeyi burası tanımlar. Tanınmayan bir ad
+# sessizce atlanmaz: o model düşer ve koşu hata koduyla biter (bkz. main.py).
+#
+# buyhold bir YARIŞMACI DEĞİL, referans çıpasıdır (is_benchmark=True, CLAUDE.md kural 15):
+# tabloda ayrı bölümde durur ve R'ye dayalı kolonları nan alır. Yarışacak 10 model bunun
+# üzerine eklenir; şu an 10'u kayıtlı (9 normal + 1 meta).
+#
+# random_ctrl bir kontrol grubudur ama is_benchmark DEĞİLDİR: boyutlandırması, stop ölçeği
+# ve limitleri yarışmacılarla birebir aynıdır, tek farkı sinyalin bilgisiz olmasıdır. Bu
+# yüzden aynı sütunda ve aynı sıralamada durur — edge'in referansı ancak orada okunabilir.
+#
+# ensemble bir META modeldir (is_meta=True, kural 4): kendi sinyal mantığı yoktur, o turda
+# normal modellerin ürettiği sinyalleri salt okunur okur ve üst üste binenleri oynar. Listedeki
+# yeri sırayı DEĞİŞTİRMEZ — engine her turu iki geçişte yürütür ve metalar her hâlükârda ikinci
+# geçiştedir; metalar birbirini de göremez.
+# SADELEŞTİRİLDİ (karar 33). Ölçüt performans DEĞİL, ÖLÇÜLEBİLİRLİKTİR: 29 barlık
+# geçmişte `momentum`, `squeeze`, `failed_breakout` ve `downtrend_rally` HİÇ sinyal
+# üretmedi; `confluence` (72 gün), `ensemble` (125 gün) ve `avwap` (42 gün) örneklem
+# kapısına (n=30) pratikte hiç ulaşamazdı. Ne kadar iyi olduklarını asla öğrenemeyeceğimiz
+# satırlar tabloda yalnızca gürültü üretir. Emekli edilen modellerin KODU ve DEFTERİ durur
+# (kural 1: append-only); listeye geri eklemek bir commit'tir.
+#
+# `random_ctrl` kalır: kabul çıtasının kontrol grubudur (`acceptance.control_model`).
+# `buyhold` kalır: çıpadır (kural 15) ve 0 işlem görünmesi bir arıza DEĞİL — hiç kapatmaz,
+# bilgisi hesap getirisindedir.
+models: ["buyhold", "trend", "meanrev", "random_ctrl"]
+
+# --- Kabul çıtası (dashboard rozetleri ve Telegram özeti) ---
+# Bir modelin sonucunun nasıl okunacağını belirleyen eşikler. Burada dururlar, çünkü rozet
+# bir yorum değil bir ölçüdür: sayıyı koda gömmek, çıtanın modelden modele ya da sürümden
+# sürüme sessizce kaymasına kapı açardı (CLAUDE.md kural 6).
+acceptance:
+  # İKİ KAPI (geçilmesi zorunlu) + BİR UYARI (geçmeyi engellemez).
+  min_trades: 30          # KAPI — ÖRNEKLEM: R'ye giren kapanmış işlem sayısı bu sayının
+                          # altındaysa ortalama R bir ölçüm değil gürültüdür.
+  control_model: "random_ctrl"   # KAPI — EDGE: sinyalin bilgisiz çekilişi geçip geçmediği
+                                 # buna göre ölçülür. is_benchmark DEĞİLdir (aynı sütunda
+                                 # yarışır), bu yüzden adı benchmarks listesinden
+                                 # türetilemez; açıkça yazılır.
+  control_min_trades: 30  # KAPI — KONTROLÜN KENDİ ÖRNEKLEMİ. Marj, kontrolün ortalama
+                          # R'sine göre ölçülür ve o ortalama da bir örneklemden gelir.
+                          # Bu kapı olmadan şu mümkündü (ve base katmanında GERÇEKTEN
+                          # oldu): random_ctrl n=4 iken trend n=17 ona karşı 0.15R marjla
+                          # "ölçülüyordu" — kapı çalışıyormuş gibi görünürken gürültüyü
+                          # gürültüyle kıyaslıyordu. Kontrol bu sayıya ulaşmadıysa edge
+                          # DEĞERLENDİRİLEMEZ (geçilmiş sayılmaz) ve logger.warning yazar.
+                          # min_trades ile aynı değer: kontrol de bir yarışmacıdır ve
+                          # örneklem kapısı herkes için aynıdır (kural 6). Ayrı anahtar
+                          # olmasının sebebi, bir gün ayrışması gerekirse bunun sessiz
+                          # değil açık bir karar olması.
+  edge_ci_alpha: 0.05     # KAPI — EDGE'in KESİNLİK koşulu: (model − kontrol) farkının
+                          # yüzdelik bootstrap güven aralığı bu alfa ile kurulur ve ALT
+                          # SINIRI sıfırın üstünde olmalıdır. Marjın yerine geçmez,
+                          # yanına gelir: marj "fark yeterince büyük mü" (etki büyüklüğü),
+                          # aralık "fark gürültüden ayırt edilebiliyor mu" (kesinlik)
+                          # sorusudur. 8 işlemle ölçülen 0.40R marjı geçer ama aralığı
+                          # sıfırı içerir; ikisini birlikte istemek bunu eler.
+  bootstrap_samples: 2000 # Bootstrap yeniden örnekleme sayısı. Tohum random_seed'den
+                          # türer (model adına bağlı), yani aynı defter HER ZAMAN aynı
+                          # aralığı verir — rozetin koşudan koşuya titremesi, çıtayı bir
+                          # ölçü olmaktan çıkarıp bir çekilişe çevirirdi. 0 yazmak
+                          # aralığı hesaplanamaz yapar ve edge yalnızca marja düşer
+                          # (sessizce değil: logger.warning).
+  edge_margin_r: 0.15     # KAPI — EDGE marjı: kontrolü "geçmek" için kıl payı önde olmak
+                          # yetmez, ort. R farkı en az bu kadar olmalıdır. Çekilişin kendi
+                          # gürültüsü küçük bir farkı tek başına üretebilir; marj, kontrolü
+                          # anlamlı biçimde geçmiş modeli sıfır virgül farkla öne geçmiş
+                          # modelden ayırır.
+  stop_band_ratio: 2.5    # UYARI — BAND: kural 14'ün 1×-2.5×ATR bandının oranı. Defterde
+                          # ATR yoktur, bu yüzden band yarışmacıların avg_stop_distance_pct
+                          # MEDYANINA göre uygulanır: medyan/√oran .. medyan×√oran aralığı,
+                          # uçtan uca tam bu oran kadar geniştir. Bandın dışında kalmak bir
+                          # KUSUR DEĞİL, bir kıyas koşuludur: model doğrulanabilir, ama
+                          # sonucu okunurken R başına maliyet farkı hesaba katılmalıdır.
+                          # Bu yüzden çıtayı ENGELLEMEZ, tabloda uyarı ikonu olarak durur.
+
+# --- Trailing stop ---
+# Trailing'i core/engine.py uygular (CLAUDE.md kural 9); strateji yalnızca Signal.trailing_atr
+# ile "ATR'nin kaç katı" der. ATR periyodu tüm modeller için ortaktır: her modelin kendi
+# periyodunu seçmesi, aynı trailing_atr değerinin modelden modele farklı stop mesafesi
+# anlamına gelmesi demekti.
+trailing:
+  atr_period: 14            # ATR'nin hesaplandığı kapanmış bar sayısı
+
+# --- Funding / borçlanma ---
+funding:
+  enabled: true
+  interval_hours: 8         # OKX perpetual funding periyodu
+
+# --- Borsa erişimi (OKX public API v5; auth gerekmez) ---
+exchange:
+  name: "okx"
+  rest_base: "https://www.okx.com"
+  inst_type: "SWAP"
+  quote_ccy: "USDT"         # evren yalnızca USDT ile takas edilen lineer perpetual'lar
+  btc_reference: "BTC-USDT-SWAP"   # MarketData.btc referans serisi
+  candles_limit: 300        # /market/candles istek başına azami bar
+  history_candles_limit: 100  # /market/history-candles istek başına azami bar
+  funding_limit: 100        # /public/funding-rate-history istek başına azami kayıt
+  request_timeout_sec: 20
+  min_request_interval_sec: 0.15   # basit istemci tarafı throttle (OKX IP limiti ~20-40/2s)
+  max_retries: 5
+  backoff_base_sec: 1.0     # 429/5xx sonrası bekleme: base * 2**deneme (+ jitter)
+  backoff_max_sec: 30.0
+
+# --- Yerel veri deposu ---
+data:
+  cache_dir: "data/cache"           # sembol başına parquet mum önbelleği
+  universe_file: "data/universe.json"
+  history_bars: 600                 # stratejilere verilen azami geçmiş bar sayısı
+  funding_history_periods: 180      # funding serisinde tutulan azami periyot sayısı
+  # as_of çıpası BTC'nin son kapanmış barıdır; bu değer çıpanın kendi tazelik sınırıdır.
+  # BTC verisi beklenen bardan bu kadar barlık gecikmeyi aşarsa anlık görüntü üretilmez.
+  # (Diğer semboller tolere edilmez: as_of barına sahip olmayan sembol o tur dışlanır.)
+  max_staleness_bars: 2
+
+# --- Katmanlar (core/layers.py) ---
+# Proje İKİ zaman diliminde ölçüm yapar ve ikisi de AYNI çekirdeği kullanır: engine,
+# portfolio, ledger, funding, metrics tek kopyadır. Katmanın değiştirebildiği şey ölçümün
+# KOŞULLARIDIR (bar, sembol evreni, model listesi, defter, rapor dosyası); maliyet ve risk
+# sabitleri (risk_per_trade, fee_rate, slippage_*, leverage_cap, initial_capital, maintenance_margin)
+# katman bloğunda YOKTUR — kökten gelirler, çünkü iki katmanın birebir aynısını görmesi
+# kural 6'nın kendisidir.
+#
+# Katman bloğu yalnızca FARKI yazar; geri kalan her ayar kökten devralınır (derin birleştirme).
+layers:
+  base:
+    # 4 saatlik ana yarışma. Kökle aynı olduğu için hiçbir override yoktur: burada
+    # tekrarlanan bir `timeframe: "4H"` satırı, kökle katmanın sessizce ayrışabileceği
+    # ikinci bir kaynak demekti.
+    ledger_dir: "ledgers"
+    metrics_file: "docs/data/metrics.json"
+    universe: null            # hacimden otomatik seçim (universe_size / universe_refresh_days)
+    retention:
+      equity_compaction_days: null   # bar başına bir tur: equity.csv yavaş büyür, sıkıştırma gereksiz
+      model_trade_limit: 100
+    breakdowns: []            # 4 saatlik modellerde kol/sembol kırılımı yok
+
+  ema:
+    # EMA(21/55) kesişim katmanı (4H) — model 18'in ölçüldüğü yer.
+    #
+    # NEDEN AYRI BİR KATMAN. Modelin backtest'i SABİT 13 coinde koşuyor; base evreni ise
+    # hacme göre seçilen 50 coindir ve 30 günde bir kayar. Modeli base'e almak, backtest'in
+    # ölçtüğünden BAŞKA bir evrende koşturmak olurdu — yani forward test, backtest'in
+    # cevapladığı sorunun cevabını taşımazdı. Ayrı katman ikisini eşitler.
+    #
+    # NEDEN `trend` DE BURADA. Katmanlar arası kıyas yapılmaz (CLAUDE.md > Katmanlar), oysa
+    # sorulan soru tam olarak "bu model mevcut trend modelinden iyi mi". Bu yüzden kıyas
+    # hedefi katmanın İÇİNE alındı: `trend` aynı evreni, aynı barları, aynı maliyeti ve
+    # aynı defter kurallarını görür, yani kıyas katman İÇİ ve geçerlidir. `random_ctrl`
+    # kabul çıtasının kontrol grubudur (acceptance.control_model), `buyhold` ise çıpadır
+    # (C-3) — ikisi de olmadan kabul kapıları değerlendirilemezdi.
+    #
+    # TETİKLEYİCİSİ YOKTUR: tanım var, koşu yok. `run-ema.yml` ancak ön-kayıtlı kapılar
+    # (docs/backtest.md > 6d) geçilirse eklenir; o güne kadar bu katman yalnızca
+    # scripts/backtest.py tarafından okunur ve hiçbir deftere yazmaz.
+    models: ["buyhold", "trend", "random_ctrl", "ema_trend"]
+
+    # SABİT evren, hacimden otomatik seçim YOK — scalp katmanının evreninin aynısı.
+    # Aynı liste olmasının sebebi kolaylık değil: iki katman aynı sembolleri görürse,
+    # bir sembolün kayma/likidite sorunu iki katmanda da aynı biçimde görünür ve
+    # `breakdowns.symbol` kırılımı iki zaman diliminde karşılaştırılabilir olur.
+    # (Bu, KATMANLAR ARASI performans kıyası değildir; veri kalitesi denetimidir.)
+    universe:
+      - "BTC-USDT-SWAP"
+      - "ETH-USDT-SWAP"
+      - "SOL-USDT-SWAP"
+      - "XRP-USDT-SWAP"
+      - "DOGE-USDT-SWAP"
+      - "BNB-USDT-SWAP"
+      - "AVAX-USDT-SWAP"
+      - "LINK-USDT-SWAP"
+      - "ADA-USDT-SWAP"
+      - "SUI-USDT-SWAP"
+      - "NEAR-USDT-SWAP"
+      - "PENGU-USDT-SWAP"
+      - "ETHFI-USDT-SWAP"
+
+    ledger_dir: "ledgers_ema"
+    metrics_file: "docs/data/metrics_ema.json"
+
+    data:
+      # 4H barda 600 bar = 100 gün; bu katmanın modelleri EMA55 ve ATR14 okur, yani canlı
+      # için fazlasıyla yeterli. Backtest pencereyi `--history-bars` ile DERİNLEŞTİRİR
+      # (docs/backtest.md > 5b) — canlının o derinlikten faydalanmadığı, aynı override ile
+      # koşulan Kapı 0'da sınanır.
+      history_bars: 600
+
+    retention:
+      # Base ile aynı: 4 saatte bir tur, equity.csv yavaş büyür, sıkıştırma gereksiz.
+      equity_compaction_days: null
+      model_trade_limit: 100
+
+    # symbol: kayma varsayımının (slippage_base) sembol başına tutup tutmadığı ancak burada
+    # görünür — 13 sembollük sabit evrende PENGU/ETHFI gibi ince kitaplı satırların
+    # cost_per_r'si belirgin ayrışıyorsa, o satırın sonucu yorumlanmadan önce bilinmelidir.
+    # exit_rule: modelin çıkışlarının kaçı hedef, kaçı stop — ön-kayıtlı P2 tahmini
+    # (hedefe ulaşma oranı < %35) doğrudan bu kırılımdan okunur.
+    # session/loss_streak: scalp katmanındakiyle aynı statüde ÖLÇÜM (kural değil); hiçbir
+    # model bunlara bakmaz ve hiçbir sinyal bu etiketlere göre elenmez.
+    breakdowns: ["symbol", "exit_rule", "session", "loss_streak"]
+
+  scalp:
+    # 15 dakikalık scalp katmanı: iki model (model 11 adaptif, model 12 kontrol).
+    timeframe: "15m"
+
+    # Telafi edilen HER bar kendi sinyalini üretir. Gerekçe ölçümün kendisidir: GitHub
+    # cron'u 15 dakikalık kadansta tetiklemelerin büyük kısmını düşürüyor (ölçüldü: 14
+    # saatte 57 slot, 5 tetikleme). Sinyal yalnızca `as_of` barında üretilseydi kaybolan
+    # tetiklemelerin sinyal FIRSATI da kaybolurdu ve tablo, modelin kadansını değil
+    # cron'un kadansını ölçerdi — üstelik kaybın büyüklüğü turdan tura değişeceği için
+    # iki model arasındaki fark bile gürültüye karışırdı. Açık olması, turun o barların
+    # her birinde ayrı ayrı koşulmuş olmasıyla AYNI sonucu vermesi demektir.
+    signals_per_bar: true
+    # Katmanın BEŞ modeli, iki eksende:
+    #   adaptasyonun katkısı   scalp_bandit (11) ↔ scalp_fixed (12)
+    #   çıkış yönetiminin katkısı  scalp_fixed (12) ↔ scalp_managed (15)
+    #   ev kurallarının katkısı    vwap_clone (13) ↔ vwap_managed (14)
+    # vwap_clone bir YARIŞMACI DEĞİLDİR (is_replica): dış bir sistemin kopyasıdır, kendi
+    # boyutlandırmasıyla (sabit teminat × 10x) koşar ve tabloda ayrı bir bölümde durur.
+    # SADELEŞTİRİLDİ (karar 33). İki eksen İKİ bağımsız pencerede de SIFIR fark verdi:
+    #   adaptasyon      scalp_bandit  ↔ scalp_fixed : −0.21↔−0.21 (IS), −0.15↔−0.15 (OOS)
+    #   çıkış yönetimi  scalp_managed ↔ scalp_fixed : −0.21↔−0.21 (IS), −0.14↔−0.15 (OOS)
+    # Adaptasyon ekseninin sebebi kol kırılımında görünür: rsi2_reversal %87, iki kol HİÇ
+    # tetiklemedi, yani bandit'in tahsis edecek bir şeyi yok ("1 uygun kol"). Eksenleri
+    # kapatmak bilgi kaybı değil, iki kez alınan "fark yok" cevabını kabul etmektir.
+    # Hareket eden TEK eksen süredir (scalp_patient ↔ scalp_fixed: −0.01 ↔ −0.15).
+    models: ["scalp_fixed", "scalp_patient", "vwap_clone", "vwap_managed"]
+
+    # SABİT evren, hacimden otomatik seçim YOK. Gerekçe: evren zamanla kayarsa geçmiş
+    # performans başka bir sembol kümesine ait olur ve kıyas bozulur. 13 sembol elle
+    # seçilir ve sabit kalır; değişiklik bir commit'tir, bir yan etki değil.
+    #
+    # TON-USDT-SWAP bu listede DEĞİLDİR: OKX'te mevcut değil (51001) ve her turda veri
+    # çekiminden düşüyordu, yani zaten çekiliş uzayının parçası değildi. Listede durması
+    # yalnızca gürültü üretiyordu — evrenin kaç sembol olduğu sorusuna config'in verdiği
+    # cevap ile turun gerçekte gördüğü küme ayrışıyordu (bkz. docs/decisions.md > 24).
+    universe:
+      - "BTC-USDT-SWAP"
+      - "ETH-USDT-SWAP"
+      - "SOL-USDT-SWAP"
+      - "XRP-USDT-SWAP"
+      - "DOGE-USDT-SWAP"
+      - "BNB-USDT-SWAP"
+      - "AVAX-USDT-SWAP"
+      - "LINK-USDT-SWAP"
+      - "ADA-USDT-SWAP"
+      - "SUI-USDT-SWAP"
+      - "NEAR-USDT-SWAP"
+      - "PENGU-USDT-SWAP"
+      - "ETHFI-USDT-SWAP"
+
+    ledger_dir: "ledgers_scalp"
+    metrics_file: "docs/data/metrics_scalp.json"
+
+    # Stop mesafesi tavanı (kural 14) scalp'te 8×ATR'dir, 3× değil. Gerekçe: scalp
+    # modellerinin stop TABANI %1'dir (tur maliyeti ~%0.25; daha dar stop'ta maliyet
+    # 0.25R'yi aşar) ve 15 dakikalık ATR çoğu sembolde fiyatın %1'inden küçüktür — 3×
+    # tavanı bırakmak, sinyallerin büyük kısmının band dışı diye elenmesi ve iki modelin
+    # de 30 işlem eşiğine hiç ulaşamaması demekti. Tavan KATMAN İÇİ kıyası bozmaz: model
+    # 11 ve 12 aynı tavanı görür. Katmanlar arası kıyas zaten yapılmaz (ayrı tablo).
+    max_stop_atr_multiple: 8.0
+
+    data:
+      # 15m barda 1500 bar ≈ 15.6 gün: gün-çapalı VWAP, açılış aralığı ve RSI/ATR
+      # pencerelerinin hepsi için fazlasıyla yeterli, önbellek ise küçük kalır.
+      history_bars: 1500
+      # Çıpanın (BTC) tazelik sınırı bar cinsindendir: 15m'de 4 bar = 1 saat. 4 saatlik
+      # katmandaki 2 bar (8 saat) burada 30 dakikaya karşılık gelirdi ve GitHub cron'unun
+      # olağan gecikmesi turu sebepsiz düşürürdü.
+      max_staleness_bars: 4
+
+    retention:
+      # Günde 96 tur × 2 model: equity.csv yılda ~35 bin satıra çıkar ve her tur commit
+      # edilir. 30 günden eski satırlar GÜNLÜK özete (o günün son barı) indirilir; taze
+      # 30 gün bar bazında kalır. trades.csv'ye DOKUNULMAZ — denetim izi odur.
+      equity_compaction_days: 30
+      model_trade_limit: 50    # scalp çok işlem üretir; JSON'a model başına son 50 işlem
+    # exit_rule: üç aşamalı yönetimin hangi aşamasının gerçekten tetiklendiği. Birimi
+    # DİLİMDİR (bkz. core/metrics.py::exit_rule_of): kısmi çıkışlı pozisyon iki gruba
+    # düşer, yani grupların işlem sayısı toplamı model tablosuyla eşleşmez.
+    # session: işlemin AÇILDIĞI seans (UTC sabit sınırlar, core/metrics.py::_SESSIONS).
+    # Bir ÖLÇÜMDÜR, bir kural değil — hiçbir model seansa bakmaz, hiçbir sinyal bu etikete
+    # göre elenmez. Eklenme gerekçesi: "sabah iyi, öğleden sonra kötü" gözlemi tek bir günün
+    # verisiyle test edildiğinde doğrulanır gibi görünüyordu, kaynak sistemin 6 günlük
+    # defterinde ise ters çıktı ve permütasyon testinde p=0.575 (docs/decisions.md > 27).
+    # Kırılım, kararı veriye bağlamak için kanıt biriktirir; kararın kendisi burada değil.
+    # loss_streak: pozisyon AÇILIRKEN geçerli olan ardışık kayıp sayısı (kova: 0/1/2/3/4/5+).
+    # session ile aynı statüde: ÖLÇÜM, kural değil — hiçbir model kayıp serisine bakmaz.
+    # Gerekçe, "üst üste N kayıptan sonra bir süre bekle" fikrinin test edilmesi: kaynak
+    # sistemin 256 pozisyonluk defterinde kayıp kümelenmesi GERÇEK (p<0.002) ama kuralın
+    # tetiklendiği yerde ortalama PnL tabana dönüyor, yani sayaç yanlış tetikleyici
+    # (docs/decisions.md > 28). Kırılım, bunun bizim modellerimizde de böyle olup
+    # olmadığını kendi defterimizden okumak için var.
+    breakdowns: ["arm", "symbol", "exit_rule", "session", "loss_streak"]
+
+# --- Scalp katmanının model kısıtları (core/layers.py'nin değil, modellerin okuduğu blok) ---
+# İki scalp modeli de bu değerleri BİREBİR aynı okur: aralarındaki tek fark kol seçimidir.
+# Blok kökte durur ama yalnızca scalp modelleri okur — 4 saatlik modeller bu anahtarları
+# hiç sormaz (core/config.py'nin REQUIRED_KEYS listesi gibi, okunmayan anahtar zararsızdır).
+scalp:
+  min_stop_pct: 0.01        # stop mesafesi girişin %1'inden DARSA işlem alınmaz (atlanır)
+  min_reward_risk: 1.5      # hedef/stop oranı bunun altındaysa kurulum atlanır
+  time_stop_bars: 16        # 16 × 15m = 4 saat; sonra pozisyon piyasa fiyatından kapanır
+  # `scalp_patient` (model 16) İÇİN AYRI sınır — kural aynı, yalnızca SÜRE ayrışır.
+  # Karar 30 şunu ölçtü: 5×ATR stop ile 10×ATR hedef, 16 barlık tipik yayılım (√16 = 4×ATR)
+  # içinde ulaşılamaz; `scalp_fixed`in 151 pozisyonundan 2'si hedefe vardı (%1.3), ki bu
+  # sürüklenmesiz rastgele yürüyüşün öngördüğü %1.24 ile örtüşür. 100 = (hedef/ATR)² =
+  # 10², yani sayı TEORİDEN gelir, veriden değil — birkaç değer deneyip en iyisini seçmek
+  # docs/backtest.md > 7.1'in yasakladığı şeydir.
+  patient:
+    time_stop_bars: 100     # 100 × 15m ≈ 25 saat
+  # Kolların ORTAK stop mesafesi: 5×ATR(14). Neden bu kadar geniş: 15 dakikalık barda
+  # ATR tipik olarak fiyatın %0.15-0.25'idir; 1.5×ATR gibi bir çarpan stop'u %0.3'te
+  # bırakır ve stop TABANI (%1) yüzünden kurulumların neredeyse tamamı atlanırdı — iki
+  # model de 30 işlem eşiğine hiç ulaşamaz, yani ölçüm hiç başlamazdı. 5×ATR tipik olarak
+  # %0.75-1.25 verir: tabanın civarında, katmanın 8×ATR tavanının (layers.scalp) altında.
+  stop_atr_multiple: 5.0
+  # Hedef PROJEKSİYONU: stop mesafesinin bu katı. Gerçek hedef, projeksiyon ile kolun
+  # yapısal engelinin YAKIN olanıdır (bkz. strategies/scalp/arms.py) — yani 2.0 bir tavan,
+  # min_reward_risk (1.5) ise taban: engeli 1.5R'den yakın olan kurulum atlanır.
+  target_reward_risk: 2.0
+  bandit:
+    warmup_trades: 20       # kol başına: ilk 20 işlemde tüm kollar eşit ağırlık
+    min_allocation: 0.05    # hiçbir kol %5 tahsisin altına düşmez (susturulan kol ölçülemez)
+    window_trades: 100      # kayan pencere: kol başına son 100 kapanmış işlem
+    prior_r_sigma: 1.0      # posterior önseli: R'nin a priori standart sapması
+
+# --- Üç aşamalı çıkış yönetimi (modeller 13, 14 ve 15 BİREBİR aynı okur) ---
+# Tanımı strategies/exit_management.py'de, uygulaması core/engine.py (stop hareketleri) ve
+# core/portfolio.py'dedir (kısmi dolum) — kural 9'un trailing için koyduğu sınırın aynısı.
+#
+# Neden tek blok: model 15 ile scalp_fixed arasındaki ortalama R farkının "çıkış
+# yönetiminin katkısı" olarak okunabilmesi, üç modelin de AYNI kuralı görmesine bağlıdır.
+# Model başına ayrı bloklar, bir gün birinin sessizce ayrışması ve farkın "iki ayrı
+# yönetimin farkı"na dönüşmesi demekti.
+#
+# Bu blok yalnızca üç model tarafından okunur; diğer modeller anahtarı hiç sormaz ve
+# davranışları değişmez (scalp bloğuyla aynı desen).
+exit_management:
+  breakeven_at_r: 1.0       # 1R'a ULAŞILDIĞINDA stop girişe çekilir (risk sıfırlanır)
+  partial_tp:
+    r: 1.5                  # 1.5R'da kısmi çıkış; stop AYNI ANDA bu seviyeye çekilir
+    fraction: 0.5           # başlangıç boyutunun yarısı (1.0 olamaz — o tam çıkıştır)
+  trail_giveback_pct: 0.5   # kısmi sonrası: en iyi kazancın en çok yarısı geri verilir
+
+# --- EMA kesişim modeli (18) ---
+# Dört sayı da docs/backtest.md > 6d'de ÖN-KAYITLI olarak sabitlendi: koşu sonucuna göre
+# değiştirilemezler (§7.1). Değiştirmek YENİ bir hipotezdir ve taze bir OOS penceresi ister.
+#
+# Blok kökte durur ama yalnızca `ema_trend` okur; diğer modeller bu anahtarları hiç sormaz
+# (scalp ve vwap bloklarıyla aynı desen). ATR PERİYODU BURADA YOKTUR: projenin tek ATR
+# tanımı `trailing.atr_period`tır ve modele özel bir periyot, aynı "1.5×ATR" ifadesinin
+# modelden modele farklı mesafe anlamına gelmesi demek olurdu.
+ema_trend:
+  fast_period: 21           # hızlı EMA
+  slow_period: 55           # yavaş EMA; sinyal fast'in slow'u YUKARI kesmesidir (olay, durum değil)
+  stop_atr_multiple: 1.5    # stop = kapanış − 1.5×ATR(14); kural 14'ün 1–2.5 bandının içinde
+  target_reward_risk: 2.0   # hedef = giriş + 2.0 × stop mesafesi, tek dilim (fraction=1.0)
+  # ATR YUMUŞATMASI — bu modelin BİLDİRİMİ, projenin varsayılanı değil.
+  #
+  # Ev modellerinin tamamı `simple` (TR'lerin düz ortalaması) kullanır ve o varsayılan
+  # DEĞİŞMEDİ. Bu model `wilder` (RMA) okur çünkü kuralları dış bir sistemde (TradingView,
+  # `ta.atr`) geliştirildi ve orada doğrulandı: stop ve hedef mesafelerinin TAMAMI bu
+  # değerden türüyor, yani yumuşatma bir parametre değil SPEC'in parçası. Başka bir
+  # yumuşatmayla koşmak, "koşulan şey" ile "doğrulanan şey"i ayrıştırırdı.
+  #
+  # Bedeli: "1.5×ATR" ifadesi artık modeller arasında birebir kıyaslanabilir değildir.
+  # Kural 14'ün kıyas ölçütü zaten GERÇEKLEŞEN stop mesafesidir (avg_stop_distance_pct,
+  # ⚠B bandı) ve motorun tavan kontrolü ORTAK tanımda kalır — her model kendi yumuşatmasını
+  # seçerek kendi tavanını genişletebilseydi tavan bir kural olmaktan çıkardı.
+  # Gerekçe ve zamanlama: docs/backtest.md > 6d > TADİLAT-1, docs/decisions.md > 46.
+  atr_smoothing: "wilder"
+
+# --- VWAP sapma-dönüş modelleri (13 ve 14) ---
+# İki modelin SİNYALİ AYRIDIR (karar 23): model 14 `strategies/vwap/signal.py`yi, model 13
+# `strategies/vwap/clone_signal.py`yi okur. Bu yüzden blok da ikiye ayrılır: aşağıdaki iki
+# kök değer (`band_mult`, `min_vwap_bars`) YALNIZCA model 14'ündür; kopyanın karşılıkları
+# `clone.*` altındadır ve paylaşılmaz — model 13 `band_mult`i ÖĞRENİR.
+#
+# 13 ↔ 14 farkı bu yüzden "ev kurallarının katkısı" DEĞİLDİR: iki model sinyal kuralları,
+# boyutlandırma, ev kapıları, seçim politikası, bar başına sinyal sayısı ve evren olmak
+# üzere altı eksende birden ayrışır (bkz. strategies/vwap_managed.py docstring'i).
+vwap:
+  band_mult: 2.0            # MODEL 14: VWAP'ten kaç hacim ağırlıklı standart sapma "bant dışı"
+  min_vwap_bars: 8          # MODEL 14: gün çapasından bu kadar bar geçmeden sapma anlamlı değil
+
+  # Model 14 — EV kurallarıyla koşan yarışmacı. Çarpanlar SABİT: öğrenme bu modelde yok,
+  # çünkü model 14 ↔ scalp_fixed kıyasının tek değişkeni sinyal + çıkış yönetimi olmalı.
+  managed:
+    # Amaç değişmedi: model 14 ↔ scalp_fixed kıyasının tek değişkeni sinyal + çıkış
+    # yönetimi olmalı, MALİYET ÖLÇEĞİ olmamalı (kural 14 / Rapor Kolonları). Değişen,
+    # o amaca hangi sayının ulaştığı.
+    #
+    # Değer 5.0 idi ve gerekçesi "scalp kollarıyla aynı ATR katı" (scalp.stop_atr_multiple)
+    # olarak yazılmıştı. Ölçüm bunun İKİ AYRI sebeple yanlış olduğunu gösterdi
+    # (scripts/measure_vwap_signal.py, 30 gün, 13 sembol — docs/decisions.md > 26):
+    #
+    #   1. 5.0'da model HİÇ sinyal üretmiyordu: 983 adayın 80'i %1 stop tabanında, 903'ü
+    #      1.5R kapısında eleniyor, geçen SIFIR. 5×ATR'lik bir stopla hedef (VWAP mesafesi)
+    #      stop'un 1.5 katına hiç ulaşamıyor. Ölçüme hiç girmeyen bir model, kıyas
+    #      hedefiyle aynı maliyet ölçeğinde de olamaz.
+    #   2. Kıyaslanabilirliği belirleyen şey ATR KATI değil, GERÇEKLEŞEN stop mesafesidir
+    #      (`avg_stop_distance_pct` — kural 14'ün bandı ve kabul çıtasının ⚠B uyarısı ona
+    #      bakar). Beş kollu modeller 5.0 ile ~%1.95 gerçekleştiriyor; model 14 ise 2.5 ile
+    #      ~%2.05. Yani aynı SAYIYI kopyalamak ölçekleri eşitlemiyordu, 2.5 eşitliyor.
+    #
+    # 2.5'te beklenen: haftada ~16.8 sinyal (30 işlemlik örneklem kapısına ~1.8 hafta),
+    # stop% ort 2.05 / medyan 1.97, R:R medyan 1.89, maliyet/R ~0.11.
+    atr_multiple: 2.5
+    target_reward_risk: 2.0 # hedef PROJEKSİYONU; gerçek hedef bununla VWAP'in yakın olanı
+
+  # Model 13 — dış sistem KOPYASI (is_replica). Buradaki her sayı kaynak sistemin kendi
+  # kuralıdır, ölçümün ortak koşulu değil; bu yüzden ev değerlerinden ayrı durur.
+  clone:
+    # Sabit teminat × kaldıraç. Başlangıç sermayesinde (10.000): notional = 0.5 × 10.000
+    # = 5.000 ve marj = 5.000 / 10 = 500 USDT. Oran olarak yazılır ki sermaye büyüdüğünde
+    # kopya, kaynak sistemin yarısı kadar risk alan bir şeye dönüşmesin.
+    notional_fraction: 0.5
+    leverage: 10            # tavanı core/validate.py::REPLICA_LEVERAGE_CAP (10x)
+    max_positions: 5
+    max_per_direction: 3    # aynı YÖNDE en fazla 3 (kök max_short_positions yalnızca short'u kapsar)
+    max_portfolio_risk: 0.08  # açık toplam risk sermayenin %8'ini aşarsa yeni pozisyon açılmaz
+
+    # --- Kaynak sistemin SİNYAL kuralları (vwap_detector.py + main.py) ---
+    # Bu blok `vwap.band_mult` / `vwap.min_vwap_bars`tan BAĞIMSIZDIR: o ikisi model 14'ün
+    # (ev kuralları) değerleridir ve kopya onları okumaz. Ayrışma bilinçlidir — iki model
+    # aynı sayıyı paylaşsaydı "ev kurallarının katkısı" ekseni o sayının da farkını
+    # taşırdı (bkz. docs/decisions.md > "Sadık kopya").
+    vwap_window: 300        # kaynak: main.py --limit 300; VWAP bu pencerenin KÜMÜLATİFİ
+    std_window: 20          # kaynak: compute_vwap_bands(std_window=20); sabit, grid'de yok
+    min_bars: 25            # kaynak: detect_vwap_signal -> len(df) < 25 ise sinyal yok
+    sl_mult: 0.5            # kaynak: VWAP_SL_MULT; SABİT, grid'i şişirmesin diye
+
+    # Epsilon-greedy bandit: 3 bant çarpanı × 3 hedef çarpanı = 9 kombinasyon
+    # (kaynak: learner.py::build_vwap_grid). Öğrenilen eksenler kaynağınkilerdir —
+    # `band_mult` giriş eşiğini VE stop mesafesini birlikte oynatır, `tp_mult` ise
+    # VWAP'e olan mesafenin ne kadarının hedefleneceğini. R:R bir kural değil, bu ikisinin
+    # SONUCUDUR: dayatılan bir hedef/stop oranı kaynakta yoktur.
+    band_mults: [1.5, 2.0, 2.5]
+    tp_mults: [0.5, 0.75, 1.0]
+    bandit:
+      epsilon: 0.25         # keşif payı; sıfıra İNMEZ — susturulan kombinasyon ölçülemez
+      min_symbol_samples: 3 # sembolde bu kadar örnek yoksa tüm semboller ortalamasına düşülür
+
+    # Kaynak sistemin evreni: 12 sembol. Kaynakta 13 yazar ama TON-USDT-SWAP OKX'te
+    # kalıcı olarak yoktur (51001); listede tutmak, hiç taranmayan bir sembolü
+    # taranıyormuş gibi göstermek olurdu — aynı gerekçeyle katmanın evreninde de yok.
+    # Katmanın evreni 13'tür ve aradaki TEK fark SUI'dir: kaynak sistemde SUI yok,
+    # fazladan bir sembolde işlem açmak kopyayı kopya olmaktan çıkarırdı.
+    universe:
+      - "BTC-USDT-SWAP"
+      - "ETH-USDT-SWAP"
+      - "SOL-USDT-SWAP"
+      - "XRP-USDT-SWAP"
+      - "BNB-USDT-SWAP"
+      - "DOGE-USDT-SWAP"
+      - "ADA-USDT-SWAP"
+      - "AVAX-USDT-SWAP"
+      - "LINK-USDT-SWAP"
+      - "ETHFI-USDT-SWAP"
+      - "PENGU-USDT-SWAP"
+      - "NEAR-USDT-SWAP"

@@ -1,0 +1,12 @@
+# Tek bağımlılık kaynağı: hem CI (.github/workflows/ci.yml) hem periyodik koşu
+# (.github/workflows/run.yml) bu dosyayı kurar.
+#
+# Sürümler major.minor seviyesinde pinlenir (yama sürümleri serbest): koşular
+# tekrarlanabilir olmalı — pandas/numpy'ın sessiz bir minor sürüm değişikliği
+# metrikleri kaydırırsa modeller arası kıyas geçmişe dönük geçersizleşir.
+pytest==9.1.*
+requests==2.33.*
+pandas==3.0.*
+numpy==2.4.*
+PyYAML==6.0.*
+pyarrow==25.0.*

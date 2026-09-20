@@ -1,0 +1,263 @@
+/* ==========================================================================
+   Paper Trading — ORTAK stil katmanı (docs/index.html + docs/positions.html)
+   ==========================================================================
+   İki sayfa da aynı ölçümü çizer; aynı sayının iki sayfada farklı görünmesi
+   okuyucuya iki ayrı ölçüm gibi gelir. Bu yüzden renk paleti, sayı hizası,
+   kart/tablo düzeni ve dokunma hedefi tabanı BURADA tek kopya durur —
+   sayfaya özgü görseller (eğri grafiği, korelasyon ısı haritası, model
+   kartları, açık pozisyon rozetleri) kendi dosyalarında kalır.
+
+   Hâlâ sıfır bağımlılık: harici framework yok, CDN yok, build adımı yok.
+   GitHub Pages bu dosyayı olduğu gibi sunar.
+
+   MOBİL: sayfanın kendisi yatay kaymaz. Geniş tablolar dar ekranda kart
+   düzenine döner; arada kalan genişliklerde tablo KENDİ konteynerinde kayar,
+   sayfa değil — bir sayıyı ekran dışında bırakmak onu hiç göstermemektir.
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+  --plane:        #0d0d0d;
+  --surface:      #1a1a19;
+  --surface-2:    #222221;
+  --ink:          #ffffff;
+  --ink-2:        #c3c2b7;
+  --ink-muted:    #898781;
+  --grid:         #2c2c2a;
+  --axis:         #383835;
+  --hair:         rgba(255,255,255,0.10);
+
+  --s1: #3987e5;  --s2: #d95926;  --s3: #199e70;  --s4: #c98500;
+  --s5: #d55181;  --s6: #008300;  --s7: #9085e9;  --s8: #e66767;
+
+  --good:     #0ca30c;
+  --warning:  #fab219;
+  --critical: #d03b3b;
+
+  /* Diverging çift: SAYININ İŞARETİ için (pozitif/negatif). */
+  --pos: #3987e5;
+  --neg: #e66767;
+  /* Yön KİMLİĞİ için kategorik slotlar. Short'a negatif kırmızıyı vermek,
+     kârdaki bir short'u da kırmızı gösterip "kötü" diye okuturdu. */
+  --long:  #3987e5;
+  --short: #d95926;
+
+  --radius: 10px;
+  --gap: 14px;
+  --touch: 44px;   /* dokunma hedefi tabanı; hiçbir tıklanabilir öğe bundan kısa değil */
+  --font: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--plane);
+  color: var(--ink);
+  font: 14px/1.5 var(--font);
+  padding: 0 0 56px;
+}
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 16px; }
+/* Yoğun tablo sayfası 1180px'e sığmaz: 16 kolonluk açık pozisyon tablosu geniş
+   ekranda kırpılmadan görünsün diye o sayfa daha geniş bir kap kullanır. */
+.wrap.wide-page { max-width: 1600px; }
+
+/* ---------------- başlık ---------------- */
+header.top { padding: 22px 0 12px; }
+h1 { font-size: 18px; margin: 0 0 4px; letter-spacing: -0.01em; }
+h1 span { color: var(--ink-muted); font-weight: 400; }
+.sub { color: var(--ink-2); font-size: 12.5px; margin: 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.chip {
+  border: 1px solid var(--hair); border-radius: 999px; padding: 3px 9px;
+  font-size: 11.5px; color: var(--ink-2); background: var(--surface);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.chip b { color: var(--ink); font-weight: 600; }
+
+/* Sayfalar arası gezinme. Link bir dokunma hedefidir, metin değil. */
+.nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.nav a {
+  display: inline-flex; align-items: center; gap: 7px; min-height: var(--touch);
+  padding: 0 14px; border: 1px solid var(--hair); border-radius: 999px;
+  background: var(--surface); color: var(--ink-2); text-decoration: none;
+  font: 600 12.5px/1 var(--font);
+}
+.nav a:hover, .nav a:focus-visible { border-color: var(--axis); color: var(--ink); outline: none; }
+.nav a:focus-visible { box-shadow: 0 0 0 2px var(--ink-muted); }
+.nav a[aria-current="page"] { background: var(--surface-2); color: var(--ink); border-color: var(--ink-muted); }
+
+section { margin-top: 26px; }
+h2 {
+  font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--ink-muted); margin: 0 0 4px; font-weight: 600;
+}
+h3.sub {
+  margin: 18px 0 6px; font-size: 13px; letter-spacing: .04em;
+  text-transform: uppercase; color: var(--ink-muted);
+}
+.note { color: var(--ink-muted); font-size: 12px; margin: 0 0 10px; max-width: 78ch; }
+.note b { color: var(--ink-2); }
+
+.card {
+  background: var(--surface); border: 1px solid var(--hair);
+  border-radius: var(--radius); padding: 14px;
+}
+.pos { color: var(--pos); }
+.neg { color: var(--neg); }
+.empty { color: var(--ink-muted); font-size: 12.5px; padding: 16px 0; margin: 0; }
+[hidden] { display: none !important; }
+
+/* ---------------- özet kartları ---------------- */
+.sum-grid { display: grid; gap: var(--gap); grid-template-columns: 1fr; }
+.sum {
+  background: var(--surface); border: 1px solid var(--hair); border-radius: var(--radius);
+  padding: 14px; min-width: 0;
+}
+.sum-k { color: var(--ink-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
+.sum-v {
+  font-size: clamp(24px, 7.5vw, 30px); font-weight: 650; line-height: 1.1;
+  letter-spacing: -0.02em; font-variant-numeric: tabular-nums; margin-top: 6px;
+  overflow-wrap: anywhere;
+}
+.sum-v small { font-size: 13px; font-weight: 400; color: var(--ink-muted); margin-left: 5px; letter-spacing: 0; }
+.sum-sub { color: var(--ink-2); font-size: 12px; margin-top: 6px; overflow-wrap: anywhere; }
+
+.tile-k { color: var(--ink-muted); font-size: 11px; }
+.tile-v { font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.strip { display: grid; gap: 10px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.strip > div {
+  background: var(--surface); border: 1px solid var(--hair); border-radius: 8px;
+  padding: 10px 11px; min-width: 0;
+}
+.strip .tile-v { font-size: clamp(17px, 5vw, 19px); margin-top: 2px; }
+
+/* ---------------- rozetler ve etiketler ---------------- */
+.tag {
+  font-size: 9.5px; letter-spacing: 0.06em; padding: 1px 5px; border-radius: 3px;
+  border: 1px solid var(--hair); color: var(--ink-muted); margin-left: 7px; font-weight: 600;
+  white-space: nowrap;
+}
+.badges { display: inline-flex; gap: 4px; flex-wrap: wrap; }
+.badge {
+  display: inline-flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.03em; padding: 2px 6px; border-radius: 4px; border: 1px solid transparent;
+  background: transparent; font-family: inherit; white-space: nowrap;
+}
+.badge.on  { color: var(--good);      border-color: rgba(12,163,12,0.45); background: rgba(12,163,12,0.12); }
+.badge.off { color: var(--ink-muted); border-color: var(--hair); }
+.badge.na  { color: var(--ink-muted); border-color: transparent; }
+.badge.warn { color: var(--warning); border-color: rgba(250,178,25,0.45); background: rgba(250,178,25,0.10); }
+.badge.info { color: var(--ink-2);   border-color: var(--hair); background: var(--surface-2); }
+button.badge { min-height: var(--touch); padding: 0 11px; font-size: 11px; cursor: pointer; }
+button.badge:focus-visible { outline: 2px solid var(--ink-muted); outline-offset: 1px; }
+
+.swatch { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 7px; vertical-align: baseline; }
+.swatch.dashed { background: transparent !important; box-shadow: inset 0 0 0 2px currentColor; }
+
+.dir { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; padding: 1px 5px; border-radius: 3px; white-space: nowrap; }
+.dir.long  { color: var(--long);  background: rgba(57,135,229,0.14); }
+.dir.short { color: var(--short); background: rgba(217,89,38,0.16); }
+
+/* ---------------- listeler: kart düzeni (mobil öncelikli) ---------------- */
+.rows { display: grid; gap: 8px; }
+.row {
+  background: var(--surface); border: 1px solid var(--hair); border-radius: var(--radius);
+  padding: 11px 12px; min-width: 0;
+}
+.row-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.row-top > div { min-width: 0; }
+.row-sym { font-weight: 650; font-size: 13.5px; overflow-wrap: anywhere; }
+.row-model { color: var(--ink-muted); font-size: 11.5px; }
+.row-grid {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 14px; margin-top: 8px;
+  font-size: 12px; color: var(--ink-2); font-variant-numeric: tabular-nums;
+}
+.row-grid > div { min-width: 0; }
+.row-grid span { color: var(--ink-muted); }
+/* Hücre satır sonu ALABİLİR, ama sayının içinden değil: her sayı `.nw` ile atomiktir. */
+.row-grid b { font-weight: 600; color: var(--ink-2); white-space: normal; }
+.nw { white-space: nowrap; }
+.reason {
+  margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--grid);
+  font-size: 11.5px; color: var(--ink-muted); line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.row-val { font-size: 15px; font-weight: 650; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.row-val-sub { font-size: 11.5px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* ---------------- listeler: tablo düzeni ---------------- */
+/* Tablo ile kart AYNI veriyi iki düzende verir; hangisinin görüneceğine yalnızca
+   genişlik karar verir. Eşik sayfaya göre değişir (her sayfa kendi `.wide`/`.narrow`
+   kırılımını seçer), ortak olan tablonun kendi biçimidir. */
+table.grid { border-collapse: collapse; width: 100%; font-size: 12.5px; table-layout: auto; }
+table.grid th, table.grid td { padding: 6px 7px; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+/* Başlık SARILABİLİR, hücredeki sayı sarılmaz: iki satırlık bir başlık okunur,
+   ortadan bölünmüş bir K/Z okunmaz. */
+table.grid th {
+  color: var(--ink-muted); font-weight: 600; font-size: 10.5px; text-transform: uppercase;
+  letter-spacing: 0.04em; border-bottom: 1px solid var(--axis); white-space: normal;
+}
+table.grid th:first-child, table.grid td:first-child { text-align: left; }
+table.grid td.symcell { white-space: normal; }
+table.grid tbody tr.data { border-top: 1px solid var(--grid); }
+table.grid td.wrapcell { white-space: normal; }
+table.grid td.reason-cell {
+  text-align: left; white-space: normal; color: var(--ink-muted); font-size: 11.5px;
+  padding: 0 8px 9px; overflow-wrap: anywhere;
+}
+
+/* ---------------- filtre + sayfalama ---------------- */
+.controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+.seg { display: inline-flex; border: 1px solid var(--hair); border-radius: 999px; background: var(--surface); overflow: hidden; }
+.seg button {
+  min-height: var(--touch); padding: 0 14px; background: transparent; border: 0;
+  color: var(--ink-2); font: 600 12px/1 var(--font); cursor: pointer;
+}
+.seg button + button { border-left: 1px solid var(--hair); }
+.seg button[aria-pressed="true"] { background: var(--surface-2); color: var(--ink); }
+/* Açılır liste ve tarih kutusu: tarayıcı varsayılanı açık temada gelir ve koyu
+   zeminde okunamaz hâle gelirdi. */
+.field { display: inline-flex; flex-direction: column; gap: 3px; min-width: 0; }
+.field > span { color: var(--ink-muted); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em; }
+select, input[type="date"] {
+  min-height: var(--touch); padding: 0 12px; border: 1px solid var(--hair); border-radius: 999px;
+  background: var(--surface); color: var(--ink); font: 500 12.5px/1 var(--font);
+  font-variant-numeric: tabular-nums; max-width: 100%;
+}
+select:focus-visible, input[type="date"]:focus-visible { outline: 2px solid var(--ink-muted); outline-offset: 1px; }
+.linkbtn {
+  min-height: var(--touch); padding: 0 14px; border: 1px solid var(--hair); border-radius: 999px;
+  background: var(--surface); color: var(--ink-2); font: 600 12.5px/1 var(--font); cursor: pointer;
+}
+.linkbtn:hover { border-color: var(--axis); color: var(--ink); }
+.pager { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.pager button {
+  min-height: var(--touch); padding: 0 16px; border: 1px solid var(--hair); border-radius: 999px;
+  background: var(--surface); color: var(--ink-2); font: 600 12.5px/1 var(--font); cursor: pointer;
+}
+.pager button:disabled { opacity: 0.4; cursor: default; }
+.pager .count { color: var(--ink-muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+
+footer { color: var(--ink-muted); font-size: 11.5px; margin-top: 34px; line-height: 1.6; }
+footer a {
+  color: var(--ink-2); display: inline-flex; align-items: center;
+  min-height: var(--touch); padding-right: 2px;
+}
+.banner {
+  border: 1px solid rgba(250,178,25,0.4); background: rgba(250,178,25,0.08);
+  color: var(--warning); border-radius: var(--radius); padding: 10px 12px; font-size: 12.5px;
+  margin-top: 12px;
+}
+
+@media (min-width: 560px) {
+  .sum-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .strip { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .row-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 760px) {
+  h1 { font-size: 21px; }
+}
+@media (min-width: 900px) {
+  .row-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}

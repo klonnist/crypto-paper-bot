@@ -1,0 +1,26 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+
+# ledgers/ ve ledgers_scalp/ KASTEN depoya girer: GitHub Actions runner'ı her koşuda
+# sıfırdan kurulur, yani defter commit edilmezse her tur boş bakiyeyle başlar ve ölçüm hiç
+# birikmez. Defter aynı zamanda denetim izidir (kural 1) — geçmişi git'te durmalı. İki
+# katmanın defteri ayrıdır (config.yaml > layers): 15 dakikalık turlar 4 saatlik modellerin
+# durumunu ezemesin.
+
+# core/data.py'nin ürettiği yerel veri deposu: parquet mum önbelleği ve evren dosyası.
+# Koşuda yeniden üretilir; depoya girerse herkes farklı/bayat veriyle koşar.
+#
+# Başındaki "/" ŞART: desensiz "data/" her düzeydeki data klasörünü tutar ve yayımlanan
+# docs/data/metrics.json'ı da sessizce yok sayardı — cron her turda commit edecek bir şey
+# bulamaz, rapor hiç güncellenmezdi.
+/data/
+
+# Backtest çıktıları: bir backtest ÖLÇÜMÜN KENDİSİ değil, ölçüm hakkında bir denemedir
+# (docs/backtest.md). Defterin aksine (kural 1, denetim izi) geçmişi tutulmaz — aynı
+# girdilerle her zaman yeniden üretilebilir, çünkü `random_seed` sabittir ve koşu kendi
+# config parmak izini çıktısına yazar. Karara giren sayılar docs/'a yazılır, buraya değil.
+#
+# Başındaki "/" aynı gerekçeyle: desensiz "backtests/" alt klasörlerde de eşleşirdi.
+/backtests/

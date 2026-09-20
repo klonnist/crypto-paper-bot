@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0d0d0d">
+<link rel="icon" href="data:,">
+<title>Backtest — ema_trend</title>
+<!--
+  ÖN-KAYITLI BACKTEST GÖRÜNÜMÜ: `ema_trend` modelinin iki dönemde, coin bazında
+  ölçümü. Tek veri kaynağı kardeş dosya data/backtest_ema_trend.json'dır ve onu
+  `scripts/backtest_ema.py` üretir.
+
+  NEDEN AYRI BİR SAYFA. index.html'in sözleşmesi "tek veri kaynağı metrics.json"dır
+  ve o dosya CANLI defteri anlatır. Backtest ise ölçümün kendisi değil, ölçüm hakkında
+  bir DENEMEDİR (docs/backtest.md > 9: sonuç dosyaları `backtests/` altına yazılır ve
+  depoya girmez; karara giren sayılar belgeye yazılır). İkisini aynı sayfada aynı
+  tabloda göstermek, geçmiş bir pencerede ölçülen bir sayı ile canlıda biriken bir
+  sayıyı aynı statüde sunardı — oysa biri bir tahmin bile değil, diğeri denetim izi.
+
+  SAYFA HİÇBİR ŞEY HESAPLAMAZ (kural 7): kâr faktörü, ortalama R, drawdown ve kapı
+  sonuçları yükten okunur. KARAR METNİ de yükten gelir (`gates.verdict`): sayfanın
+  kapı sonuçlarına bakıp kendi kararını türetmesi, ölçüm için konan sınırın aynısını
+  karar kuralı için delerdi.
+
+  Ortak tasarım dili ve yardımcılar kardeş dosyalarda (shared.css, shared.js).
+  Harici framework yok, build adımı yok, CDN yok.
+
+  MOBİL: 560px altında coin tablosu kart düzenine DÖNER — yatay kaydırmada ekran
+  dışına taşan bir kâr faktörü, hiç gösterilmemiş bir sayıdır.
+-->
+<link rel="stylesheet" href="shared.css">
+<style>
+  /* Yalnızca bu sayfaya özgü: kapı paneli ve coin tablosunun kart düzeni. */
+  .gate-list { display: grid; gap: 8px; }
+  .gate {
+    display: flex; gap: 10px; align-items: baseline; justify-content: space-between;
+    border: 1px solid var(--hair); border-radius: var(--radius);
+    background: var(--surface); padding: 10px 12px;
+  }
+  .gate > div:first-child { min-width: 0; }
+  .gate-k { font-weight: 650; font-size: 13px; }
+  .gate-d { color: var(--ink-muted); font-size: 11.5px; margin-top: 3px; overflow-wrap: anywhere; }
+  .verdict {
+    border: 1px solid var(--axis); border-radius: var(--radius); background: var(--surface-2);
+    padding: 12px 14px; font-size: 13px; line-height: 1.55; white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .verdict.block { border-color: rgba(217,89,38,0.5); }
+  .verdict.stop { border-color: rgba(250,178,25,0.5); }
+  .verdict.pass { border-color: rgba(12,163,12,0.45); }
+
+  .tablewrap {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--hair); border-radius: var(--radius); background: var(--surface);
+  }
+  .tablewrap > table.grid { min-width: 100%; }
+  table.grid td.model-cell { white-space: nowrap; color: var(--ink); font-weight: 600; }
+
+  /* 560px altında tablo YOK, kart VAR: 14 kolonu dar ekranda kırpmadan veren bir
+     tablo düzeni yok ve kırpılan kolon hiç gösterilmemiş sayıdır. */
+  .wide { display: none; }
+  @media (min-width: 560px) {
+    .wide { display: block; }
+    .narrow { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap wide-page">
+  <header>
+    <h1>Backtest <span>— <code>ema_trend</code>, ön-kayıtlı koşu</span></h1>
+    <p class="sub" id="stamp">yük okunuyor…</p>
+    <div class="chips" id="chips"></div>
+    <nav class="nav">
+      <a href="index.html">← Panel</a>
+      <a href="positions.html">Pozisyonlar &amp; işlemler</a>
+      <a href="backtest.html" aria-current="page">Backtest</a>
+    </nav>
+    <div id="banner"></div>
+  </header>
+
+  <main>
+    <section id="sec-gates">
+      <h2>Kapılar</h2>
+      <p class="note">
+        Kapılar koşudan <b>önce</b> yazıldı (<code>docs/backtest.md &gt; 6d</code>) ve sonuca
+        göre değiştirilemez. İki küme de <b>bağlayıcıdır</b>: repo'nun kabul çıtası
+        (örneklem, edge, çıpa) ve model sahibinin ek kapıları (K-1..K-3). <b>P1 bir tahmin
+        değil, kapıdır</b>: kaynak sistemle kâr faktörü farkı toleransı aşarsa hiçbir sayı
+        yorumlanmaz.
+      </p>
+      <div class="verdict" id="verdict">—</div>
+      <div class="gate-list" id="gates"></div>
+    </section>
+
+    <section id="sec-coins">
+      <h2>Coin bazlı sonuçlar</h2>
+      <p class="note">
+        <b>Kapsam kolonları önce gelir:</b> bir kâr faktörü, kaç yıllık veriye dayandığı
+        bilinmeden okunamaz — sabit evren listesi sembolün o pencerede var olduğu anlamına
+        gelmez (2022-01'de 13 sembolün yalnızca 9'u OKX'te vardı; kalanlar verileri
+        başladıkça girer).
+        Her satır <b>tek sembollü</b> bir koşudur: portföy kotası (<code>max_positions</code>)
+        burada bağlamaz, yani sayı kotanın değil sinyalin ölçüsüdür — dış bir referansla
+        (TradingView) kıyasın tek geçerli biçimi de budur. <b>Drawdown</b> ön-kayıtlı
+        tanımdır: o coinin kümülatif PnL eğrisinin en büyük düşüşünün başlangıç sermayesine
+        oranı. <b>Al-tut</b> aynı pencerede o sembolün kendi getirisidir; modelin getirisi
+        onunla yan yana okunur, ondan çıkarılmaz.
+      </p>
+      <div class="controls" id="coin-controls"></div>
+      <div class="tablewrap wide"><table class="grid" id="coin-table"></table></div>
+      <div class="rows narrow" id="coin-cards"></div>
+    </section>
+
+    <section id="sec-portfolio">
+      <h2>Portföy koşusu (canlının yapacağı şey)</h2>
+      <p class="note">
+        13 sembol <b>birlikte</b>, tek hesap: kota burada bağlar ve sinyal reddeder. Kabul
+        çıtası bu koşudan okunur, çünkü çıta canlıya alma kararını verir. Coin tablosunun
+        sayıları ile bu bölümün sayıları <b>toplanmaz</b> — iki ayrı koşu sınıfıdır.
+      </p>
+      <div class="tablewrap wide"><table class="grid" id="portfolio-table"></table></div>
+      <div class="rows narrow" id="portfolio-cards"></div>
+    </section>
+
+    <section id="sec-deviations">
+      <h2>Bu koşunun canlıdan sapmaları</h2>
+      <p class="note">
+        Bir sayının <b>hangi dünyada</b> ölçüldüğü, sayının kendisi kadar ölçümün parçasıdır.
+        Aşağıdakiler koşudan önce yazıldı ve <code>manifest.json</code>'a da düşer.
+      </p>
+      <div class="gate-list" id="deviations"></div>
+    </section>
+  </main>
+
+  <footer>
+    Veri kaynağı: <a href="data/backtest_ema_trend.json">data/backtest_ema_trend.json</a>
+    (üreten: <code>scripts/backtest_ema.py</code>, tetikleyici
+    <code>.github/workflows/backtest-ema.yml</code>).
+    Ön-kayıt: <code>docs/backtest.md &gt; 6d</code>. Kurallar: <code>docs/backtest.md &gt; 7</code>.
+    Tüm zamanlar UTC.
+  </footer>
+</div>
+
+<script src="shared.js"></script>
+<script>
+"use strict";
+
+const el = (id) => document.getElementById(id);
+let PAYLOAD = null;
+let PERIOD = "B";   // OOS varsayılan: kararın okunduğu pencere odur
+
+fetchPayload("data/backtest_ema_trend.json")
+  .then((data) => { PAYLOAD = data; render(); })
+  .catch((err) => {
+    el("stamp").textContent = "data/backtest_ema_trend.json okunamadı: " + err.message;
+    el("banner").innerHTML =
+      '<div class="banner">Bu sayfa <code>data/backtest_ema_trend.json</code> dosyasını okur. ' +
+      'Dosya, <code>backtest-ema</code> workflow\'u koşturulup sonucu depoya yazıldığında ' +
+      'oluşur — koşu yapılmadıysa sayfa boştur ve bu bir hata değildir. Yerelde görmek için ' +
+      'depo kökünde <code>python -m http.server</code> çalıştırın.</div>';
+  });
+
+function render() {
+  renderHeader();
+  renderGates();
+  renderControls();
+  renderCoins();
+  renderPortfolio();
+  renderDeviations();
+}
+
+/* ------------------------------------------------------------------ *
+ * Başlık: koşunun kimliği — hangi model, hangi pencereler, hangi maliyet.
+ * ------------------------------------------------------------------ */
+function renderHeader() {
+  const periods = PAYLOAD.periods || {};
+  const windows = Object.keys(periods).sort().map((k) => {
+    const w = (periods[k] || {}).window || {};
+    return k + ": " + shortTs(w.start) + " → " + shortTs(w.end);
+  });
+  el("stamp").textContent =
+    (PAYLOAD.model || "—") + " · " + (PAYLOAD.symbols || []).length + " sembol · " + windows.join(" · ");
+
+  const costs = PAYLOAD.costs || {};
+  const chips = [
+    ["katman", PAYLOAD.layer || "—"],
+    ["ön-kayıt", PAYLOAD.preregistration || "—"],
+    ["komisyon", fmt(costs.fee_rate * 100, 4) + "%"],
+    ["kayma", fmt(costs.slippage_base * 100, 4) + "%"],
+    ["embargo", (PAYLOAD.embargo_bars ?? DASH) + " bar"],
+  ];
+  el("chips").innerHTML = chips
+    .map(([k, v]) => '<span class="chip">' + esc(k) + " <b>" + esc(v) + "</b></span>")
+    .join("");
+}
+
+/* ------------------------------------------------------------------ *
+ * Kapılar. Sonuç METNİ yükten gelir; sayfa kendi kararını türetmez.
+ * ------------------------------------------------------------------ */
+function renderGates() {
+  const gates = PAYLOAD.gates;
+  if (!gates) {
+    el("verdict").textContent =
+      "Kapılar değerlendirilmedi: koşu bölünmüş (tek dönem). İki dönemin yükü " +
+      "birleştirilmeden kapı okunamaz.";
+    el("gates").innerHTML = "";
+    return;
+  }
+
+  const verdict = gates.verdict || "—";
+  const node = el("verdict");
+  node.textContent = verdict;
+  node.className = "verdict " + (
+    verdict.indexOf("BLOKE") >= 0 ? "block" :
+    verdict.indexOf("DUR") >= 0 ? "stop" :
+    verdict.indexOf("GEÇİLDİ") >= 0 ? "pass" : ""
+  );
+
+  const items = [];
+  const p1 = gates.P1_tradingview_parity || {};
+  for (const key of Object.keys(p1.periods || {}).sort()) {
+    const row = p1.periods[key];
+    items.push([
+      "P1 — TradingView paritesi (dönem " + key + ")",
+      "referans " + fmt(row.reference, 3) + " · ölçülen " + fmt(row.measured, 3) +
+      " · sapma " + fmtSigned(row.deviation, 3) + " (tolerans ±" + fmt(p1.tolerance, 2) + ")",
+      row.passed,
+    ]);
+  }
+
+  const k1 = gates.K1_period_b_profit_factor || {};
+  items.push([
+    "K-1 — dönem B kâr faktörü > " + fmt(k1.threshold, 2),
+    (k1.coins || []).length + "/" + k1.required_coins + " coin" +
+    ((k1.coins || []).length ? " · " + k1.coins.join(", ") : ""),
+    k1.passed,
+  ]);
+
+  const k2 = gates.K2_total_trades || {};
+  items.push([
+    "K-2 — toplam işlem > " + k2.threshold,
+    "ölçülen " + k2.measured,
+    k2.passed,
+  ]);
+
+  const k3 = gates.K3_max_drawdown || {};
+  items.push([
+    "K-3 — coin başına drawdown ≤ %" + fmt(k3.threshold_pct, 0),
+    (k3.breaches || []).length
+      ? k3.breaches.map((b) => b.symbol + " (" + b.period + "): " + pctRaw(b.drawdown_pct)).join(" · ")
+      : "aşım yok",
+    k3.passed,
+  ]);
+
+  for (const key of Object.keys(gates.repo_acceptance || {}).sort()) {
+    const flag = gates.repo_acceptance[key];
+    if (!flag) { items.push(["Repo kabul çıtası (dönem " + key + ")", "model tabloda yok", false]); continue; }
+    items.push([
+      "Repo kabul çıtası (dönem " + key + ")",
+      "örneklem n=" + flag.measured_trades + "/" + flag.min_trades +
+      " · ort.R " + fmtSigned(flag.avg_r) + " ↔ kontrol " + fmtSigned(flag.control_avg_r) +
+      " · getiri " + pctSigned(flag.total_return) + " ↔ çıpa " + pctSigned(flag.benchmark_return) +
+      " · band " + (flag.band ? "içinde" : "DIŞINDA"),
+      flag.passed,
+    ]);
+  }
+
+  el("gates").innerHTML = items.map(([k, d, ok]) =>
+    '<div class="gate"><div><div class="gate-k">' + esc(k) + '</div>' +
+    '<div class="gate-d">' + esc(d) + "</div></div>" +
+    '<span class="badge ' + (ok ? "on" : "off") + '">' + (ok ? "GEÇTİ" : "DÜŞTÜ") + "</span></div>"
+  ).join("");
+}
+
+/* ------------------------------------------------------------------ *
+ * Coin tablosu.
+ * ------------------------------------------------------------------ */
+const COIN_COLUMNS = [
+  ["symbol", "sembol", (r) => esc(String(r.symbol || "").replace("-USDT-SWAP", "")), "symcell"],
+  ["model", "model", (r) => esc(r.model), "model-cell"],
+  // Kapsam kolonları performans kolonlarından ÖNCE gelir: bir kâr faktörünü, kaç yıllık
+  // veriye dayandığını bilmeden okumak yanıltıcıdır — sabit evren listesi sembolün o
+  // pencerede var olduğu anlamına gelmez (2022-01'de 13 sembolün 9'u vardı).
+  ["first_bar", "veri başı", (r) => esc(shortTs(r.first_bar))],
+  ["years", "kapsam (yıl)", (r) => fmt(r.years, 2)],
+  ["trades", "n", (r) => r.trades ?? DASH],
+  ["win_rate_pct", "kazanç%", (r) => pctRaw(r.win_rate_pct, 1)],
+  ["profit_factor", "KF", (r) => fmt(r.profit_factor)],
+  ["avg_r", "ort.R", (r) => signed(r.avg_r)],
+  ["avg_win_pct", "ort.kâr%", (r) => pctRaw(r.avg_win_pct)],
+  ["avg_loss_pct", "ort.zarar%", (r) => pctRaw(r.avg_loss_pct)],
+  ["payoff", "ödeme", (r) => fmt(r.payoff)],
+  ["max_drawdown_pct", "maxDD%", (r) => signedPct(r.max_drawdown_pct)],
+  ["total_return_pct", "getiri%", (r) => signedPct(r.total_return_pct)],
+  ["buy_hold_pct", "al-tut%", (r) => signedPct(r.buy_hold_pct)],
+  ["cost_pct", "maliyet%", (r) => pctRaw(r.cost_pct)],
+  ["max_hold_bars", "azami tutuş", (r) => fmt(r.max_hold_bars, 0)],
+];
+
+const signed = (v) => '<span class="' + signClass(v) + '">' + fmtSigned(v) + "</span>";
+const signedPct = (v) => '<span class="' + signClass(v) + '">' + pctRaw(v) + "</span>";
+
+function renderControls() {
+  const periods = Object.keys(PAYLOAD.periods || {}).sort();
+  el("coin-controls").innerHTML =
+    '<div class="seg" role="group" aria-label="Dönem">' +
+    periods.map((p) =>
+      '<button type="button" data-period="' + esc(p) + '" aria-pressed="' +
+      (p === PERIOD ? "true" : "false") + '">Dönem ' + esc(p) + "</button>"
+    ).join("") + "</div>";
+
+  for (const button of el("coin-controls").querySelectorAll("button")) {
+    button.addEventListener("click", () => {
+      PERIOD = button.dataset.period;
+      renderControls();
+      renderCoins();
+      renderPortfolio();
+    });
+  }
+}
+
+function coinRows() {
+  return (PAYLOAD.coins || []).filter((row) => row.period === PERIOD);
+}
+
+function renderCoins() {
+  const rows = coinRows();
+  if (!rows.length) {
+    el("coin-table").innerHTML = "";
+    el("coin-cards").innerHTML = '<p class="empty">Bu dönemde coin satırı yok.</p>';
+    return;
+  }
+
+  el("coin-table").innerHTML =
+    "<thead><tr>" + COIN_COLUMNS.map(([, label]) => "<th>" + esc(label) + "</th>").join("") +
+    "</tr></thead><tbody>" +
+    rows.map((row) => {
+      if (row.failed) {
+        return '<tr class="data"><td class="symcell">' +
+          esc(String(row.symbol).replace("-USDT-SWAP", "")) + "</td>" +
+          '<td colspan="' + (COIN_COLUMNS.length - 1) + '" class="wrapcell">koşulamadı: ' +
+          esc(row.failed) + "</td></tr>";
+      }
+      return '<tr class="data">' + COIN_COLUMNS.map(([, , render, cls]) =>
+        "<td" + (cls ? ' class="' + cls + '"' : "") + ">" + render(row) + "</td>"
+      ).join("") + "</tr>";
+    }).join("") + "</tbody>";
+
+  el("coin-cards").innerHTML = rows.map((row) => {
+    if (row.failed) {
+      return '<div class="row"><div class="row-top"><div><div class="row-sym">' +
+        esc(String(row.symbol).replace("-USDT-SWAP", "")) +
+        '</div><div class="row-model">koşulamadı: ' + esc(row.failed) + "</div></div></div></div>";
+    }
+    const cells = COIN_COLUMNS.slice(2).map(([, label, render]) =>
+      "<div><span>" + esc(label) + "</span><br><b>" + render(row) + "</b></div>"
+    ).join("");
+    return '<div class="row"><div class="row-top"><div>' +
+      '<div class="row-sym">' + esc(String(row.symbol).replace("-USDT-SWAP", "")) + "</div>" +
+      '<div class="row-model">' + esc(row.model) + "</div></div>" +
+      '<div class="row-val ' + signClass(row.avg_r) + '">' + fmtSigned(row.avg_r) + "R</div></div>" +
+      '<div class="row-grid">' + cells + "</div></div>";
+  }).join("");
+}
+
+/* ------------------------------------------------------------------ *
+ * Portföy koşusu: modelin TOPLAM satırı + long/short kırılımı.
+ * ------------------------------------------------------------------ */
+const PORTFOLIO_COLUMNS = [
+  ["model", "model", (m, d) => esc(m.model), "model-cell"],
+  ["direction", "yön", (m, d) => d === "total" ? "TOPLAM" : dirBadge(d)],
+  ["trades", "n", (m, d) => m[d].trades ?? DASH],
+  ["avg_r", "ort.R", (m, d) => signed(m[d].avg_r)],
+  ["win_rate", "kazanç%", (m, d) => pct(m[d].win_rate, 1)],
+  ["profit_factor", "KF", (m, d) => fmt(m[d].profit_factor)],
+  ["payoff", "ödeme", (m, d) => fmt(m[d].payoff)],
+  ["max_drawdown_r", "maxDD(R)", (m, d) => fmt(m[d].max_drawdown_r)],
+  ["cost_per_r", "maliyet/R", (m, d) => fmt(m[d].cost_per_r, 3)],
+  ["total_return", "hesap getirisi", (m) => '<span class="' + signClass(m.account.total_return) + '">' + pctSigned(m.account.total_return) + "</span>"],
+  ["account_dd", "hesap maxDD", (m) => pctSigned(m.account.max_drawdown)],
+];
+
+function renderPortfolio() {
+  const period = (PAYLOAD.periods || {})[PERIOD];
+  const models = (period || {}).models || [];
+  if (!models.length) {
+    el("portfolio-table").innerHTML = "";
+    el("portfolio-cards").innerHTML = '<p class="empty">Bu dönemin portföy koşusu yükte yok.</p>';
+    return;
+  }
+
+  const rows = [];
+  for (const model of models) {
+    for (const direction of ["total", "long", "short"]) {
+      if (!model[direction] || !model[direction].trades) continue;
+      rows.push([model, direction]);
+    }
+  }
+
+  el("portfolio-table").innerHTML =
+    "<thead><tr>" + PORTFOLIO_COLUMNS.map(([, label]) => "<th>" + esc(label) + "</th>").join("") +
+    "</tr></thead><tbody>" +
+    rows.map(([model, direction]) =>
+      '<tr class="data">' + PORTFOLIO_COLUMNS.map(([, , render, cls]) =>
+        "<td" + (cls ? ' class="' + cls + '"' : "") + ">" + render(model, direction) + "</td>"
+      ).join("") + "</tr>"
+    ).join("") + "</tbody>";
+
+  el("portfolio-cards").innerHTML = models.map((model) =>
+    '<div class="row"><div class="row-top"><div>' +
+    '<div class="row-sym">' + esc(model.model) + "</div>" +
+    '<div class="row-model">' + (model.total.trades ?? 0) + " pozisyon · hesap " +
+    pctSigned(model.account.total_return) + "</div></div>" +
+    '<div class="row-val ' + signClass(model.total.avg_r) + '">' + fmtSigned(model.total.avg_r) + "R</div></div>" +
+    '<div class="row-grid">' +
+    "<div><span>kazanç%</span><br><b>" + pct(model.total.win_rate, 1) + "</b></div>" +
+    "<div><span>KF</span><br><b>" + fmt(model.total.profit_factor) + "</b></div>" +
+    "<div><span>maxDD(R)</span><br><b>" + fmt(model.total.max_drawdown_r) + "</b></div>" +
+    "<div><span>maliyet/R</span><br><b>" + fmt(model.total.cost_per_r, 3) + "</b></div>" +
+    "</div></div>"
+  ).join("");
+}
+
+/* ------------------------------------------------------------------ *
+ * Sapmalar: koşunun canlıdan farkları.
+ * ------------------------------------------------------------------ */
+function renderDeviations() {
+  const period = (PAYLOAD.periods || {})[PERIOD] || {};
+  const dev = period.deviations || {};
+  const items = [];
+
+  if (dev.costs) {
+    items.push([
+      "Maliyet varsayımı canlıdan FARKLI",
+      "komisyon " + fmt(dev.costs.live_fee_rate * 100, 4) + "% → " + fmt(dev.costs.run_fee_rate * 100, 4) + "%, " +
+      "kayma " + fmt(dev.costs.live_slippage_base * 100, 4) + "% → " + fmt(dev.costs.run_slippage_base * 100, 4) + "%. " +
+      "Dolum başına " + fmt((dev.costs.live_fee_rate + dev.costs.live_slippage_base) * 100, 4) + "% → " +
+      fmt((dev.costs.run_fee_rate + dev.costs.run_slippage_base) * 100, 4) + "%.",
+    ]);
+  }
+  if (dev.signals_per_bar) {
+    items.push([
+      "Telafi barlarında sinyal",
+      "canlı: " + (dev.signals_per_bar.live ? "açık" : "kapalı") + " · koşu: " +
+      (dev.signals_per_bar.run ? "açık" : "kapalı") +
+      ". Kapalıyken tüm pencere tek sinyal üretirdi; bu sapma backtest'i işlem SIKLIĞI " +
+      "açısından iyimser kılar (docs/backtest.md > 5a).",
+    ]);
+  }
+  if (dev.history_bars) {
+    items.push([
+      "Anlık görüntü derinliği",
+      "config " + dev.history_bars.config + " bar → koşu " + dev.history_bars.used + " bar " +
+      "(yalnızca derinleştirir; sinyali değiştirmemesi Kapı 0'da sınanır).",
+    ]);
+  }
+  if (dev.funding_history_periods) {
+    items.push([
+      "Funding geçmişi derinliği",
+      dev.funding_history_periods + " periyot. Kaydı olmayan anda funding İŞLENMEZ " +
+      "(uydurma yok), yani derinlik yetmezse eski dönem iyimser çıkar.",
+    ]);
+  }
+  if (dev.signal_cutoff) {
+    items.push([
+      "Sinyal kesimi (dönem ataması)",
+      fullTs(dev.signal_cutoff) + " sonrası YENİ sinyal yok; barlar pozisyon yönetimi için " +
+      "işlenmeye devam etti. Bir işlem GİRİŞ tarihine göre döneme aittir.",
+    ]);
+  }
+
+  const validity = period.validity || {};
+  const gaps = Object.keys(validity).filter((model) =>
+    (validity[model].missing_bars || 0) > 0 || (validity[model].unchecked_position_bars || 0) > 0
+  );
+  if (gaps.length) {
+    items.push([
+      "⚠ Veri bütünlüğü kapısı (B-2)",
+      gaps.map((model) =>
+        model + ": eksik bar " + validity[model].missing_bars +
+        ", kontrolsüz pozisyon barı " + validity[model].unchecked_position_bars
+      ).join(" · ") + " — sıfırdan büyükse pencere eksik bir geçmişin üstüne yazılmıştır.",
+    ]);
+  }
+
+  el("deviations").innerHTML = items.length
+    ? items.map(([k, d]) =>
+        '<div class="gate"><div><div class="gate-k">' + esc(k) + "</div>" +
+        '<div class="gate-d">' + esc(d) + "</div></div></div>"
+      ).join("")
+    : '<p class="empty">Bu dönem için kayıtlı sapma yok.</p>';
+}
+</script>
+</body>
+</html>
