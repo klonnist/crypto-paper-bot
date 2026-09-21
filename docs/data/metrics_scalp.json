@@ -49,7 +49,7 @@
         "model": "scalp_patient",
         "passed": false,
         "sample": false,
-        "total_return": 0.01113831300000001
+        "total_return": 0.009208862000000151
       },
       {
         "avg_r": 0.3469289128842455,
@@ -71,21 +71,46 @@
         "model": "vwap_managed",
         "passed": false,
         "sample": false,
-        "total_return": 0.009505077999999889
+        "total_return": 0.01374750899999988
       }
     ],
     "stop_band_ratio": 2.5
   },
   "activity": {
-    "closed": 62,
-    "closed_avg_r": -0.5830758281469237,
-    "closed_pnl": -1119.9565354829997,
+    "closed": 63,
+    "closed_avg_r": -0.5854629145061543,
+    "closed_pnl": -1131.0668960829998,
     "closed_wins": 19,
     "hours": 24,
     "opened": 59,
-    "since": "2026-09-20T17:45:00+00:00",
-    "still_open": 5,
+    "since": "2026-09-20T18:00:00+00:00",
+    "still_open": 4,
     "trades": [
+      {
+        "closed_at": "2026-09-21T18:00:00+00:00",
+        "direction": "short",
+        "entry_price": 2746.735945,
+        "exit_price": 2750.856049,
+        "exit_reason": "stop",
+        "exit_rule": "breakeven",
+        "fee": 4.702570418,
+        "funding": 0.0,
+        "is_partial": false,
+        "leverage": 10.0,
+        "margin": 427.1860122,
+        "model": "vwap_clone",
+        "notes": "exit_rule=breakeven",
+        "notional": 4271.860122,
+        "opened_at": "2026-09-21T17:30:00+00:00",
+        "pnl": -11.1103606,
+        "qty": 1.555249652,
+        "r": -0.7334622687784577,
+        "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=2648.11 (300 bar), σ=8.36575; bu bar +11.90σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2×0.5σ (2756.48), hedef VWAP mesafesinin %75'i (2673.11); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp1 | combo_r=-0.3921 | combo_n=5 | pick=exploit",
+        "risk_amount": 15.14782842,
+        "slippage_cost": 8.544788742,
+        "stop_price": 2756.47575,
+        "symbol": "ETH-USDT-SWAP"
+      },
       {
         "closed_at": "2026-09-21T17:15:00+00:00",
         "direction": "short",
@@ -1638,7 +1663,7 @@
       }
     ]
   },
-  "as_of": "2026-09-21T17:45:00+00:00",
+  "as_of": "2026-09-21T18:00:00+00:00",
   "benchmarks": [],
   "breakdowns": {
     "arm": {
@@ -1712,18 +1737,18 @@
       },
       "vwap_clone": {
         "vwap_revert_src": {
-          "avg_loss_pct": -0.7081269822860431,
-          "avg_loss_r": -1.4574842745574998,
-          "avg_r": -0.9865834788558566,
-          "avg_r_ci_high": -0.7121193179495136,
-          "avg_r_ci_low": -1.250222072843052,
-          "avg_stop_distance_pct": 0.6627319067309034,
+          "avg_loss_pct": -0.7004020774183155,
+          "avg_loss_r": -1.4450011365268267,
+          "avg_r": -0.9830183913899777,
+          "avg_r_ci_high": -0.7033636082811213,
+          "avg_r_ci_low": -1.2586412404629557,
+          "avg_stop_distance_pct": 0.6583919588489798,
           "avg_win_pct": 0.7503549811152619,
           "avg_win_r": 1.0781353946051946,
-          "cost_pct": 0.2879674679366845,
-          "cost_per_r": 0.719759855351167,
+          "cost_pct": 0.28825050830663895,
+          "cost_per_r": 0.7219398362759547,
           "direction": "total",
-          "fees": 363.5381622319998,
+          "fees": 368.2407326499998,
           "funding": 1.752175769898,
           "liquidations": 0,
           "market_measured": 0,
@@ -1731,17 +1756,17 @@
           "market_tailwind_pct": null,
           "max_drawdown_pnl": -1583.3634867849998,
           "max_drawdown_r": -71.63518815775723,
-          "median_r": -1.3614856999279819,
-          "notional": 329882.49850600015,
-          "payoff": 1.0596333706885372,
-          "pnl": -1434.0809144349998,
-          "profit_factor": 0.16870887246369837,
-          "r_sharpe": -0.8404677082101275,
-          "slippage_cost": 586.4161158819999,
-          "total_r": -69.06084351990997,
-          "trades": 70,
+          "median_r": -1.3563279094233605,
+          "notional": 334154.35862800013,
+          "payoff": 1.0713203248640737,
+          "pnl": -1445.1912750349998,
+          "profit_factor": 0.16723241983233395,
+          "r_sharpe": -0.8431970704722006,
+          "slippage_cost": 594.9609046239999,
+          "total_r": -69.79430578868842,
+          "trades": 71,
           "unmeasured": 0,
-          "win_rate": 0.18571428571428572
+          "win_rate": 0.18309859154929578
         }
       },
       "vwap_managed": {
@@ -1978,34 +2003,34 @@
           "win_rate": 0.0
         },
         "stop:breakeven": {
-          "avg_loss_pct": -0.24903226038709478,
-          "avg_loss_r": -0.4453797840898417,
-          "avg_r": -0.4453797840898417,
-          "avg_r_ci_high": -0.24080020517463843,
-          "avg_r_ci_low": -0.6881416782429046,
-          "avg_stop_distance_pct": 1.0742487767765874,
+          "avg_loss_pct": -0.24995311368465759,
+          "avg_loss_r": -0.469386657813893,
+          "avg_r": -0.469386657813893,
+          "avg_r_ci_high": -0.273501664257126,
+          "avg_r_ci_low": -0.7066865356157402,
+          "avg_stop_distance_pct": 1.0142776793047323,
           "avg_win_pct": null,
           "avg_win_r": null,
-          "cost_pct": 0.29116426200916645,
-          "cost_per_r": 0.5269091270447442,
+          "cost_pct": 0.292593802890252,
+          "cost_per_r": 0.5558782415419398,
           "direction": "total",
-          "fees": 57.599512358,
+          "fees": 62.302082776,
           "funding": 0.0,
           "liquidations": 0,
           "market_measured": 0,
           "market_r": null,
           "market_tailwind_pct": null,
-          "max_drawdown_pnl": -130.070705079,
-          "max_drawdown_r": -4.899177624988258,
-          "median_r": -0.26721677014041617,
-          "notional": 52335.76631399999,
+          "max_drawdown_pnl": -141.181065679,
+          "max_drawdown_r": -5.632639893766716,
+          "median_r": -0.3102209431609331,
+          "notional": 56607.62643599999,
           "payoff": null,
-          "pnl": -130.070705079,
+          "pnl": -141.181065679,
           "profit_factor": 0.0,
-          "r_sharpe": -1.1189200098026986,
-          "slippage_cost": 94.78353539700001,
-          "total_r": -4.899177624988258,
-          "trades": 11,
+          "r_sharpe": -1.2081246700900516,
+          "slippage_cost": 103.328324139,
+          "total_r": -5.632639893766716,
+          "trades": 12,
           "unmeasured": 0,
           "win_rate": 0.0
         },
@@ -2244,18 +2269,18 @@
       },
       "vwap_clone": {
         "0": {
-          "avg_loss_pct": -0.4552946668916886,
-          "avg_loss_r": -1.8387639539082725,
-          "avg_r": -0.8659880364502515,
-          "avg_r_ci_high": 0.4033543710899603,
-          "avg_r_ci_low": -2.2095200789895393,
-          "avg_stop_distance_pct": 0.8070874236037828,
+          "avg_loss_pct": -0.41625223350492063,
+          "avg_loss_r": -1.6177036168823098,
+          "avg_r": -0.8470557839257095,
+          "avg_r_ci_high": 0.3355644667730329,
+          "avg_r_ci_low": -1.9784112214204248,
+          "avg_stop_distance_pct": 0.7424457355338604,
           "avg_win_pct": 0.5329617143749479,
           "avg_win_r": 1.0795637984657902,
-          "cost_pct": 0.2778340609813977,
-          "cost_per_r": 1.0279574617939182,
+          "cost_pct": 0.2819156847061144,
+          "cost_per_r": 1.0060404673963714,
           "direction": "total",
-          "fees": 32.528406156,
+          "fees": 37.230976574,
           "funding": -0.08586254444,
           "liquidations": 0,
           "market_measured": 0,
@@ -2263,17 +2288,17 @@
           "market_tailwind_pct": null,
           "max_drawdown_pnl": -78.0041567,
           "max_drawdown_r": -7.271750191401207,
-          "median_r": -0.8021776675740198,
-          "notional": 29505.793003,
-          "payoff": 1.1705863326128871,
-          "pnl": -39.170642902,
-          "profit_factor": 0.29355692887365703,
-          "r_sharpe": -0.4729161192789477,
-          "slippage_cost": 49.44873676899999,
-          "total_r": -5.195928218701509,
-          "trades": 6,
+          "median_r": -0.7334622687784577,
+          "notional": 33777.653125,
+          "payoff": 1.2803816327598099,
+          "pnl": -50.281003502,
+          "profit_factor": 0.26693735173723854,
+          "r_sharpe": -0.506500607909927,
+          "slippage_cost": 57.993525510999994,
+          "total_r": -5.929390487479966,
+          "trades": 7,
           "unmeasured": 0,
-          "win_rate": 0.3333333333333333
+          "win_rate": 0.2857142857142857
         },
         "1": {
           "avg_loss_pct": -0.9775942108037746,
@@ -2734,36 +2759,36 @@
           "win_rate": 0.26666666666666666
         },
         "16-24_gece": {
-          "avg_loss_pct": -0.5556697577693057,
-          "avg_loss_r": -1.4064136174067197,
-          "avg_r": -1.1377045672779753,
-          "avg_r_ci_high": -0.6183314728617489,
-          "avg_r_ci_low": -1.566606647018063,
-          "avg_stop_distance_pct": 0.6287255795220514,
+          "avg_loss_pct": -0.5371955541560897,
+          "avg_loss_r": -1.3643541581174532,
+          "avg_r": -1.11524666180578,
+          "avg_r_ci_high": -0.630168419541308,
+          "avg_r_ci_low": -1.518511912566514,
+          "avg_stop_distance_pct": 0.6134961366105112,
           "avg_win_pct": 0.4878816571860583,
           "avg_win_r": 0.8776133086876098,
-          "cost_pct": 0.30461663031367103,
-          "cost_per_r": 0.7682046154420675,
+          "cost_pct": 0.30488905872580013,
+          "cost_per_r": 0.7741120535292355,
           "direction": "total",
-          "fees": 90.156935633,
+          "fees": 94.859506051,
           "funding": 1.1846743664000001,
           "liquidations": 0,
           "market_measured": 0,
           "market_r": null,
           "market_tailwind_pct": null,
-          "max_drawdown_pnl": -352.96809972299997,
-          "max_drawdown_r": -19.34097764372558,
-          "median_r": -1.4731713934389605,
-          "notional": 81828.85265500001,
-          "payoff": 0.878006496420864,
-          "pnl": -352.96809972299997,
-          "profit_factor": 0.08320106288559571,
-          "r_sharpe": -1.1282606377597735,
-          "slippage_cost": 159.107357949,
-          "total_r": -19.34097764372558,
-          "trades": 17,
+          "max_drawdown_pnl": -364.07846032299994,
+          "max_drawdown_r": -20.074439912504037,
+          "median_r": -1.4705687470542372,
+          "notional": 86100.71277700001,
+          "payoff": 0.9082012191119092,
+          "pnl": -364.07846032299994,
+          "profit_factor": 0.08040556253906864,
+          "r_sharpe": -1.1346583360197167,
+          "slippage_cost": 167.652146691,
+          "total_r": -20.074439912504037,
+          "trades": 18,
           "unmeasured": 0,
-          "win_rate": 0.11764705882352941
+          "win_rate": 0.1111111111111111
         }
       },
       "vwap_managed": {
@@ -3128,36 +3153,36 @@
           "win_rate": 0.5
         },
         "ETH-USDT-SWAP": {
-          "avg_loss_pct": -0.6531432863411426,
-          "avg_loss_r": -1.5288823209265217,
-          "avg_r": -1.2981358720562621,
-          "avg_r_ci_high": -0.7079303081400456,
-          "avg_r_ci_low": -1.7627755238555458,
-          "avg_stop_distance_pct": 0.5238166308217199,
+          "avg_loss_pct": -0.6203882208092014,
+          "avg_loss_r": -1.4625973165808495,
+          "avg_r": -1.2546994410348924,
+          "avg_r_ci_high": -0.7064752529519102,
+          "avg_r_ci_low": -1.694621885958361,
+          "avg_stop_distance_pct": 0.5107996289980743,
           "avg_win_pct": 0.9932629688972445,
           "avg_win_r": 1.2400750655165909,
-          "cost_pct": 0.30653465912148364,
-          "cost_per_r": 0.8044910399936988,
+          "cost_pct": 0.3067865621891958,
+          "cost_per_r": 0.809879306225806,
           "direction": "total",
-          "fees": 62.07344374099999,
+          "fees": 66.77601415899998,
           "funding": 0.3656681867,
           "liquidations": 0,
           "market_measured": 0,
           "market_r": null,
           "market_tailwind_pct": null,
-          "max_drawdown_pnl": -286.84763389,
-          "max_drawdown_r": -15.577630464675146,
-          "median_r": -1.4976336416194638,
-          "notional": 56317.833472,
-          "payoff": 1.5207428288230989,
-          "pnl": -286.84763389,
-          "profit_factor": 0.07373628128345834,
-          "r_sharpe": -1.330452636892109,
-          "slippage_cost": 110.560235117,
-          "total_r": -15.577630464675146,
-          "trades": 12,
+          "max_drawdown_pnl": -297.95799449,
+          "max_drawdown_r": -16.311092733453602,
+          "median_r": -1.4359884712871693,
+          "notional": 60589.693594,
+          "payoff": 1.6010345386662646,
+          "pnl": -297.95799449,
+          "profit_factor": 0.07065484643075155,
+          "r_sharpe": -1.324629156226238,
+          "slippage_cost": 119.105023859,
+          "total_r": -16.311092733453602,
+          "trades": 13,
           "unmeasured": 0,
-          "win_rate": 0.08333333333333333
+          "win_rate": 0.07692307692307693
         },
         "ETHFI-USDT-SWAP": {
           "avg_loss_pct": -0.6950845877017585,
@@ -3428,18 +3453,18 @@
       "top_symbol_share": 0.0
     },
     "scalp_patient": {
-      "gross_exposure": 0.1604217002143203,
-      "net_exposure": -0.1604217002143203,
+      "gross_exposure": 0.16264024715290737,
+      "net_exposure": -0.16264024715290737,
       "top_symbol_share": 1.0
     },
     "vwap_clone": {
-      "gross_exposure": 1.5059036236806427,
-      "net_exposure": -1.5059036236806427,
-      "top_symbol_share": 0.33642039047752176
+      "gross_exposure": 1.0196785568435798,
+      "net_exposure": -1.0196785568435798,
+      "top_symbol_share": 0.5051069867909223
     },
     "vwap_managed": {
-      "gross_exposure": 0.2583215689495699,
-      "net_exposure": 0.2583215689495699,
+      "gross_exposure": 0.2614254183805444,
+      "net_exposure": 0.2614254183805444,
       "top_symbol_share": 1.0
     }
   },
@@ -3447,27 +3472,27 @@
     "matrix": [
       [
         0.9999999999999999,
-        0.5039858127562133,
-        -0.08030547232964433,
-        -0.17787632730915118
+        0.4951928324550373,
+        -0.0814075544177599,
+        -0.17149087960126475
       ],
       [
-        0.5039858127562133,
+        0.4951928324550373,
         1.0000000000000002,
-        -0.2279040287883279,
-        -0.2246955727087908
+        -0.20668527352343494,
+        -0.24877631151256144
       ],
       [
-        -0.08030547232964433,
-        -0.2279040287883279,
-        0.9999999999999999,
-        0.2826592930028138
+        -0.0814075544177599,
+        -0.20668527352343494,
+        1.0,
+        0.2544569039064506
       ],
       [
-        -0.17787632730915118,
-        -0.2246955727087908,
-        0.2826592930028138,
-        0.9999999999999999
+        -0.17149087960126475,
+        -0.24877631151256144,
+        0.2544569039064506,
+        1.0
       ]
     ],
     "min_overlap": 3,
@@ -3479,28 +3504,28 @@
     ],
     "overlap": [
       [
-        118,
-        118,
-        118,
-        118
+        119,
+        119,
+        119,
+        119
       ],
       [
-        118,
-        118,
-        118,
-        118
+        119,
+        119,
+        119,
+        119
       ],
       [
-        118,
-        118,
-        118,
-        118
+        119,
+        119,
+        119,
+        119
       ],
       [
-        118,
-        118,
-        118,
-        118
+        119,
+        119,
+        119,
+        119
       ]
     ]
   },
@@ -3982,6 +4007,10 @@
       [
         "2026-09-21T17:45:00+00:00",
         9773.757878
+      ],
+      [
+        "2026-09-21T18:00:00+00:00",
+        9773.757878
       ]
     ],
     "scalp_patient": [
@@ -4460,6 +4489,10 @@
       [
         "2026-09-21T17:45:00+00:00",
         10111.38313
+      ],
+      [
+        "2026-09-21T18:00:00+00:00",
+        10092.08862
       ]
     ],
     "vwap_clone": [
@@ -4938,6 +4971,10 @@
       [
         "2026-09-21T17:45:00+00:00",
         8547.349713
+      ],
+      [
+        "2026-09-21T18:00:00+00:00",
+        8485.614505
       ]
     ],
     "vwap_managed": [
@@ -5416,10 +5453,14 @@
       [
         "2026-09-21T17:45:00+00:00",
         10095.05078
+      ],
+      [
+        "2026-09-21T18:00:00+00:00",
+        10137.47509
       ]
     ]
   },
-  "generated_at": "2026-09-21T18:01:39.826825+00:00",
+  "generated_at": "2026-09-21T18:16:09.366685+00:00",
   "layer": "scalp",
   "model_trades": {
     "limit": 50,
@@ -5610,8 +5651,33 @@
         ]
       },
       "vwap_clone": {
-        "total": 82,
+        "total": 83,
         "trades": [
+          {
+            "closed_at": "2026-09-21T18:00:00+00:00",
+            "direction": "short",
+            "entry_price": 2746.735945,
+            "exit_price": 2750.856049,
+            "exit_reason": "stop",
+            "exit_rule": "breakeven",
+            "fee": 4.702570418,
+            "funding": 0.0,
+            "is_partial": false,
+            "leverage": 10.0,
+            "margin": 427.1860122,
+            "model": "vwap_clone",
+            "notes": "exit_rule=breakeven",
+            "notional": 4271.860122,
+            "opened_at": "2026-09-21T17:30:00+00:00",
+            "pnl": -11.1103606,
+            "qty": 1.555249652,
+            "r": -0.7334622687784577,
+            "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=2648.11 (300 bar), σ=8.36575; bu bar +11.90σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2×0.5σ (2756.48), hedef VWAP mesafesinin %75'i (2673.11); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp1 | combo_r=-0.3921 | combo_n=5 | pick=exploit",
+            "risk_amount": 15.14782842,
+            "slippage_cost": 8.544788742,
+            "stop_price": 2756.47575,
+            "symbol": "ETH-USDT-SWAP"
+          },
           {
             "closed_at": "2026-09-21T17:15:00+00:00",
             "direction": "short",
@@ -6836,31 +6902,6 @@
             "slippage_cost": 2.399991729,
             "stop_price": 1.416928523,
             "symbol": "XRP-USDT-SWAP"
-          },
-          {
-            "closed_at": "2026-09-20T19:30:00+00:00",
-            "direction": "short",
-            "entry_price": 110.214865,
-            "exit_price": 110.3801873,
-            "exit_reason": "stop",
-            "exit_rule": "breakeven",
-            "fee": 5.314372057,
-            "funding": 0.0,
-            "is_partial": false,
-            "leverage": 10.0,
-            "margin": 482.7626605,
-            "model": "vwap_clone",
-            "notes": "exit_rule=breakeven",
-            "notional": 4827.626605,
-            "opened_at": "2026-09-20T17:00:00+00:00",
-            "pnl": -12.55581196,
-            "qty": 43.80195543,
-            "r": -0.3532251161814501,
-            "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=108.596 (300 bar), σ=0.605109; bu bar +2.64σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2.5×0.5σ (111.026), hedef VWAP mesafesinin %75'i (109.015); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=-0.2489 | combo_n=5 | pick=unexplored",
-            "risk_amount": 35.54620378,
-            "slippage_cost": 9.65646072,
-            "stop_price": 111.0263859,
-            "symbol": "SOL-USDT-SWAP"
           }
         ]
       },
@@ -6974,19 +7015,19 @@
   "models": [
     {
       "account": {
-        "bars": 119,
-        "days": 1.2291666666666667,
+        "bars": 120,
+        "days": 1.2395833333333333,
         "final_equity": 9773.757878,
         "initial_capital": 10000.0,
         "max_drawdown": -0.024876763981111605,
-        "sharpe": -29.855464277935983,
+        "sharpe": -29.727619784941083,
         "total_return": -0.022624212199999993
       },
       "friction": {
-        "cost_drag_pct_per_day": 0.4780378825708474,
-        "days": 1.2291666666666667,
-        "trades_per_day": 4.067796610169491,
-        "turnover_per_day": 2.075147220447458
+        "cost_drag_pct_per_day": 0.4740207575072269,
+        "days": 1.2395833333333333,
+        "trades_per_day": 4.033613445378151,
+        "turnover_per_day": 2.057709008510925
       },
       "is_benchmark": false,
       "is_replica": false,
@@ -7091,19 +7132,19 @@
     },
     {
       "account": {
-        "bars": 119,
-        "days": 1.2291666666666667,
-        "final_equity": 10111.38313,
+        "bars": 120,
+        "days": 1.2395833333333333,
+        "final_equity": 10092.08862,
         "initial_capital": 10000.0,
         "max_drawdown": -0.006579697612555391,
-        "sharpe": 15.449098251051383,
-        "total_return": 0.01113831300000001
+        "sharpe": 12.59053787255067,
+        "total_return": 0.009208862000000151
       },
       "friction": {
-        "cost_drag_pct_per_day": 0.23193030208271184,
-        "days": 1.2291666666666667,
-        "trades_per_day": 1.6271186440677965,
-        "turnover_per_day": 0.9148938576813558
+        "cost_drag_pct_per_day": 0.22998130794756305,
+        "days": 1.2395833333333333,
+        "trades_per_day": 1.6134453781512605,
+        "turnover_per_day": 0.9072056740033613
       },
       "is_benchmark": false,
       "is_replica": false,
@@ -7208,19 +7249,19 @@
     },
     {
       "account": {
-        "bars": 119,
-        "days": 1.2291666666666667,
-        "final_equity": 8547.349713,
+        "bars": 120,
+        "days": 1.2395833333333333,
+        "final_equity": 8485.614505,
         "initial_capital": 10000.0,
         "max_drawdown": -0.16385368430000002,
-        "sharpe": -48.84523268932132,
-        "total_return": -0.14526502870000002
+        "sharpe": -50.60957581233556,
+        "total_return": -0.15143854950000002
       },
       "friction": {
-        "cost_drag_pct_per_day": 7.728441584656268,
-        "days": 1.2291666666666667,
-        "trades_per_day": 56.94915254237288,
-        "turnover_per_day": 26.837898183538993
+        "cost_drag_pct_per_day": 7.770366149437309,
+        "days": 1.2395833333333333,
+        "trades_per_day": 57.27731092436975,
+        "turnover_per_day": 26.956990275872283
       },
       "is_benchmark": false,
       "is_replica": true,
@@ -7259,85 +7300,85 @@
       "model": "vwap_clone",
       "name": "vwap_clone",
       "short": {
-        "avg_loss_pct": -0.7294048897763736,
-        "avg_loss_r": -1.5001423277862456,
-        "avg_r": -1.1884914334175494,
-        "avg_r_ci_high": -0.9005599753183351,
-        "avg_r_ci_low": -1.4553179934072669,
+        "avg_loss_pct": -0.7203794592029404,
+        "avg_loss_r": -1.4853984804976341,
+        "avg_r": -1.180779074694853,
+        "avg_r_ci_high": -0.8772673278105128,
+        "avg_r_ci_low": -1.4433796174725892,
         "avg_stop_distance_pct": null,
         "avg_win_pct": 0.9177934838527497,
         "avg_win_r": 1.082107939840093,
-        "cost_pct": 0.30485469765922496,
+        "cost_pct": 0.3049361924420928,
         "cost_per_r": null,
         "direction": "short",
-        "fees": 298.8105142,
+        "fees": 303.513084618,
         "funding": 1.9619353508380002,
         "liquidations": 0,
-        "market_measured": 58,
-        "market_r": -0.33886348352481777,
-        "market_tailwind_pct": -0.227334733477918,
+        "market_measured": 59,
+        "market_r": -0.3392778897433374,
+        "market_tailwind_pct": -0.2256651507668276,
         "max_drawdown_pnl": -1589.0185049149998,
         "max_drawdown_r": -71.50684777606513,
-        "median_r": -1.4259862404793278,
-        "notional": 271074.47832500003,
-        "payoff": 1.2582771197683273,
-        "pnl": -1439.7359325649998,
-        "profit_factor": 0.09900701849598197,
-        "r_sharpe": -1.1038622756232488,
-        "slippage_cost": 527.572767129,
-        "total_r": -68.93250313821787,
-        "trades": 58,
+        "median_r": -1.4159840096714862,
+        "notional": 275346.338447,
+        "payoff": 1.2740417180526453,
+        "pnl": -1450.8462931649997,
+        "profit_factor": 0.09806686786708854,
+        "r_sharpe": -1.1045774305871703,
+        "slippage_cost": 536.117555871,
+        "total_r": -69.66596540699632,
+        "trades": 59,
         "unmeasured": 0,
-        "win_rate": 0.1206896551724138
+        "win_rate": 0.11864406779661017
       },
       "total": {
-        "avg_loss_pct": -0.7081269822860431,
-        "avg_loss_r": -1.4574842745574998,
-        "avg_r": -0.9865834788558566,
-        "avg_r_ci_high": -0.7198409884690657,
-        "avg_r_ci_low": -1.2459059686454907,
+        "avg_loss_pct": -0.7004020774183155,
+        "avg_loss_r": -1.4450011365268267,
+        "avg_r": -0.9830183913899777,
+        "avg_r_ci_high": -0.7162536463228165,
+        "avg_r_ci_low": -1.2515710024934619,
         "avg_stop_distance_pct": null,
         "avg_win_pct": 0.7503549811152619,
         "avg_win_r": 1.0781353946051946,
-        "cost_pct": 0.2879674679366845,
+        "cost_pct": 0.28825050830663895,
         "cost_per_r": null,
         "direction": "total",
-        "fees": 363.5381622319998,
+        "fees": 368.2407326499998,
         "funding": 1.752175769898,
         "liquidations": 0,
-        "market_measured": 70,
-        "market_r": -0.2370628143579635,
-        "market_tailwind_pct": -0.16925837544674033,
+        "market_measured": 71,
+        "market_r": -0.2388409923306327,
+        "market_tailwind_pct": -0.1686889526027522,
         "max_drawdown_pnl": -1583.3634867849998,
         "max_drawdown_r": -71.63518815775723,
-        "median_r": -1.3614856999279819,
-        "notional": 329882.49850600015,
-        "payoff": 1.0596333706885372,
-        "pnl": -1434.0809144349998,
-        "profit_factor": 0.16870887246369837,
-        "r_sharpe": -0.8404677082101275,
-        "slippage_cost": 586.4161158819999,
-        "total_r": -69.06084351990997,
-        "trades": 70,
+        "median_r": -1.3563279094233605,
+        "notional": 334154.35862800013,
+        "payoff": 1.0713203248640737,
+        "pnl": -1445.1912750349998,
+        "profit_factor": 0.16723241983233395,
+        "r_sharpe": -0.8431970704722006,
+        "slippage_cost": 594.9609046239999,
+        "total_r": -69.79430578868842,
+        "trades": 71,
         "unmeasured": 0,
-        "win_rate": 0.18571428571428572
+        "win_rate": 0.18309859154929578
       }
     },
     {
       "account": {
-        "bars": 119,
-        "days": 1.2291666666666667,
-        "final_equity": 10095.05078,
+        "bars": 120,
+        "days": 1.2395833333333333,
+        "final_equity": 10137.47509,
         "initial_capital": 10000.0,
         "max_drawdown": -0.01528084445812794,
-        "sharpe": 8.115466515644535,
-        "total_return": 0.009505077999999889
+        "sharpe": 11.367316526380609,
+        "total_return": 0.01374750899999988
       },
       "friction": {
-        "cost_drag_pct_per_day": 0.14742556637288134,
-        "days": 1.2291666666666667,
-        "trades_per_day": 3.254237288135593,
-        "turnover_per_day": 0.7080789831864407
+        "cost_drag_pct_per_day": 0.1461866960672269,
+        "days": 1.2395833333333333,
+        "trades_per_day": 3.226890756302521,
+        "turnover_per_day": 0.7021287396302521
       },
       "is_benchmark": false,
       "is_replica": false,
@@ -7449,23 +7490,23 @@
       "entry_fee": 0.9175186288881748,
       "entry_price": 11.153420500000001,
       "funding": -0.0029469579325128335,
-      "gross_pnl": 46.13041504841996,
+      "gross_pnl": 26.83590141769131,
       "initial_qty": 149.56987310642418,
       "initial_stop_price": 11.82642857142857,
       "leverage": 1.0,
       "liq_price": 22.2510738975,
       "margin": 1668.2156888875904,
-      "mark_price": 10.845,
+      "mark_price": 10.974,
       "marked": true,
       "model": "scalp_patient",
       "notional": 1668.2156888875904,
       "opened_at": "2026-09-21T08:45:00+00:00",
       "partial_done": false,
       "partial_tp": null,
-      "pnl": 45.20994946159927,
-      "pnl_pct": 2.7100781848986473,
+      "pnl": 25.915435830870624,
+      "pnl_pct": 1.553482322669661,
       "qty": 149.56987310642418,
-      "r": 0.4491274750968499,
+      "r": 0.25745072488169124,
       "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.050% < 0.200%; engel Bollinger(20) orta bandı 11.2154; stop 5.97% (11.8264), hedef 9.82714 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
       "risk_amount": 100.66173184317034,
       "stop_moved": false,
@@ -7489,13 +7530,13 @@
       "entry_fee": 2.3507575085574755,
       "entry_price": 85799.87860000001,
       "funding": 0.0,
-      "gross_pnl": -2.920213841805546,
+      "gross_pnl": -8.006305836340285,
       "initial_qty": 0.049814808957242405,
       "initial_stop_price": 86057.39581119042,
       "leverage": 10.0,
       "liq_price": 93950.86706700001,
       "margin": 427.41045610135916,
-      "mark_price": 85858.5,
+      "mark_price": 85960.6,
       "marked": true,
       "model": "vwap_clone",
       "notional": 4274.104561013592,
@@ -7505,10 +7546,10 @@
         "fraction": 0.5,
         "r": 1.5
       },
-      "pnl": -5.270971350363022,
-      "pnl_pct": -0.1233234066953436,
+      "pnl": -10.35706334489776,
+      "pnl_pct": -0.24232124406525077,
       "qty": 0.049814808957242405,
-      "r": -0.4108903352162793,
+      "r": -0.8073686891407953,
       "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=82384.7 (300 bar), σ=214.596; bu bar +16.10σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2×0.5σ (86057.4), hedef VWAP mesafesinin %75'i (83249.2); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp1 | combo_r=-0.3414 | combo_n=14 | pick=exploit",
       "risk_amount": 12.828170678652135,
       "stop_moved": false,
@@ -7527,61 +7568,18 @@
     },
     {
       "breakeven_at_r": 1.0,
-      "breakeven_done": true,
-      "direction": "short",
-      "entry_fee": 2.349523066873798,
-      "entry_price": 2746.7359450000004,
-      "funding": 0.0,
-      "gross_pnl": 7.629969252180672,
-      "initial_qty": 1.5552496516328669,
-      "initial_stop_price": 2756.475750055461,
-      "leverage": 10.0,
-      "liq_price": 3007.6758597750004,
-      "margin": 427.18601215887236,
-      "mark_price": 2741.83,
-      "marked": true,
-      "model": "vwap_clone",
-      "notional": 4271.860121588724,
-      "opened_at": "2026-09-21T17:30:00+00:00",
-      "partial_done": false,
-      "partial_tp": {
-        "fraction": 0.5,
-        "r": 1.5
-      },
-      "pnl": 5.280446185306873,
-      "pnl_pct": 0.12360999740185902,
-      "qty": 1.5552496516328669,
-      "r": 0.34859426969196494,
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=2648.11 (300 bar), σ=8.36575; bu bar +11.90σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2×0.5σ (2756.48), hedef VWAP mesafesinin %75'i (2673.11); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp1 | combo_r=-0.3921 | combo_n=5 | pick=exploit",
-      "risk_amount": 15.147828419477278,
-      "stop_moved": true,
-      "stop_price": 2746.7359450000004,
-      "stop_rule": "breakeven",
-      "symbol": "ETH-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 2673.110965645379
-        }
-      ],
-      "trail_giveback_pct": 0.5,
-      "trailing_active": false,
-      "trailing_atr": null
-    },
-    {
-      "breakeven_at_r": 1.0,
       "breakeven_done": false,
       "direction": "short",
       "entry_fee": 2.372474883683615,
       "entry_price": 1.48935495,
       "funding": 0.43290714652759865,
-      "gross_pnl": -16.639280137541938,
+      "gross_pnl": -56.897588404977114,
       "initial_qty": 2896.2811703191187,
       "initial_stop_price": 1.5149988595025845,
       "leverage": 10.0,
       "liq_price": 1.63084367025,
       "margin": 431.35906976065723,
-      "mark_price": 1.4951,
+      "mark_price": 1.509,
       "marked": true,
       "model": "vwap_clone",
       "notional": 4313.590697606573,
@@ -7591,10 +7589,10 @@
         "fraction": 0.5,
         "r": 1.5
       },
-      "pnl": -18.578847874697956,
-      "pnl_pct": -0.4307049318565752,
+      "pnl": -58.83715614213313,
+      "pnl_pct": -1.3639948772789072,
       "qty": 2896.2811703191187,
-      "r": -0.2501461495897707,
+      "r": -0.7921851861336696,
       "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=1.40786 (300 bar), σ=0.0199191; bu bar +4.19σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2.5×0.5σ (1.515), hedef VWAP mesafesinin %75'i (1.42842); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=-0.4908 | combo_n=7 | pick=unexplored",
       "risk_amount": 74.27197222570283,
       "stop_moved": false,
@@ -7618,13 +7616,13 @@
       "entry_fee": 1.45797055432005,
       "entry_price": 3.9989984999999995,
       "funding": 0.0,
-      "gross_pnl": -43.0861963768591,
+      "gross_pnl": -0.6618855370856461,
       "initial_qty": 662.8798568714597,
       "initial_stop_price": 3.846035714285715,
       "leverage": 1.0,
       "liq_price": 0.019994992499999142,
       "margin": 2650.8555533091817,
-      "mark_price": 3.934,
+      "mark_price": 3.998,
       "marked": true,
       "model": "vwap_managed",
       "notional": 2650.8555533091817,
@@ -7634,10 +7632,10 @@
         "fraction": 0.5,
         "r": 1.5
       },
-      "pnl": -44.54416693117915,
-      "pnl_pct": -1.680369451876496,
+      "pnl": -2.1198560914056963,
+      "pnl_pct": -0.07996875155115053,
       "qty": 662.8798568714597,
-      "r": -0.43930913562542456,
+      "r": -0.020906713747830222,
       "reason": "VWAP sapma-dönüş: gün-çapalı VWAP=4.22855 (70 bar), sapma=0.107559; önceki bar -2.37σ ile bandın dışında kapandı, bu bar -2.14σ ile VWAP'e döndü (yön long, ATR=0.0607857); stop 2.5×ATR = %3.80 (3.84604), hedef 4.22855 (1.52R), zaman stop'u 16 bar; yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert | rr=1.517",
       "risk_amount": 101.39594950094455,
       "stop_moved": false,
@@ -7761,6 +7759,31 @@
     ]
   },
   "recent_trades": [
+    {
+      "closed_at": "2026-09-21T18:00:00+00:00",
+      "direction": "short",
+      "entry_price": 2746.735945,
+      "exit_price": 2750.856049,
+      "exit_reason": "stop",
+      "exit_rule": "breakeven",
+      "fee": 4.702570418,
+      "funding": 0.0,
+      "is_partial": false,
+      "leverage": 10.0,
+      "margin": 427.1860122,
+      "model": "vwap_clone",
+      "notes": "exit_rule=breakeven",
+      "notional": 4271.860122,
+      "opened_at": "2026-09-21T17:30:00+00:00",
+      "pnl": -11.1103606,
+      "qty": 1.555249652,
+      "r": -0.7334622687784577,
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=2648.11 (300 bar), σ=8.36575; bu bar +11.90σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2×0.5σ (2756.48), hedef VWAP mesafesinin %75'i (2673.11); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp1 | combo_r=-0.3921 | combo_n=5 | pick=exploit",
+      "risk_amount": 15.14782842,
+      "slippage_cost": 8.544788742,
+      "stop_price": 2756.47575,
+      "symbol": "ETH-USDT-SWAP"
+    },
     {
       "closed_at": "2026-09-21T17:15:00+00:00",
       "direction": "short",
@@ -8235,38 +8258,13 @@
       "slippage_cost": 6.851897102,
       "stop_price": 80038.57857,
       "symbol": "BTC-USDT-SWAP"
-    },
-    {
-      "closed_at": "2026-09-21T08:30:00+00:00",
-      "direction": "short",
-      "entry_price": 81259.05015,
-      "exit_price": 83193.4032,
-      "exit_reason": "stop",
-      "exit_rule": "",
-      "fee": 4.994341378,
-      "funding": 0.4511253527,
-      "is_partial": false,
-      "leverage": 1.387191425,
-      "margin": 3234.525088,
-      "model": "scalp_patient",
-      "notes": "boyut komisyon+marj nakde sığsın diye 0.9992 oranında kırpıldı",
-      "notional": 4486.905466,
-      "opened_at": "2026-09-21T03:15:00+00:00",
-      "pnl": -111.3529715,
-      "qty": 0.05521730143,
-      "r": -1.1143152740616182,
-      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.199% < 0.200%; engel Bollinger(20) orta bandı 81345; stop 2.18% (83068.8), hedef 77761.8 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
-      "risk_amount": 99.92950298,
-      "slippage_cost": 9.124827474,
-      "stop_price": 83068.8,
-      "symbol": "BTC-USDT-SWAP"
     }
   ],
   "replicas": [
     "vwap_clone"
   ],
   "round": {
-    "as_of": "2026-09-21T17:45:00+00:00",
+    "as_of": "2026-09-21T18:00:00+00:00",
     "models": [
       {
         "ambiguous_stop_exits": 0,
@@ -8305,88 +8303,27 @@
       {
         "ambiguous_stop_exits": 0,
         "bars_processed": 1,
-        "closed": 0,
-        "emitted": [
-          {
-            "bar": "2026-09-21T17:45:00+00:00",
-            "close": 2741.83,
-            "direction": "short",
-            "fills_at": "2026-09-21T18:00:00+00:00",
-            "model": "vwap_clone",
-            "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=2650.01 (300 bar), σ=8.28515; bu bar +10.84σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2×0.5σ (2750.12), hedef VWAP mesafesinin %75'i (2672.96); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp1 | combo_r=-0.3921 | combo_n=5 | pick=exploit",
-            "reward_risk": 8.312020860119947,
-            "stop_price": 2750.1151467356176,
-            "symbol": "ETH-USDT-SWAP",
-            "target_price": 2672.963687504391
-          },
-          {
-            "bar": "2026-09-21T17:45:00+00:00",
-            "close": 117.15,
-            "direction": "short",
-            "fills_at": "2026-09-21T18:00:00+00:00",
-            "model": "vwap_clone",
-            "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=112.324 (300 bar), σ=0.469601; bu bar +10.13σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2×0.5σ (117.62), hedef VWAP mesafesinin %75'i (113.531); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp1 | combo_r=-0.3414 | combo_n=14 | pick=exploit",
-            "reward_risk": 7.707157447974756,
-            "stop_price": 117.61960125082703,
-            "symbol": "SOL-USDT-SWAP",
-            "target_price": 113.53070922211023
-          },
-          {
-            "bar": "2026-09-21T17:45:00+00:00",
-            "close": 1.4951,
-            "direction": "short",
-            "fills_at": "2026-09-21T18:00:00+00:00",
-            "model": "vwap_clone",
-            "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=1.42546 (300 bar), σ=0.00478476; bu bar +14.30σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 1.5×0.5σ (1.49869), hedef VWAP mesafesinin %50'i (1.46028); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band0_tp0 | combo_r=-1.808 | combo_n=7 | pick=unexplored",
-            "reward_risk": 9.703438049040303,
-            "stop_price": 1.49868857084276,
-            "symbol": "XRP-USDT-SWAP",
-            "target_price": 1.4602785251426873
-          },
-          {
-            "bar": "2026-09-21T17:45:00+00:00",
-            "close": 795.7,
-            "direction": "short",
-            "fills_at": "2026-09-21T18:00:00+00:00",
-            "model": "vwap_clone",
-            "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=771.86 (300 bar), σ=3.83689; bu bar +6.02σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2×0.5σ (799.537), hedef VWAP mesafesinin %50'i (783.78); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp0 | combo_r=-0.5158 | combo_n=10 | pick=unexplored",
-            "reward_risk": 3.1066914495116134,
-            "stop_price": 799.53689160821,
-            "symbol": "BNB-USDT-SWAP",
-            "target_price": 783.7799616480713
-          },
-          {
-            "bar": "2026-09-21T17:45:00+00:00",
-            "close": 0.09737,
-            "direction": "short",
-            "fills_at": "2026-09-21T18:00:00+00:00",
-            "model": "vwap_clone",
-            "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=0.089968 (300 bar), σ=0.00132952; bu bar +5.66σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2×0.5σ (0.0986995), hedef VWAP mesafesinin %75'i (0.0918185); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp1 | combo_r=-0.3414 | combo_n=14 | pick=unexplored",
-            "reward_risk": 4.17555833801431,
-            "stop_price": 0.09869951999189783,
-            "symbol": "DOGE-USDT-SWAP",
-            "target_price": 0.0918185117122743
-          }
-        ],
+        "closed": 1,
+        "emitted": [],
         "exits": 0,
         "filled": 0,
         "missing_bars": 0,
         "model": "vwap_clone",
         "rejections": {
-          "duplicate_position": 1,
-          "max_short_positions": 4
+          "duplicate_position": 2,
+          "max_short_positions": 3
         },
-        "signals": 5,
+        "signals": 0,
         "skipped": "",
         "skipped_signals": 0,
-        "stop_exits": 0,
+        "stop_exits": 1,
         "survey": {
           "band_yok": 0,
-          "bant_ici": 1,
+          "bant_ici": 2,
           "bar_yok": 0,
-          "donus_yok": 3,
+          "donus_yok": 10,
           "gecersiz_geometri": 0,
-          "kurulum": 8
+          "kurulum": 0
         },
         "unchecked_position_bars": 0
       },
@@ -8405,14 +8342,14 @@
         "skipped_signals": 0,
         "stop_exits": 0,
         "survey": {
-          "bant_ici": 13,
+          "bant_ici": 11,
           "donus_yok": 0,
-          "kurulum": 0,
+          "kurulum": 2,
           "vwap_gecildi": 0,
           "vwap_yok": 0,
-          "z_ge_1_0": 7,
+          "z_ge_1_0": 6,
           "z_ge_1_5": 3,
-          "z_ge_2_0": 0,
+          "z_ge_2_0": 2,
           "z_ge_2_5": 0
         },
         "unchecked_position_bars": 0
