@@ -1,9 +1,31 @@
 {
   "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-09-22T09:30:00+00:00",
+  "last_processed_bar": "2026-09-22T09:45:00+00:00",
   "model": "scalp_fixed",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-09-22T09:45:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.096% < 0.200%; engel Bollinger(20) orta bandı 0.0992305; stop 4.14% (0.102863), hedef 0.0905843 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 0.10286285714285714,
+      "symbol": "DOGE-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.09058428571428571
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -112,7 +134,7 @@
       "entry_slippage": 2.901602400948723,
       "final_target_price": 88606.5285714286,
       "funding": 0.0,
-      "high_water": 86046.7,
+      "high_water": 86255.0,
       "initial_qty": 0.06758191297809182,
       "initial_stop_price": 84500.38571428572,
       "leverage": 1.567847039362863,
