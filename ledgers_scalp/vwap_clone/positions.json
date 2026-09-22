@@ -1,23 +1,36 @@
 {
-  "cash": 7880.76858440695,
+  "cash": 7484.562943825891,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-09-22T14:45:00+00:00",
+  "last_processed_bar": "2026-09-22T15:00:00+00:00",
   "model": "vwap_clone",
-  "pending_orders": [
+  "pending_orders": [],
+  "positions": [
     {
       "breakeven_at_r": 1.0,
-      "created_at": "2026-09-22T14:45:00+00:00",
       "direction": "long",
-      "fraction": 1.0,
-      "kind": "open",
-      "notional_fraction": 0.5,
+      "entry_fee": 2.1672113607119114,
+      "entry_price": 0.69164565,
+      "entry_slippage": 1.9692075423304307,
+      "final_target_price": 0.722987368983982,
+      "funding": 0.0,
+      "high_water": 0.6937,
+      "initial_qty": 5697.114255259865,
+      "initial_stop_price": 0.6827293424394725,
+      "leverage": 10.0,
+      "liq_price": 0.62593931325,
+      "low_water": 0.6889,
+      "margin": 394.0384292203475,
+      "notes": "",
+      "opened_at": "2026-09-22T15:00:00+00:00",
+      "partial_done": false,
       "partial_tp": {
         "fraction": 0.5,
         "r": 1.5
       },
+      "qty": 5697.114255259865,
       "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=0.722987 (300 bar), σ=0.00701653; bu bar -4.87σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2.5×0.5σ (0.682729), hedef VWAP mesafesinin %100'i (0.722987); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp2 | combo_r=0.04516 | combo_n=8 | pick=explore",
-      "sizing": "notional_fraction",
       "stop_price": 0.6827293424394725,
+      "stop_rule": "",
       "symbol": "ETHFI-USDT-SWAP",
       "take_profits": [
         {
@@ -29,6 +42,5 @@
       "trailing_atr": null
     }
   ],
-  "positions": [],
   "version": 1
 }
