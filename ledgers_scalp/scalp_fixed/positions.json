@@ -1,9 +1,31 @@
 {
   "cash": 2269.817434408744,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-09-23T00:00:00+00:00",
+  "last_processed_bar": "2026-09-23T00:15:00+00:00",
   "model": "scalp_fixed",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-09-23T00:15:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.123% < 0.200%; engel Bollinger(20) orta bandı 4.35095; stop 4.40% (4.20179), hedef 4.78143 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 4.201785714285713,
+      "symbol": "NEAR-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 4.781428571428573
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -13,7 +35,7 @@
       "entry_slippage": 3.5305606408169585,
       "final_target_price": 808.6714285714286,
       "funding": -0.6758318848259285,
-      "high_water": 790.8,
+      "high_water": 792.8,
       "initial_qty": 8.953996045695115,
       "initial_stop_price": 778.5642857142858,
       "leverage": 1.0,
