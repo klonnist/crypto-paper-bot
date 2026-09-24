@@ -1,9 +1,106 @@
 {
   "cash": 7428.15456436879,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-09-24T14:45:00+00:00",
+  "last_processed_bar": "2026-09-24T15:00:00+00:00",
   "model": "vwap_clone",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": 1.0,
+      "created_at": "2026-09-24T15:00:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": 0.5,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=85229.7 (300 bar), σ=414.168; bu bar -3.59σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (83450.1), hedef VWAP mesafesinin %50'i (84547); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp0 | combo_r=0.4836 | combo_n=15 | pick=exploit",
+      "sizing": "notional_fraction",
+      "stop_price": 83450.13227866332,
+      "symbol": "BTC-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 84546.99729703393
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": 1.0,
+      "created_at": "2026-09-24T15:00:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": 0.5,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=2717.3 (300 bar), σ=14.9487; bu bar -3.87σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2.5×0.5σ (2643.91), hedef VWAP mesafesinin %75'i (2703.62); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=0.3535 | combo_n=11 | pick=exploit",
+      "sizing": "notional_fraction",
+      "stop_price": 2643.9141305112057,
+      "symbol": "ETH-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 2703.6248417563393
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": 1.0,
+      "created_at": "2026-09-24T15:00:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": 0.5,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=0.0977837 (300 bar), σ=0.00111095; bu bar -3.04σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2.5×0.5σ (0.0931213), hedef VWAP mesafesinin %100'i (0.0977837); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp2 | combo_r=0.9236 | combo_n=5 | pick=exploit",
+      "sizing": "notional_fraction",
+      "stop_price": 0.0931213113783426,
+      "symbol": "DOGE-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.09778365987042517
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": 1.0,
+      "created_at": "2026-09-24T15:00:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": 0.5,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=10.8104 (300 bar), σ=0.114509; bu bar -4.84σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 1.5×0.5σ (10.1901), hedef VWAP mesafesinin %100'i (10.8104); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band0_tp2 | combo_r=-0.5305 | combo_n=21 | pick=explore",
+      "sizing": "notional_fraction",
+      "stop_price": 10.190118195821816,
+      "symbol": "AVAX-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 10.810435016289459
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    }
+  ],
   "positions": [],
   "version": 1
 }
