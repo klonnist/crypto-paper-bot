@@ -1,58 +1,9 @@
 {
-  "cash": 7182.031797425917,
+  "cash": 6801.992129939998,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-09-24T16:30:00+00:00",
+  "last_processed_bar": "2026-09-24T16:45:00+00:00",
   "model": "vwap_clone",
-  "pending_orders": [
-    {
-      "breakeven_at_r": 1.0,
-      "created_at": "2026-09-24T16:30:00+00:00",
-      "direction": "long",
-      "fraction": 1.0,
-      "kind": "open",
-      "notional_fraction": 0.5,
-      "partial_tp": {
-        "fraction": 0.5,
-        "r": 1.5
-      },
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=10.7787 (300 bar), σ=0.146361; bu bar -2.15σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (10.2986), hedef VWAP mesafesinin %50'i (10.6119); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp0 | combo_r=-0.06024 | combo_n=35 | pick=exploit",
-      "sizing": "notional_fraction",
-      "stop_price": 10.298638641060975,
-      "symbol": "AVAX-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 10.611864513650822
-        }
-      ],
-      "trail_giveback_pct": 0.5,
-      "trailing_atr": null
-    },
-    {
-      "breakeven_at_r": 1.0,
-      "created_at": "2026-09-24T16:30:00+00:00",
-      "direction": "short",
-      "fraction": 1.0,
-      "kind": "open",
-      "notional_fraction": 0.5,
-      "partial_tp": {
-        "fraction": 0.5,
-        "r": 1.5
-      },
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=4.3991 (300 bar), σ=0.0998123; bu bar +2.89σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2.5×0.5σ (4.78277), hedef VWAP mesafesinin %75'i (4.46383); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=1.211 | combo_n=5 | pick=exploit",
-      "sizing": "notional_fraction",
-      "stop_price": 4.7827653613036345,
-      "symbol": "NEAR-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 4.4638256224134265
-        }
-      ],
-      "trail_giveback_pct": 0.5,
-      "trailing_atr": null
-    }
-  ],
+  "pending_orders": [],
   "positions": [
     {
       "breakeven_at_r": 1.0,
@@ -67,7 +18,7 @@
       "initial_stop_price": 10.27127181965058,
       "leverage": 10.0,
       "liq_price": 9.456545909999999,
-      "low_water": 10.41,
+      "low_water": 10.395,
       "margin": 378.35249875885836,
       "notes": "",
       "opened_at": "2026-09-24T16:30:00+00:00",
@@ -85,6 +36,42 @@
         {
           "fraction": 1.0,
           "price": 10.614056396785571
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": 1.0,
+      "direction": "short",
+      "entry_fee": 2.0787848544729526,
+      "entry_price": 4.6566705,
+      "entry_slippage": 1.8907497880513329,
+      "final_target_price": 4.4638256224134265,
+      "funding": 0.0,
+      "high_water": 4.717,
+      "initial_qty": 811.6547705736233,
+      "initial_stop_price": 4.7827653613036345,
+      "leverage": 10.0,
+      "liq_price": 5.099054197499999,
+      "low_water": 4.647,
+      "margin": 377.96088263144594,
+      "notes": "",
+      "opened_at": "2026-09-24T16:45:00+00:00",
+      "partial_done": false,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "qty": 811.6547705736233,
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=4.3991 (300 bar), σ=0.0998123; bu bar +2.89σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2.5×0.5σ (4.78277), hedef VWAP mesafesinin %75'i (4.46383); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=1.211 | combo_n=5 | pick=exploit",
+      "stop_price": 4.7827653613036345,
+      "stop_rule": "",
+      "symbol": "NEAR-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 4.4638256224134265
         }
       ],
       "trail_giveback_pct": 0.5,
