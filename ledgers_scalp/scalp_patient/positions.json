@@ -1,9 +1,47 @@
 {
-  "cash": 0.0,
+  "cash": -0.5551650414943561,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-09-25T15:45:00+00:00",
+  "last_processed_bar": "2026-09-25T16:00:00+00:00",
   "model": "scalp_patient",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-09-25T16:00:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.022% < 0.200%; engel Bollinger(20) orta bandı 2699.72; stop 3.13% (2776.3), hedef 2523.41 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 2776.296428571429,
+      "symbol": "ETH-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 2523.4071428571424
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-09-25T16:00:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "exit",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "zaman stop'u: pozisyon 100 bardır açık (100 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
+      "sizing": "risk",
+      "stop_price": null,
+      "symbol": "AVAX-USDT-SWAP",
+      "take_profits": [],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -12,7 +50,7 @@
       "entry_price": 10.2421185,
       "entry_slippage": 0.9978857907810067,
       "final_target_price": 11.175142857142859,
-      "funding": -0.1879280512383113,
+      "funding": -0.27237523821396836,
       "high_water": 10.742,
       "initial_qty": 194.95668472814333,
       "initial_stop_price": 9.76942857142857,
@@ -45,7 +83,7 @@
       "entry_price": 84265.41165,
       "entry_slippage": 1.7636502016209394,
       "final_target_price": 88534.44285714284,
-      "funding": -0.23938290146589686,
+      "funding": -0.35922177923785115,
       "high_water": 85242.2,
       "initial_qty": 0.04188033956449794,
       "initial_stop_price": 82067.72857142858,
@@ -78,7 +116,7 @@
       "entry_price": 779.6896499999999,
       "entry_slippage": 2.6223240442037015,
       "final_target_price": 806.2571428571429,
-      "funding": 0.0,
+      "funding": -0.5209652361396871,
       "high_water": 780.2,
       "initial_qty": 6.729947502127466,
       "initial_stop_price": 765.9714285714285,
@@ -111,7 +149,7 @@
       "entry_price": 84361.69804999999,
       "entry_slippage": 2.5085006015444353,
       "final_target_price": 81372.57142857142,
-      "funding": 0.0,
+      "funding": 0.1700862593929424,
       "high_water": 84547.7,
       "initial_qty": 0.05944039556333991,
       "initial_stop_price": 85919.71428571429,
