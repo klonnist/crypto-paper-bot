@@ -8,8 +8,8 @@
     "min_trades": 30,
     "models": [
       {
-        "avg_r": -0.23781059757578285,
-        "avg_stop_distance_pct": 3.0358193582071284,
+        "avg_r": -0.23024776276007553,
+        "avg_stop_distance_pct": 3.018957736679988,
         "band": true,
         "band_high": 5.681506074712445,
         "band_low": 2.2726024298849774,
@@ -22,12 +22,12 @@
         "edge_diff_ci_high": null,
         "edge_diff_ci_low": null,
         "edge_margin_r": 0.15,
-        "measured_trades": 60,
+        "measured_trades": 61,
         "min_trades": 30,
         "model": "scalp_fixed",
         "passed": false,
         "sample": true,
-        "total_return": -0.12325990419999999
+        "total_return": -0.1254210887999999
       },
       {
         "avg_r": -0.31376258813277264,
@@ -49,7 +49,7 @@
         "model": "scalp_patient",
         "passed": false,
         "sample": false,
-        "total_return": -0.07948035539999998
+        "total_return": -0.07960183770000007
       },
       {
         "avg_r": 0.19289406117911756,
@@ -78,14 +78,139 @@
   },
   "activity": {
     "closed": 99,
-    "closed_avg_r": -0.15069609559941433,
-    "closed_pnl": -766.991959853611,
-    "closed_wins": 43,
+    "closed_avg_r": -0.21506740897578114,
+    "closed_pnl": -772.5964497896109,
+    "closed_wins": 41,
     "hours": 24,
-    "opened": 98,
-    "since": "2026-09-25T08:15:00+00:00",
-    "still_open": 11,
+    "opened": 99,
+    "since": "2026-09-25T08:30:00+00:00",
+    "still_open": 8,
     "trades": [
+      {
+        "closed_at": "2026-09-26T08:30:00+00:00",
+        "direction": "short",
+        "entry_price": 1.55832045,
+        "exit_price": 1.5497745,
+        "exit_reason": "signal",
+        "exit_rule": "time_stop",
+        "fee": 4.779596168,
+        "funding": 0.4338803528,
+        "is_partial": false,
+        "leverage": 1.0,
+        "margin": 4357.034583,
+        "model": "scalp_fixed",
+        "notes": "exit_rule=time_stop",
+        "notional": 4357.034583,
+        "opened_at": "2026-09-26T04:15:00+00:00",
+        "pnl": 19.54859918,
+        "qty": 2795.981137,
+        "r": 0.22352232618236298,
+        "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.050% < 0.200%; engel Bollinger(20) orta bandı 1.56561; stop 1.96% (1.5896), hedef 1.4981 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+        "risk_amount": 87.45703176,
+        "slippage_cost": 4.345094485,
+        "stop_price": 1.5896,
+        "symbol": "XRP-USDT-SWAP"
+      },
+      {
+        "closed_at": "2026-09-26T08:30:00+00:00",
+        "direction": "short",
+        "entry_price": 121.948995,
+        "exit_price": 121.2060342,
+        "exit_reason": "stop",
+        "exit_rule": "giveback",
+        "fee": 1.701923794,
+        "funding": 0.04205107077,
+        "is_partial": false,
+        "leverage": 10.0,
+        "margin": 155.1930932,
+        "model": "vwap_clone",
+        "notes": "exit_rule=giveback",
+        "notional": 1551.930932,
+        "opened_at": "2026-09-26T02:00:00+00:00",
+        "pnl": 7.795094703,
+        "qty": 12.72606578,
+        "r": 1.3386650612429378,
+        "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=117.357 (300 bar), σ=0.396563; bu bar +11.72σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2×0.5σ (122.407), hedef VWAP mesafesinin %100'i (117.357); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp2 | combo_r=-0.75 | combo_n=11 | pick=explore",
+        "risk_amount": 5.823035895,
+        "slippage_cost": 3.086602218,
+        "stop_price": 122.4065626,
+        "symbol": "SOL-USDT-SWAP"
+      },
+      {
+        "closed_at": "2026-09-26T08:30:00+00:00",
+        "direction": "long",
+        "entry_price": 772.48605,
+        "exit_price": 773.3666854,
+        "exit_reason": "tp",
+        "exit_rule": "",
+        "fee": 3.417277616,
+        "funding": -0.3107313894,
+        "is_partial": false,
+        "leverage": 10.0,
+        "margin": 310.484625,
+        "model": "vwap_clone",
+        "notes": "",
+        "notional": 3104.84625,
+        "opened_at": "2026-09-26T06:45:00+00:00",
+        "pnl": -0.1884791553,
+        "qty": 4.019291028,
+        "r": -0.03533278693980335,
+        "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=774.305 (300 bar), σ=1.25487; bu bar -1.84σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 1.5×0.5σ (771.159), hedef VWAP mesafesinin %75'i (773.754); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band0_tp1 | combo_r=0.786 | combo_n=4 | pick=exploit",
+        "risk_amount": 5.334398207,
+        "slippage_cost": 3.106617677,
+        "stop_price": 771.1588512,
+        "symbol": "BNB-USDT-SWAP"
+      },
+      {
+        "closed_at": "2026-09-26T08:30:00+00:00",
+        "direction": "long",
+        "entry_price": 84109.33365,
+        "exit_price": 84215.58647,
+        "exit_reason": "partial",
+        "exit_rule": "",
+        "fee": 1.723017265,
+        "funding": 0.0,
+        "is_partial": true,
+        "leverage": 10.0,
+        "margin": 156.5390576,
+        "model": "vwap_clone",
+        "notes": "",
+        "notional": 1565.390576,
+        "opened_at": "2026-09-26T08:30:00+00:00",
+        "pnl": 0.2544941218,
+        "qty": 0.01861137769,
+        "r": 0.13823251558150537,
+        "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=84325.2 (300 bar), σ=56.8875; bu bar -5.03σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (84010.4), hedef VWAP mesafesinin %50'i (84196.3); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp0 | combo_r=-0.03429 | combo_n=37 | pick=exploit",
+        "risk_amount": 1.841058312,
+        "slippage_cost": 1.566380217,
+        "stop_price": 84010.41253,
+        "symbol": "BTC-USDT-SWAP"
+      },
+      {
+        "closed_at": "2026-09-26T08:30:00+00:00",
+        "direction": "long",
+        "entry_price": 84109.33365,
+        "exit_price": 84154.16564,
+        "exit_reason": "tp",
+        "exit_rule": "",
+        "fee": 1.722388545,
+        "funding": 0.0,
+        "is_partial": false,
+        "leverage": 10.0,
+        "margin": 156.5390576,
+        "model": "vwap_clone",
+        "notes": "",
+        "notional": 1565.390576,
+        "opened_at": "2026-09-26T08:30:00+00:00",
+        "pnl": -0.8880033755,
+        "qty": 0.01861137769,
+        "r": -0.48233310683969255,
+        "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=84325.2 (300 bar), σ=56.8875; bu bar -5.03σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (84010.4), hedef VWAP mesafesinin %50'i (84196.3); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp0 | combo_r=-0.03429 | combo_n=37 | pick=exploit",
+        "risk_amount": 1.841058312,
+        "slippage_cost": 1.565808368,
+        "stop_price": 84010.41253,
+        "symbol": "BTC-USDT-SWAP"
+      },
       {
         "closed_at": "2026-09-26T08:00:00+00:00",
         "direction": "long",
@@ -2435,135 +2560,10 @@
         "slippage_cost": 3.375052149,
         "stop_price": 2686.041859,
         "symbol": "ETH-USDT-SWAP"
-      },
-      {
-        "closed_at": "2026-09-25T08:15:00+00:00",
-        "direction": "long",
-        "entry_price": 0.0950475,
-        "exit_price": 0.09583356797,
-        "exit_reason": "partial",
-        "exit_rule": "",
-        "fee": 1.870535894,
-        "funding": -0.1700834007,
-        "is_partial": true,
-        "leverage": 10.0,
-        "margin": 169.3484395,
-        "model": "vwap_clone",
-        "notes": "",
-        "notional": 1693.484395,
-        "opened_at": "2026-09-25T06:30:00+00:00",
-        "pnl": 11.96494466,
-        "qty": 17817.2429,
-        "r": 1.207788413201456,
-        "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=0.0975264 (300 bar), σ=0.000406805; bu bar -6.05σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2.5×0.5σ (0.0944915), hedef VWAP mesafesinin %100'i (0.0975264); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp2 | combo_r=0.8174 | combo_n=10 | pick=exploit",
-        "risk_amount": 9.906490681,
-        "slippage_cost": 1.700491103,
-        "stop_price": 0.09449149418,
-        "symbol": "DOGE-USDT-SWAP"
-      },
-      {
-        "closed_at": "2026-09-25T08:15:00+00:00",
-        "direction": "long",
-        "entry_price": 84042.0,
-        "exit_price": 84226.40388,
-        "exit_reason": "partial",
-        "exit_rule": "",
-        "fee": 1.851215198,
-        "funding": 0.0,
-        "is_partial": true,
-        "leverage": 10.0,
-        "margin": 168.1078606,
-        "model": "vwap_clone",
-        "notes": "",
-        "notional": 1681.078606,
-        "opened_at": "2026-09-25T08:00:00+00:00",
-        "pnl": 1.837385964,
-        "qty": 0.02000283913,
-        "r": 0.608217150289254,
-        "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=84883.2 (300 bar), σ=109.025; bu bar -8.43σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (83891), hedef VWAP mesafesinin %50'i (84441.6); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp0 | combo_r=0.2374 | combo_n=24 | pick=exploit",
-        "risk_amount": 3.020937445,
-        "slippage_cost": 1.68292425,
-        "stop_price": 83890.97457,
-        "symbol": "BTC-USDT-SWAP"
-      },
-      {
-        "closed_at": "2026-09-25T08:15:00+00:00",
-        "direction": "long",
-        "entry_price": 84042.0,
-        "exit_price": 84399.39038,
-        "exit_reason": "tp",
-        "exit_rule": "",
-        "fee": 1.853118319,
-        "funding": 0.0,
-        "is_partial": false,
-        "leverage": 10.0,
-        "margin": 168.1078606,
-        "model": "vwap_clone",
-        "notes": "",
-        "notional": 1681.078606,
-        "opened_at": "2026-09-25T08:00:00+00:00",
-        "pnl": 5.295704011,
-        "qty": 0.02000283913,
-        "r": 1.7530002217573226,
-        "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=84883.2 (300 bar), σ=109.025; bu bar -8.43σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (83891), hedef VWAP mesafesinin %50'i (84441.6); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp0 | combo_r=0.2374 | combo_n=24 | pick=exploit",
-        "risk_amount": 3.020937445,
-        "slippage_cost": 1.684655226,
-        "stop_price": 83890.97457,
-        "symbol": "BTC-USDT-SWAP"
-      },
-      {
-        "closed_at": "2026-09-25T08:15:00+00:00",
-        "direction": "long",
-        "entry_price": 2672.77572,
-        "exit_price": 2679.233451,
-        "exit_reason": "partial",
-        "exit_rule": "",
-        "fee": 1.850448625,
-        "funding": 0.0,
-        "is_partial": true,
-        "leverage": 10.0,
-        "margin": 168.019625,
-        "model": "vwap_clone",
-        "notes": "",
-        "notional": 1680.19625,
-        "opened_at": "2026-09-25T08:00:00+00:00",
-        "pnl": 2.209096955,
-        "qty": 0.6286334605,
-        "r": 0.6759651945014058,
-        "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=2701.9 (300 bar), σ=3.09837; bu bar -10.09σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2.5×0.5σ (2667.58), hedef VWAP mesafesinin %75'i (2694.28); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=0.04154 | combo_n=20 | pick=exploit",
-        "risk_amount": 3.268063168,
-        "slippage_cost": 1.682227458,
-        "stop_price": 2667.577042,
-        "symbol": "ETH-USDT-SWAP"
-      },
-      {
-        "closed_at": "2026-09-25T08:15:00+00:00",
-        "direction": "long",
-        "entry_price": 2672.77572,
-        "exit_price": 2692.937311,
-        "exit_reason": "tp",
-        "exit_rule": "",
-        "fee": 1.855186713,
-        "funding": 0.0,
-        "is_partial": false,
-        "leverage": 10.0,
-        "margin": 168.019625,
-        "model": "vwap_clone",
-        "notes": "",
-        "notional": 1680.19625,
-        "opened_at": "2026-09-25T08:00:00+00:00",
-        "pnl": 10.81906382,
-        "qty": 0.6286334605,
-        "r": 3.3105430537381833,
-        "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=2701.9 (300 bar), σ=3.09837; bu bar -10.09σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2.5×0.5σ (2667.58), hedef VWAP mesafesinin %75'i (2694.28); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=0.04154 | combo_n=20 | pick=exploit",
-        "risk_amount": 3.268063168,
-        "slippage_cost": 1.686536965,
-        "stop_price": 2667.577042,
-        "symbol": "ETH-USDT-SWAP"
       }
     ]
   },
-  "as_of": "2026-09-26T08:15:00+00:00",
+  "as_of": "2026-09-26T08:30:00+00:00",
   "benchmarks": [],
   "breakdowns": {
     "arm": {
@@ -2603,34 +2603,34 @@
         "rsi2_reversal": {
           "avg_loss_pct": -1.132336087474317,
           "avg_loss_r": -0.4568433268571009,
-          "avg_r": -0.22370106721800614,
-          "avg_r_ci_high": -0.08307324160727242,
-          "avg_r_ci_low": -0.36102253739313167,
-          "avg_stop_distance_pct": 2.8253662376913513,
-          "avg_win_pct": 1.519354843275977,
-          "avg_win_r": 0.4091136375166799,
-          "cost_pct": 0.21998990814354918,
-          "cost_per_r": 0.10114095998830414,
+          "avg_r": -0.2152628899840369,
+          "avg_r_ci_high": -0.07537992999803267,
+          "avg_r_ci_low": -0.3563417750780848,
+          "avg_stop_distance_pct": 2.8099302793396577,
+          "avg_win_pct": 1.4479756886524224,
+          "avg_win_r": 0.3967408834277254,
+          "cost_pct": 0.21977826158821925,
+          "cost_per_r": 0.10120119495912293,
           "direction": "total",
-          "fees": 234.71241017550798,
-          "funding": -1.0686125537000002,
+          "fees": 239.492006343508,
+          "funding": -0.6347322009000003,
           "liquidations": 0,
           "market_measured": 0,
           "market_r": null,
           "market_tailwind_pct": null,
           "max_drawdown_pnl": -1002.170319537551,
           "max_drawdown_r": -11.63245549533632,
-          "median_r": -0.18107129726360438,
-          "notional": 213149.80043573602,
-          "payoff": 1.3417878844300617,
-          "pnl": -1002.170319537551,
-          "profit_factor": 0.3299294706059613,
-          "r_sharpe": -0.42268323306354666,
-          "slippage_cost": 234.19564001122612,
-          "total_r": -11.63245549533632,
-          "trades": 52,
+          "median_r": -0.1751053096716876,
+          "notional": 217506.83501873602,
+          "payoff": 1.2787508096488753,
+          "pnl": -982.621720357551,
+          "profit_factor": 0.342805146210003,
+          "r_sharpe": -0.4079153134605434,
+          "slippage_cost": 238.54073449622612,
+          "total_r": -11.408933169153956,
+          "trades": 53,
           "unmeasured": 0,
-          "win_rate": 0.2692307692307692
+          "win_rate": 0.2830188679245283
         }
       },
       "scalp_patient": {
@@ -2701,36 +2701,36 @@
       },
       "vwap_clone": {
         "vwap_revert_src": {
-          "avg_loss_pct": -0.7405312443230556,
-          "avg_loss_r": -1.285877442894686,
-          "avg_r": -0.6008234043754871,
-          "avg_r_ci_high": -0.4767476692203563,
-          "avg_r_ci_low": -0.7256738116846396,
-          "avg_stop_distance_pct": 0.6857035777573689,
-          "avg_win_pct": 0.7701750494094882,
-          "avg_win_r": 1.0114754943616198,
-          "cost_pct": 0.2678475265471116,
-          "cost_per_r": 0.6116197608574596,
+          "avg_loss_pct": -0.7343407883925811,
+          "avg_loss_r": -1.2758162862852374,
+          "avg_r": -0.5974519737839091,
+          "avg_r_ci_high": -0.4726938782729985,
+          "avg_r_ci_low": -0.7188284918833094,
+          "avg_stop_distance_pct": 0.6824640920529327,
+          "avg_win_pct": 0.7706745520907173,
+          "avg_win_r": 1.0128067478101548,
+          "cost_pct": 0.2676163745602832,
+          "cost_per_r": 0.6173627430736929,
           "direction": "total",
-          "fees": 1405.251426947999,
-          "funding": 6.039618577241001,
+          "fees": 1413.816034167999,
+          "funding": 5.770938258611001,
           "liquidations": 0,
           "market_measured": 0,
           "market_r": null,
           "market_tailwind_pct": null,
-          "max_drawdown_pnl": -3867.7178117711596,
-          "max_drawdown_r": -199.4733702526617,
-          "median_r": -1.1462508500986588,
-          "notional": 1276547.7903540006,
-          "payoff": 1.0400304582874569,
-          "pnl": -3867.7178117711596,
-          "profit_factor": 0.33422202097476916,
-          "r_sharpe": -0.5082943898431505,
-          "slippage_cost": 2013.9502547069992,
-          "total_r": -199.4733702526617,
-          "trades": 332,
+          "max_drawdown_pnl": -3873.9780230241595,
+          "max_drawdown_r": -200.54844713109472,
+          "median_r": -1.1412273249439013,
+          "notional": 1284335.3486880006,
+          "payoff": 1.049478068319844,
+          "pnl": -3860.744705477159,
+          "profit_factor": 0.33443042188074995,
+          "r_sharpe": -0.5064421065991366,
+          "slippage_cost": 2023.275663186999,
+          "total_r": -199.54895924382564,
+          "trades": 334,
           "unmeasured": 0,
-          "win_rate": 0.29819277108433734
+          "win_rate": 0.2964071856287425
         }
       },
       "vwap_managed": {
@@ -2773,34 +2773,34 @@
         "signal:time_stop": {
           "avg_loss_pct": -1.0907392381668697,
           "avg_loss_r": -0.3025505170757139,
-          "avg_r": -0.08374309860497417,
-          "avg_r_ci_high": 0.026972018321406072,
-          "avg_r_ci_low": -0.19118693745975443,
-          "avg_stop_distance_pct": 3.212236416522249,
-          "avg_win_pct": 1.540333068454517,
-          "avg_win_r": 0.3948981292997687,
-          "cost_pct": 0.21010633475179713,
-          "cost_per_r": 0.0913748895070384,
+          "avg_r": -0.07783414812829462,
+          "avg_r_ci_high": 0.03379587697002806,
+          "avg_r_ci_low": -0.18664486185911405,
+          "avg_stop_distance_pct": 3.1890638016862742,
+          "avg_win_pct": 1.4761174481879369,
+          "avg_win_r": 0.3848171997046272,
+          "cost_pct": 0.21009179117865323,
+          "cost_per_r": 0.09162409189039727,
           "direction": "total",
-          "fees": 220.067495171548,
-          "funding": -0.9043893380999999,
+          "fees": 224.847091339548,
+          "funding": -0.4705089852999999,
           "liquidations": 0,
           "market_measured": 0,
           "market_r": null,
           "market_tailwind_pct": null,
           "max_drawdown_pnl": -445.27676065950004,
           "max_drawdown_r": -4.579225151794488,
-          "median_r": -0.12419387780897191,
-          "notional": 199960.10891068602,
-          "payoff": 1.412191855354217,
-          "pnl": -415.50602311435097,
-          "profit_factor": 0.5966767495667143,
-          "r_sharpe": -0.20621880624097932,
-          "slippage_cost": 200.06136062639607,
-          "total_r": -4.270898028853683,
-          "trades": 51,
+          "median_r": -0.10810251734392443,
+          "notional": 204317.14349368602,
+          "payoff": 1.3533183702722071,
+          "pnl": -395.95742393435097,
+          "profit_factor": 0.617785132518315,
+          "r_sharpe": -0.19249724380403163,
+          "slippage_cost": 204.40645511139607,
+          "total_r": -4.04737570267132,
+          "trades": 52,
           "unmeasured": 0,
-          "win_rate": 0.3137254901960784
+          "win_rate": 0.3269230769230769
         },
         "stop": {
           "avg_loss_pct": -2.2425866209797616,
@@ -2937,16 +2937,16 @@
         "partial": {
           "avg_loss_pct": null,
           "avg_loss_r": null,
-          "avg_r": 1.1221767223815826,
-          "avg_r_ci_high": 1.1714464533542321,
-          "avg_r_ci_low": 1.068006992284954,
-          "avg_stop_distance_pct": 0.6687779638062703,
-          "avg_win_pct": 0.8438046641994429,
-          "avg_win_r": 1.1221767223815826,
-          "cost_pct": 0.20965428878408848,
-          "cost_per_r": 0.4965007793469788,
+          "avg_r": 1.1118194149415819,
+          "avg_r_ci_high": 1.1648086350769717,
+          "avg_r_ci_low": 1.0531855940490313,
+          "avg_stop_distance_pct": 0.6629761974268779,
+          "avg_win_pct": 0.8350936419219912,
+          "avg_win_r": 1.1118194149415819,
+          "cost_pct": 0.20965851289158172,
+          "cost_per_r": 0.5100817013964928,
           "direction": "total",
-          "fees": 192.980772697,
+          "fees": 194.703789962,
           "funding": 0.511318794648,
           "liquidations": 0,
           "market_measured": 0,
@@ -2954,15 +2954,15 @@
           "market_tailwind_pct": null,
           "max_drawdown_pnl": 0.0,
           "max_drawdown_r": 0.0,
-          "median_r": 1.1785139956869322,
-          "notional": 175726.57479400001,
+          "median_r": 1.1774289564900402,
+          "notional": 177291.96537000002,
           "payoff": null,
-          "pnl": 1479.30658084311,
+          "pnl": 1479.56107496491,
           "profit_factor": null,
-          "r_sharpe": 4.301366665150032,
-          "slippage_cost": 175.43752789200005,
-          "total_r": 105.48461190386877,
-          "trades": 94,
+          "r_sharpe": 3.993008077816008,
+          "slippage_cost": 177.00390810900004,
+          "total_r": 105.62284441945027,
+          "trades": 95,
           "unmeasured": 0,
           "win_rate": 1.0
         },
@@ -3033,32 +3033,32 @@
         "stop:giveback": {
           "avg_loss_pct": null,
           "avg_loss_r": null,
-          "avg_r": 1.0825451235742434,
-          "avg_r_ci_high": 1.473690815791168,
-          "avg_r_ci_low": 0.8011380090145039,
-          "avg_stop_distance_pct": 0.24311550741879523,
-          "avg_win_pct": 0.271220919586997,
-          "avg_win_r": 1.0825451235742434,
-          "cost_pct": 0.2802426660371856,
-          "cost_per_r": 1.1747072535735292,
+          "avg_r": 1.1337691111079822,
+          "avg_r_ci_high": 1.4466856648815216,
+          "avg_r_ci_low": 0.8507872255258888,
+          "avg_stop_distance_pct": 0.2695348611844631,
+          "avg_win_pct": 0.3174334575799513,
+          "avg_win_r": 1.1337691111079822,
+          "cost_pct": 0.28468214748112386,
+          "cost_per_r": 1.1042341694753408,
           "direction": "total",
-          "fees": 9.168876324,
-          "funding": 0.0,
+          "fees": 10.870800118,
+          "funding": 0.04205107077,
           "liquidations": 0,
           "market_measured": 0,
           "market_r": null,
           "market_tailwind_pct": null,
           "max_drawdown_pnl": 0.0,
           "max_drawdown_r": 0.0,
-          "median_r": 0.9542931003232458,
-          "notional": 8344.571591,
+          "median_r": 1.049384091571429,
+          "notional": 9896.502523,
           "payoff": null,
-          "pnl": 22.101410336,
+          "pnl": 29.896505039,
           "profit_factor": null,
-          "r_sharpe": 2.596673732900888,
-          "slippage_cost": 14.216173572,
-          "total_r": 4.3301804942969735,
-          "trades": 4,
+          "r_sharpe": 2.9932394216210687,
+          "slippage_cost": 17.302775790000002,
+          "total_r": 5.668845555539911,
+          "trades": 5,
           "unmeasured": 0,
           "win_rate": 1.0
         },
@@ -3095,36 +3095,36 @@
           "win_rate": 0.9230769230769231
         },
         "tp": {
-          "avg_loss_pct": null,
-          "avg_loss_r": null,
-          "avg_r": 1.1353407337451153,
-          "avg_r_ci_high": 1.3940118178583951,
-          "avg_r_ci_low": 0.8895852366742681,
-          "avg_stop_distance_pct": 0.6077278838626463,
+          "avg_loss_pct": -0.03139887754195415,
+          "avg_loss_r": -0.25883294688974795,
+          "avg_r": 1.0533305172371823,
+          "avg_r_ci_high": 1.3188898031278384,
+          "avg_r_ci_low": 0.7830325335238664,
+          "avg_stop_distance_pct": 0.5804915062893459,
           "avg_win_pct": 0.8111709397259637,
           "avg_win_r": 1.1353407337451153,
-          "cost_pct": 0.20974837818768452,
-          "cost_per_r": 0.5592024596481304,
+          "cost_pct": 0.20976929181837667,
+          "cost_per_r": 0.6148088575313359,
           "direction": "total",
-          "fees": 80.74237712199998,
-          "funding": 0.11201608913899999,
+          "fees": 85.88204328299997,
+          "funding": -0.198715300261,
           "liquidations": 0,
           "market_measured": 0,
           "market_r": null,
           "market_tailwind_pct": null,
-          "max_drawdown_pnl": 0.0,
-          "max_drawdown_r": 0.0,
-          "median_r": 1.0949141489829115,
-          "notional": 73490.29962800001,
-          "payoff": null,
-          "pnl": 539.7779449529999,
-          "profit_factor": null,
-          "r_sharpe": 1.5411728316418418,
-          "slippage_cost": 73.40233447299998,
-          "total_r": 36.33090347984369,
-          "trades": 32,
+          "max_drawdown_pnl": -1.0764825308000354,
+          "max_drawdown_r": -0.517665893779494,
+          "median_r": 1.0747479360907382,
+          "notional": 78160.53645400002,
+          "payoff": 25.834392921915878,
+          "pnl": 538.7014624221998,
+          "profit_factor": 70.18214627699453,
+          "r_sharpe": 1.3337610767953652,
+          "slippage_cost": 78.07476051799999,
+          "total_r": 35.8132375860642,
+          "trades": 34,
           "unmeasured": 0,
-          "win_rate": 1.0
+          "win_rate": 0.9411764705882353
         }
       },
       "vwap_managed": {
@@ -3391,34 +3391,34 @@
         "5+": {
           "avg_loss_pct": -1.7166741837559165,
           "avg_loss_r": -0.4700415812010331,
-          "avg_r": -0.22925078025331766,
-          "avg_r_ci_high": -0.016248654211632366,
-          "avg_r_ci_low": -0.46614594891395106,
-          "avg_stop_distance_pct": 3.3104351609330815,
-          "avg_win_pct": 0.818331209350888,
-          "avg_win_r": 0.2523308216421133,
-          "cost_pct": 0.22040520517563672,
-          "cost_per_r": 0.09302533599207945,
+          "avg_r": -0.20095246110108764,
+          "avg_r_ci_high": 0.00632144326262018,
+          "avg_r_ci_low": -0.4237403996947852,
+          "avg_stop_distance_pct": 3.228986741190488,
+          "avg_win_pct": 0.7567205951128496,
+          "avg_win_r": 0.24752940573215487,
+          "cost_pct": 0.21955713704622343,
+          "cost_per_r": 0.09373209083268076,
           "direction": "total",
-          "fees": 57.41982326454799,
-          "funding": 0.809405466,
+          "fees": 62.19941943254799,
+          "funding": 1.2432858188,
           "liquidations": 0,
           "market_measured": 0,
           "market_r": null,
           "market_tailwind_pct": null,
           "max_drawdown_pnl": -324.3169019753511,
           "max_drawdown_r": -3.438761703799765,
-          "median_r": -0.13122956738724223,
-          "notional": 52058.286620686,
-          "payoff": 0.4766957044582908,
-          "pnl": -324.3169019753511,
-          "profit_factor": 0.2684132976037638,
-          "r_sharpe": -0.49069492990035535,
-          "slippage_cost": 57.31935017269601,
-          "total_r": -3.438761703799765,
-          "trades": 15,
+          "median_r": -0.1081943504686515,
+          "notional": 56415.321203686,
+          "payoff": 0.4408061834175303,
+          "pnl": -304.7683027953511,
+          "profit_factor": 0.3159670322353313,
+          "r_sharpe": -0.4318478952355926,
+          "slippage_cost": 61.66444465769601,
+          "total_r": -3.215239377617402,
+          "trades": 16,
           "unmeasured": 0,
-          "win_rate": 0.3333333333333333
+          "win_rate": 0.375
         }
       },
       "scalp_patient": {
@@ -3619,16 +3619,16 @@
         "0": {
           "avg_loss_pct": -0.9086325561642299,
           "avg_loss_r": -1.119176924992859,
-          "avg_r": -0.18873385593275727,
-          "avg_r_ci_high": 0.0854595345419958,
-          "avg_r_ci_low": -0.4583541532228583,
-          "avg_stop_distance_pct": 0.8068171675948012,
-          "avg_win_pct": 0.6803616971502443,
-          "avg_win_r": 0.967271169263127,
-          "cost_pct": 0.2516584249312103,
-          "cost_per_r": 0.528388962111903,
+          "avg_r": -0.20818422948637652,
+          "avg_r_ci_high": 0.06549295116941498,
+          "avg_r_ci_low": -0.47502599327354,
+          "avg_stop_distance_pct": 0.8119176636775114,
+          "avg_win_pct": 0.6849071135984812,
+          "avg_win_r": 0.9590251616313045,
+          "cost_pct": 0.25214082539151905,
+          "cost_per_r": 0.5290274672711677,
           "direction": "total",
-          "fees": 305.48465457000003,
+          "fees": 302.05479625000004,
           "funding": 0.5501775379580001,
           "liquidations": 0,
           "market_measured": 0,
@@ -3636,113 +3636,113 @@
           "market_tailwind_pct": null,
           "max_drawdown_pnl": -587.2110808888001,
           "max_drawdown_r": -16.913476232916647,
-          "median_r": -0.24947835967988358,
-          "notional": 277650.318766,
-          "payoff": 0.7487753905961444,
-          "pnl": -570.4784288178001,
-          "profit_factor": 0.6956320434886505,
-          "r_sharpe": -0.16056937462288437,
-          "slippage_cost": 393.2457644530001,
-          "total_r": -13.966305339024037,
-          "trades": 74,
+          "median_r": -0.26148373266284164,
+          "notional": 274522.184494,
+          "payoff": 0.753777870880832,
+          "pnl": -587.2110808888001,
+          "profit_factor": 0.6688017117840493,
+          "r_sharpe": -0.177709601866585,
+          "slippage_cost": 390.1277056160001,
+          "total_r": -15.197448752505485,
+          "trades": 73,
           "unmeasured": 0,
-          "win_rate": 0.44594594594594594
+          "win_rate": 0.4383561643835616
         },
         "1": {
-          "avg_loss_pct": -0.6598200322844138,
-          "avg_loss_r": -1.3159665830551608,
-          "avg_r": -0.7523258191576269,
-          "avg_r_ci_high": -0.45572016487363615,
-          "avg_r_ci_low": -1.0304015857308317,
-          "avg_stop_distance_pct": 0.5922149643910553,
-          "avg_win_pct": 0.6093927819310758,
-          "avg_win_r": 0.9761725234614779,
-          "cost_pct": 0.26456953482989276,
-          "cost_per_r": 0.6668267143874648,
+          "avg_loss_pct": -0.6681414276460492,
+          "avg_loss_r": -1.2946888627587254,
+          "avg_r": -0.6948732386678531,
+          "avg_r_ci_high": -0.39409199194065797,
+          "avg_r_ci_low": -0.977332252046972,
+          "avg_stop_distance_pct": 0.5972799555426271,
+          "avg_win_pct": 0.6047375062357999,
+          "avg_win_r": 0.9921082040877259,
+          "cost_pct": 0.26456208913925855,
+          "cost_per_r": 0.6473211268693257,
           "direction": "total",
-          "fees": 248.72048884600002,
+          "fees": 248.715273571,
           "funding": 0.7430066442800001,
           "liquidations": 0,
           "market_measured": 0,
           "market_r": null,
           "market_tailwind_pct": null,
-          "max_drawdown_pnl": -801.3515149540003,
-          "max_drawdown_r": -45.89187496861524,
-          "median_r": -1.2086100233939738,
-          "notional": 225953.13452599995,
-          "payoff": 0.923574235570342,
-          "pnl": -801.3515149540003,
-          "profit_factor": 0.2418884577423624,
-          "r_sharpe": -0.6532327177322058,
-          "slippage_cost": 349.08266810299995,
-          "total_r": -45.89187496861524,
+          "max_drawdown_pnl": -790.5668771270003,
+          "max_drawdown_r": -42.38726755873904,
+          "median_r": -1.1680527662683653,
+          "notional": 225955.73268599994,
+          "payoff": 0.9051040411704006,
+          "pnl": -775.6999192670005,
+          "profit_factor": 0.2724589620119203,
+          "r_sharpe": -0.5980397516155219,
+          "slippage_cost": 349.07793335299993,
+          "total_r": -42.38726755873904,
           "trades": 61,
           "unmeasured": 0,
-          "win_rate": 0.2459016393442623
+          "win_rate": 0.26229508196721313
         },
         "2": {
-          "avg_loss_pct": -0.682643149990382,
-          "avg_loss_r": -1.1307391625874061,
-          "avg_r": -0.6905109163940497,
-          "avg_r_ci_high": -0.4112683257446185,
-          "avg_r_ci_low": -0.9567744945597154,
-          "avg_stop_distance_pct": 0.7729861858535677,
+          "avg_loss_pct": -0.6590943900634452,
+          "avg_loss_r": -1.1348288507396067,
+          "avg_r": -0.7095197103089738,
+          "avg_r_ci_high": -0.42929649080737176,
+          "avg_r_ci_low": -0.9866241527646633,
+          "avg_stop_distance_pct": 0.7497210836994234,
           "avg_win_pct": 1.1394729787609452,
           "avg_win_r": 1.030381318725433,
-          "cost_pct": 0.2620400251889082,
-          "cost_per_r": 0.5152360963990128,
+          "cost_pct": 0.26047669335910667,
+          "cost_per_r": 0.5585844723151757,
           "direction": "total",
-          "fees": 222.428434798,
+          "fees": 229.30891420300003,
           "funding": 1.628760636255,
           "liquidations": 0,
           "market_measured": 0,
           "market_r": null,
           "market_tailwind_pct": null,
-          "max_drawdown_pnl": -633.4654389350002,
-          "max_drawdown_r": -37.28758948527869,
+          "max_drawdown_pnl": -640.6951939677001,
+          "max_drawdown_r": -39.73310377730253,
           "median_r": -1.1680285150838112,
-          "notional": 202182.716303,
-          "payoff": 1.6692073725152001,
-          "pnl": -631.1427410980001,
-          "profit_factor": 0.2331093920374764,
-          "r_sharpe": -0.6650283826014378,
-          "slippage_cost": 307.37120593,
-          "total_r": -37.28758948527869,
-          "trades": 54,
+          "notional": 208439.033567,
+          "payoff": 1.7288464231219725,
+          "pnl": -640.6951939677001,
+          "profit_factor": 0.22194623344094536,
+          "r_sharpe": -0.6799152284312558,
+          "slippage_cost": 313.62618810199996,
+          "total_r": -39.73310377730253,
+          "trades": 56,
           "unmeasured": 0,
-          "win_rate": 0.2037037037037037
+          "win_rate": 0.19642857142857142
         },
         "3": {
-          "avg_loss_pct": -0.6890718326292264,
-          "avg_loss_r": -1.4613266472114868,
-          "avg_r": -0.7972164917670499,
-          "avg_r_ci_high": -0.4157364650160486,
-          "avg_r_ci_low": -1.1933750786284043,
-          "avg_stop_distance_pct": 0.5478110292856495,
-          "avg_win_pct": 0.7769446958852371,
-          "avg_win_r": 0.9958809279329305,
-          "cost_pct": 0.26092428520975747,
-          "cost_per_r": 0.6640706690244405,
+          "avg_loss_pct": -0.6646789272755684,
+          "avg_loss_r": -1.4103982950589267,
+          "avg_r": -0.7736986550240971,
+          "avg_r_ci_high": -0.4212479038304944,
+          "avg_r_ci_low": -1.1364016155496524,
+          "avg_stop_distance_pct": 0.5379162330536351,
+          "avg_win_pct": 0.7818897724294037,
+          "avg_win_r": 1.0090603370734268,
+          "cost_pct": 0.26034696493626097,
+          "cost_per_r": 0.6822538951534229,
           "direction": "total",
-          "fees": 154.733758669,
-          "funding": 0.22470334607999998,
+          "fees": 159.852960079,
+          "funding": -0.04397697255000005,
           "liquidations": 0,
           "market_measured": 0,
           "market_r": null,
           "market_tailwind_pct": null,
           "max_drawdown_pnl": -554.9251141060001,
           "max_drawdown_r": -32.872752575714614,
-          "median_r": -1.3632407467488152,
-          "notional": 140538.41332599995,
-          "payoff": 1.1275235165551933,
-          "pnl": -475.8689509507601,
-          "profit_factor": 0.2524040664194687,
-          "r_sharpe": -0.6802618266324749,
-          "slippage_cost": 211.96509174699995,
-          "total_r": -29.497010195380845,
-          "trades": 37,
+          "median_r": -1.3515610938039382,
+          "notional": 145195.19050799997,
+          "payoff": 1.1763420507917517,
+          "pnl": -468.26233540306015,
+          "profit_factor": 0.25551554697312046,
+          "r_sharpe": -0.6621717545026162,
+          "slippage_cost": 218.15831164199994,
+          "total_r": -29.40054889091569,
+          "trades": 38,
           "unmeasured": 0,
-          "win_rate": 0.2702702702702703
+          "win_rate": 0.2631578947368421
         },
         "4": {
           "avg_loss_pct": -0.8455201599303254,
@@ -3913,34 +3913,34 @@
         "00-07_asya": {
           "avg_loss_pct": -1.5456731447620038,
           "avg_loss_r": -0.43543414660996704,
-          "avg_r": -0.2540746733603853,
-          "avg_r_ci_high": -0.029498885680976354,
-          "avg_r_ci_low": -0.45674468951871,
-          "avg_stop_distance_pct": 3.374642549526703,
-          "avg_win_pct": 1.7451614798412227,
-          "avg_win_r": 0.42602335132554603,
-          "cost_pct": 0.21000774777987585,
-          "cost_per_r": 0.08905264341247242,
+          "avg_r": -0.2301948233832479,
+          "avg_r_ci_high": -0.02074423460689906,
+          "avg_r_ci_low": -0.42814970913307127,
+          "avg_stop_distance_pct": 3.306273444302947,
+          "avg_win_pct": 1.4858626886575097,
+          "avg_win_r": 0.3855231462969094,
+          "cost_pct": 0.2099730993916014,
+          "cost_per_r": 0.08981668191393381,
           "direction": "total",
-          "fees": 75.910825785548,
-          "funding": 0.9105076286,
+          "fees": 80.690421953548,
+          "funding": 1.3443879814,
           "liquidations": 0,
           "market_measured": 0,
           "market_r": null,
           "market_tailwind_pct": null,
           "max_drawdown_pnl": -484.7280809725,
           "max_drawdown_r": -4.960167333730981,
-          "median_r": -0.30010277464969815,
-          "notional": 69007.257421686,
-          "payoff": 1.12906243196063,
-          "pnl": -465.17700868435105,
-          "profit_factor": 0.2609033487718328,
-          "r_sharpe": -0.5317965260869947,
-          "slippage_cost": 69.009761330396,
-          "total_r": -4.827418793847321,
-          "trades": 19,
+          "median_r": -0.27579466426002397,
+          "notional": 73364.292004686,
+          "payoff": 0.9613045899728668,
+          "pnl": -445.62840950435105,
+          "profit_factor": 0.29512548896954516,
+          "r_sharpe": -0.482458096103446,
+          "slippage_cost": 73.35485581539601,
+          "total_r": -4.603896467664958,
+          "trades": 20,
           "unmeasured": 0,
-          "win_rate": 0.21052631578947367
+          "win_rate": 0.25
         },
         "07-12_avrupa": {
           "avg_loss_pct": -2.0295466564154565,
@@ -4171,68 +4171,68 @@
       },
       "vwap_clone": {
         "00-07_asya": {
-          "avg_loss_pct": -0.6451604094035638,
-          "avg_loss_r": -1.442438387131177,
-          "avg_r": -0.6364851321877845,
-          "avg_r_ci_high": -0.3931129613695104,
-          "avg_r_ci_low": -0.8771211463140124,
-          "avg_stop_distance_pct": 0.5192114578549811,
-          "avg_win_pct": 0.5491775896671679,
-          "avg_win_r": 0.9250492992650377,
-          "cost_pct": 0.26528157129322444,
-          "cost_per_r": 0.6928240491973959,
+          "avg_loss_pct": -0.635016124853139,
+          "avg_loss_r": -1.42010337760433,
+          "avg_r": -0.6287699065388062,
+          "avg_r_ci_high": -0.37808185148518964,
+          "avg_r_ci_low": -0.8689280400704916,
+          "avg_stop_distance_pct": 0.5155545874824982,
+          "avg_win_pct": 0.5507229260872201,
+          "avg_win_r": 0.9291678646214426,
+          "cost_pct": 0.2649872031199411,
+          "cost_per_r": 0.6997946724892735,
           "direction": "total",
-          "fees": 384.098286431,
-          "funding": 1.3994164219000003,
+          "fees": 389.21748784100004,
+          "funding": 1.1307361032700003,
           "liquidations": 0,
           "market_measured": 0,
           "market_r": null,
           "market_tailwind_pct": null,
-          "max_drawdown_pnl": -877.31422488056,
-          "max_drawdown_r": -59.82960242565174,
-          "median_r": -1.244053779089513,
-          "notional": 349033.08114100003,
-          "payoff": 0.8512264262695074,
-          "pnl": -877.31422488056,
-          "profit_factor": 0.3309984009578672,
-          "r_sharpe": -0.5169623290089455,
-          "slippage_cost": 541.8221555529999,
-          "total_r": -59.82960242565174,
-          "trades": 94,
+          "max_drawdown_pnl": -883.5744361335599,
+          "max_drawdown_r": -60.90467930408476,
+          "median_r": -1.2307953578856279,
+          "notional": 353689.858323,
+          "payoff": 0.867258175868505,
+          "pnl": -869.7076093328599,
+          "profit_factor": 0.33234079144211065,
+          "r_sharpe": -0.5119398338426793,
+          "slippage_cost": 548.015375448,
+          "total_r": -59.733141121186584,
+          "trades": 95,
           "unmeasured": 0,
-          "win_rate": 0.3404255319148936
+          "win_rate": 0.3368421052631579
         },
         "07-12_avrupa": {
-          "avg_loss_pct": -0.9740372843361056,
-          "avg_loss_r": -1.1927512666445048,
-          "avg_r": -0.5521914582429681,
-          "avg_r_ci_high": -0.21904847615067302,
-          "avg_r_ci_low": -0.8252171078754814,
-          "avg_stop_distance_pct": 0.8777545894119665,
+          "avg_loss_pct": -0.9495808119751231,
+          "avg_loss_r": -1.1665794468748787,
+          "avg_r": -0.5451518070834519,
+          "avg_r_ci_high": -0.2216882532673375,
+          "avg_r_ci_low": -0.828578176215598,
+          "avg_stop_distance_pct": 0.8636778406777446,
           "avg_win_pct": 0.9684851246998039,
           "avg_win_r": 1.0705600563742583,
-          "cost_pct": 0.2708537423565638,
-          "cost_per_r": 0.5036822654975933,
+          "cost_pct": 0.2699033916141417,
+          "cost_per_r": 0.5274355998404356,
           "direction": "total",
-          "fees": 217.21999296799996,
+          "fees": 220.66539877799997,
           "funding": 0.32425582340000003,
           "liquidations": 0,
           "market_measured": 0,
           "market_r": null,
           "market_tailwind_pct": null,
-          "max_drawdown_pnl": -917.7467422586,
-          "max_drawdown_r": -29.26614728687731,
-          "median_r": -1.1472736735215143,
-          "notional": 197031.47845099994,
-          "payoff": 0.9942998489630857,
-          "pnl": -917.7467422586,
-          "profit_factor": 0.35429809026826925,
-          "r_sharpe": -0.48366628762357505,
-          "slippage_cost": 316.44714003699994,
-          "total_r": -29.26614728687731,
-          "trades": 53,
+          "max_drawdown_pnl": -918.3802515123,
+          "max_drawdown_r": -29.438197582506405,
+          "median_r": -1.1412214923549535,
+          "notional": 200162.25960299995,
+          "payoff": 1.019908060995209,
+          "pnl": -918.3802515123,
+          "profit_factor": 0.35295827381434725,
+          "r_sharpe": -0.48156612564064477,
+          "slippage_cost": 319.57932862199993,
+          "total_r": -29.438197582506405,
+          "trades": 54,
           "unmeasured": 0,
-          "win_rate": 0.2830188679245283
+          "win_rate": 0.2777777777777778
         },
         "12-16_abd": {
           "avg_loss_pct": -0.6956786597907519,
@@ -4723,34 +4723,34 @@
         "XRP-USDT-SWAP": {
           "avg_loss_pct": -0.7951048016455169,
           "avg_loss_r": -0.22474421977305972,
-          "avg_r": -0.03775020271972323,
-          "avg_r_ci_high": 0.2020186542062238,
-          "avg_r_ci_low": -0.26364086211447896,
-          "avg_stop_distance_pct": 3.222407672548345,
-          "avg_win_pct": 1.2929001368302426,
-          "avg_win_r": 0.33623783138694974,
-          "cost_pct": 0.21051352276799853,
-          "cost_per_r": 0.070376828047345,
+          "avg_r": -0.00042555573371091157,
+          "avg_r_ci_high": 0.21304057630299303,
+          "avg_r_ci_low": -0.2019938584977385,
+          "avg_stop_distance_pct": 3.048815211477379,
+          "avg_win_pct": 1.0114892658610477,
+          "avg_win_r": 0.2986659963187542,
+          "cost_pct": 0.2102560042223488,
+          "cost_per_r": 0.07522776881796721,
           "direction": "total",
-          "fees": 15.516259626947999,
-          "funding": 0.08434247691000002,
+          "fees": 20.295855794948,
+          "funding": 0.51822282971,
           "liquidations": 0,
           "market_measured": 0,
           "market_r": null,
           "market_tailwind_pct": null,
           "max_drawdown_pnl": -65.01543888,
           "max_drawdown_r": -0.6834839084723207,
-          "median_r": -0.10774648530995909,
-          "notional": 14071.283180886,
-          "payoff": 1.626075121360742,
-          "pnl": -14.634812001851,
-          "profit_factor": 0.7480455598067729,
-          "r_sharpe": -0.11538585189381123,
-          "slippage_cost": 14.105694295796,
-          "total_r": -0.22650121631833936,
-          "trades": 6,
+          "median_r": -0.08426340323267595,
+          "notional": 18428.317763886,
+          "payoff": 1.2721458401052417,
+          "pnl": 4.913787178149001,
+          "profit_factor": 0.9966863551162913,
+          "r_sharpe": -0.0013528513099128172,
+          "slippage_cost": 18.450788780796,
+          "total_r": -0.002978890135976381,
+          "trades": 7,
           "unmeasured": 0,
-          "win_rate": 0.3333333333333333
+          "win_rate": 0.42857142857142855
         }
       },
       "scalp_patient": {
@@ -5109,68 +5109,68 @@
           "win_rate": 0.19230769230769232
         },
         "BNB-USDT-SWAP": {
-          "avg_loss_pct": -0.5270507913240646,
-          "avg_loss_r": -1.1544519755591665,
-          "avg_r": -0.6971525402413197,
-          "avg_r_ci_high": -0.24670435483671108,
-          "avg_r_ci_low": -1.1273170832393467,
-          "avg_stop_distance_pct": 0.446134112770651,
+          "avg_loss_pct": -0.48363576560762606,
+          "avg_loss_r": -1.0611920431742194,
+          "avg_r": -0.6557888056599749,
+          "avg_r_ci_high": -0.24046346355285952,
+          "avg_r_ci_low": -1.0499982641830725,
+          "avg_stop_distance_pct": 0.42898877900180393,
           "avg_win_pct": 0.16546593705014384,
           "avg_win_r": 0.5604209068827594,
-          "cost_pct": 0.26165415231692907,
-          "cost_per_r": 0.7228558911331718,
+          "cost_pct": 0.2590340786919713,
+          "cost_per_r": 0.7541140342719671,
           "direction": "total",
-          "fees": 63.789617445000005,
-          "funding": 0.6158771029,
+          "fees": 67.20689506100001,
+          "funding": 0.30514571349999997,
           "liquidations": 0,
           "market_measured": 0,
           "market_r": null,
           "market_tailwind_pct": null,
           "max_drawdown_pnl": -208.29995386060003,
           "max_drawdown_r": -11.04558441940345,
-          "median_r": -0.708194769350608,
-          "notional": 57964.57668300001,
-          "payoff": 0.3139468525119902,
-          "pnl": -205.10906684360003,
-          "profit_factor": 0.17652481436998105,
-          "r_sharpe": -0.7474612201454814,
-          "slippage_cost": 87.877104319,
-          "total_r": -10.457288103619796,
-          "trades": 15,
+          "median_r": -0.6440477956243147,
+          "notional": 61069.42293300001,
+          "payoff": 0.34212924026050306,
+          "pnl": -205.29754599890003,
+          "profit_factor": 0.176035026046884,
+          "r_sharpe": -0.715823095745271,
+          "slippage_cost": 90.983721996,
+          "total_r": -10.492620890559598,
+          "trades": 16,
           "unmeasured": 0,
-          "win_rate": 0.26666666666666666
+          "win_rate": 0.25
         },
         "BTC-USDT-SWAP": {
-          "avg_loss_pct": -0.4034060748082164,
-          "avg_loss_r": -1.6438731950655185,
-          "avg_r": -0.9002525532173281,
-          "avg_r_ci_high": -0.5488885103851888,
-          "avg_r_ci_low": -1.2164696863969828,
-          "avg_stop_distance_pct": 0.2927232112024814,
+          "avg_loss_pct": -0.39449511637681106,
+          "avg_loss_r": -1.609644755543741,
+          "avg_r": -0.8883148112896521,
+          "avg_r_ci_high": -0.5562337009044256,
+          "avg_r_ci_low": -1.2048951492266742,
+          "avg_stop_distance_pct": 0.28985250540840757,
           "avg_win_pct": 0.2857465283370524,
           "avg_win_r": 0.8348622777617823,
-          "cost_pct": 0.2623950817963125,
-          "cost_per_r": 1.089114089641999,
+          "cost_pct": 0.2616962611000166,
+          "cost_per_r": 1.1005443885005086,
           "direction": "total",
-          "fees": 254.43017571399997,
+          "fees": 257.875581524,
           "funding": 0.7350229473279999,
           "liquidations": 0,
           "market_measured": 0,
           "market_r": null,
           "market_tailwind_pct": null,
-          "max_drawdown_pnl": -483.62856449776,
-          "max_drawdown_r": -54.01515319303969,
-          "median_r": -1.366166746273724,
-          "notional": 231181.30753299998,
-          "payoff": 0.7083347182436441,
-          "pnl": -483.62856449776,
-          "profit_factor": 0.21765554673850826,
-          "r_sharpe": -0.6842251864901923,
-          "slippage_cost": 352.178205285,
-          "total_r": -54.01515319303969,
-          "trades": 60,
+          "max_drawdown_pnl": -484.26207375146004,
+          "max_drawdown_r": -54.18720348866878,
+          "median_r": -1.1657952602148882,
+          "notional": 234312.088685,
+          "payoff": 0.7243347673387039,
+          "pnl": -484.26207375146004,
+          "profit_factor": 0.21711451011026947,
+          "r_sharpe": -0.679117821279826,
+          "slippage_cost": 355.31039387,
+          "total_r": -54.18720348866878,
+          "trades": 61,
           "unmeasured": 0,
-          "win_rate": 0.3
+          "win_rate": 0.29508196721311475
         },
         "DOGE-USDT-SWAP": {
           "avg_loss_pct": -0.66533016939767,
@@ -5367,17 +5367,17 @@
         "SOL-USDT-SWAP": {
           "avg_loss_pct": -0.7099392620726759,
           "avg_loss_r": -1.3796776304627119,
-          "avg_r": -0.9274774431295152,
-          "avg_r_ci_high": -0.6012119879942618,
-          "avg_r_ci_low": -1.2439284681900238,
+          "avg_r": -0.9242629530952479,
+          "avg_r_ci_high": -0.5997847411908296,
+          "avg_r_ci_low": -1.2425173529238618,
           "avg_stop_distance_pct": 0.5608961950309634,
-          "avg_win_pct": 0.3923335006127735,
-          "avg_win_r": 0.9378483296199206,
-          "cost_pct": 0.29541633182641325,
-          "cost_per_r": 0.6437051661659916,
+          "avg_win_pct": 0.3985148462929819,
+          "avg_win_r": 0.9543225910455407,
+          "cost_pct": 0.29554609400055576,
+          "cost_per_r": 0.6469258266677447,
           "direction": "total",
-          "fees": 171.46041630700003,
-          "funding": 0.6761010982000001,
+          "fees": 173.16234010100004,
+          "funding": 0.7181521689700001,
           "liquidations": 0,
           "market_measured": 0,
           "market_r": null,
@@ -5385,13 +5385,13 @@
           "max_drawdown_pnl": -800.0607065718,
           "max_drawdown_r": -39.10165204674314,
           "median_r": -1.3563279094233605,
-          "notional": 155557.47445000004,
-          "payoff": 0.5526296706951399,
-          "pnl": -793.8004953188,
-          "profit_factor": 0.1647900681992649,
-          "r_sharpe": -0.8767604222780818,
-          "slippage_cost": 288.0817685950001,
-          "total_r": -38.026575168310124,
+          "notional": 157109.40538200006,
+          "payoff": 0.5613365362122855,
+          "pnl": -786.0054006158,
+          "profit_factor": 0.16768477364162643,
+          "r_sharpe": -0.8684526931953443,
+          "slippage_cost": 291.1683708130001,
+          "total_r": -37.89478107690516,
           "trades": 41,
           "unmeasured": 0,
           "win_rate": 0.1951219512195122
@@ -5660,19 +5660,19 @@
   "build_failures": {},
   "concentration": {
     "scalp_fixed": {
-      "gross_exposure": 1.0152655066343783,
-      "net_exposure": -1.0152655066343783,
-      "top_symbol_share": 0.513441398076564
+      "gross_exposure": 0.524518493164864,
+      "net_exposure": -0.524518493164864,
+      "top_symbol_share": 1.0
     },
     "scalp_patient": {
-      "gross_exposure": 1.7056071012501584,
-      "net_exposure": -0.08931524449282943,
-      "top_symbol_share": 0.6733377977069006
+      "gross_exposure": 1.7080378439542092,
+      "net_exposure": -0.08945902194355847,
+      "top_symbol_share": 0.6732512553127954
     },
     "vwap_clone": {
-      "gross_exposure": 1.7376557928023397,
-      "net_exposure": -0.7452596587558927,
-      "top_symbol_share": 0.2880538618997327
+      "gross_exposure": 1.0052200501048025,
+      "net_exposure": -1.0052200501048025,
+      "top_symbol_share": 0.5023247242124803
     },
     "vwap_managed": {
       "gross_exposure": 0.0,
@@ -5683,28 +5683,28 @@
   "correlation": {
     "matrix": [
       [
-        1.0,
-        0.17422570195565248,
-        0.04600414855166578,
-        -0.03383440045446459
+        0.9999999999999998,
+        0.1739898508124494,
+        0.04791337034698375,
+        -0.03372722669644128
       ],
       [
-        0.17422570195565248,
-        0.9999999999999999,
-        -0.1981567697235696,
-        -0.07835109053693651
-      ],
-      [
-        0.04600414855166578,
-        -0.1981567697235696,
+        0.1739898508124494,
         1.0000000000000002,
-        0.1514580022274466
+        -0.19801201061729218,
+        -0.07835149600514178
       ],
       [
-        -0.03383440045446459,
-        -0.07835109053693651,
-        0.1514580022274466,
-        1.0
+        0.04791337034698375,
+        -0.19801201061729218,
+        0.9999999999999999,
+        0.151388105859095
+      ],
+      [
+        -0.03372722669644128,
+        -0.07835149600514178,
+        0.151388105859095,
+        0.9999999999999998
       ]
     ],
     "min_overlap": 3,
@@ -5716,28 +5716,28 @@
     ],
     "overlap": [
       [
-        560,
-        560,
-        560,
-        560
+        561,
+        561,
+        561,
+        561
       ],
       [
-        560,
-        560,
-        560,
-        560
+        561,
+        561,
+        561,
+        561
       ],
       [
-        560,
-        560,
-        560,
-        560
+        561,
+        561,
+        561,
+        561
       ],
       [
-        560,
-        560,
-        560,
-        560
+        561,
+        561,
+        561,
+        561
       ]
     ]
   },
@@ -5957,8 +5957,8 @@
         9968.331721
       ],
       [
-        "2026-09-21T03:00:00+00:00",
-        9960.161919
+        "2026-09-21T03:15:00+00:00",
+        9949.163372
       ],
       [
         "2026-09-21T03:30:00+00:00",
@@ -5989,8 +5989,8 @@
         9954.892632
       ],
       [
-        "2026-09-21T05:15:00+00:00",
-        9941.414285
+        "2026-09-21T05:30:00+00:00",
+        9939.691655
       ],
       [
         "2026-09-21T05:45:00+00:00",
@@ -6021,7 +6021,7 @@
         9939.834749
       ],
       [
-        "2026-09-21T07:30:00+00:00",
+        "2026-09-21T07:45:00+00:00",
         9935.113451
       ],
       [
@@ -6053,8 +6053,8 @@
         9799.676672
       ],
       [
-        "2026-09-21T09:45:00+00:00",
-        9800.384859
+        "2026-09-21T10:00:00+00:00",
+        9787.77914
       ],
       [
         "2026-09-21T10:15:00+00:00",
@@ -6085,8 +6085,8 @@
         9792.594808
       ],
       [
-        "2026-09-21T12:00:00+00:00",
-        9788.487326
+        "2026-09-21T12:15:00+00:00",
+        9783.813296
       ],
       [
         "2026-09-21T12:30:00+00:00",
@@ -6117,11 +6117,11 @@
         9773.757878
       ],
       [
-        "2026-09-21T14:15:00+00:00",
+        "2026-09-21T14:30:00+00:00",
         9773.757878
       ],
       [
-        "2026-09-21T14:30:00+00:00",
+        "2026-09-21T14:45:00+00:00",
         9773.757878
       ],
       [
@@ -6149,11 +6149,11 @@
         9773.757878
       ],
       [
-        "2026-09-21T16:30:00+00:00",
+        "2026-09-21T16:45:00+00:00",
         9773.757878
       ],
       [
-        "2026-09-21T16:45:00+00:00",
+        "2026-09-21T17:00:00+00:00",
         9773.757878
       ],
       [
@@ -6181,11 +6181,11 @@
         9773.757878
       ],
       [
-        "2026-09-21T18:45:00+00:00",
+        "2026-09-21T19:00:00+00:00",
         9773.757878
       ],
       [
-        "2026-09-21T19:00:00+00:00",
+        "2026-09-21T19:15:00+00:00",
         9773.757878
       ],
       [
@@ -6213,11 +6213,11 @@
         9773.757878
       ],
       [
-        "2026-09-21T21:00:00+00:00",
+        "2026-09-21T21:15:00+00:00",
         9773.757878
       ],
       [
-        "2026-09-21T21:15:00+00:00",
+        "2026-09-21T21:30:00+00:00",
         9773.757878
       ],
       [
@@ -6245,12 +6245,12 @@
         9772.816747
       ],
       [
-        "2026-09-21T23:15:00+00:00",
-        9771.05361
-      ],
-      [
         "2026-09-21T23:30:00+00:00",
         9766.547816
+      ],
+      [
+        "2026-09-21T23:45:00+00:00",
+        9768.898665
       ],
       [
         "2026-09-22T00:00:00+00:00",
@@ -6277,12 +6277,12 @@
         9746.933407
       ],
       [
-        "2026-09-22T01:30:00+00:00",
-        9748.108832
-      ],
-      [
         "2026-09-22T01:45:00+00:00",
         9741.587578
+      ],
+      [
+        "2026-09-22T02:00:00+00:00",
+        9743.968443
       ],
       [
         "2026-09-22T02:15:00+00:00",
@@ -6309,16 +6309,16 @@
         9707.416459
       ],
       [
-        "2026-09-22T03:45:00+00:00",
-        9703.801489
-      ],
-      [
         "2026-09-22T04:00:00+00:00",
         9687.082254
       ],
       [
         "2026-09-22T04:15:00+00:00",
         9683.03455
+      ],
+      [
+        "2026-09-22T04:30:00+00:00",
+        9652.319143
       ],
       [
         "2026-09-22T04:45:00+00:00",
@@ -6341,16 +6341,16 @@
         9693.087603
       ],
       [
-        "2026-09-22T06:00:00+00:00",
-        9698.932685
-      ],
-      [
         "2026-09-22T06:15:00+00:00",
         9678.27267
       ],
       [
         "2026-09-22T06:30:00+00:00",
         9661.295538
+      ],
+      [
+        "2026-09-22T06:45:00+00:00",
+        9660.163485
       ],
       [
         "2026-09-22T07:00:00+00:00",
@@ -6373,16 +6373,16 @@
         9613.109324
       ],
       [
-        "2026-09-22T08:15:00+00:00",
-        9622.997096
-      ],
-      [
         "2026-09-22T08:30:00+00:00",
         9517.973955
       ],
       [
         "2026-09-22T08:45:00+00:00",
         9525.968444
+      ],
+      [
+        "2026-09-22T09:00:00+00:00",
+        9545.498006
       ],
       [
         "2026-09-22T09:15:00+00:00",
@@ -6405,16 +6405,16 @@
         9542.215213
       ],
       [
-        "2026-09-22T10:30:00+00:00",
-        9539.442599
-      ],
-      [
         "2026-09-22T10:45:00+00:00",
         9538.31701
       ],
       [
         "2026-09-22T11:00:00+00:00",
         9525.707041
+      ],
+      [
+        "2026-09-22T11:15:00+00:00",
+        9514.068812
       ],
       [
         "2026-09-22T11:30:00+00:00",
@@ -6441,12 +6441,12 @@
         9521.295482
       ],
       [
-        "2026-09-22T13:00:00+00:00",
-        9501.391552
-      ],
-      [
         "2026-09-22T13:15:00+00:00",
         9483.984547
+      ],
+      [
+        "2026-09-22T13:30:00+00:00",
+        9509.864014
       ],
       [
         "2026-09-22T13:45:00+00:00",
@@ -6473,16 +6473,16 @@
         9514.921291
       ],
       [
-        "2026-09-22T15:15:00+00:00",
-        9508.624152
-      ],
-      [
         "2026-09-22T15:30:00+00:00",
         9535.997881
       ],
       [
         "2026-09-22T15:45:00+00:00",
         9521.189807
+      ],
+      [
+        "2026-09-22T16:00:00+00:00",
+        9504.110854
       ],
       [
         "2026-09-22T16:15:00+00:00",
@@ -6505,16 +6505,16 @@
         9477.654588
       ],
       [
-        "2026-09-22T17:30:00+00:00",
-        9485.417001
-      ],
-      [
         "2026-09-22T17:45:00+00:00",
         9482.506096
       ],
       [
         "2026-09-22T18:00:00+00:00",
         9479.918625
+      ],
+      [
+        "2026-09-22T18:15:00+00:00",
+        9488.004471
       ],
       [
         "2026-09-22T18:30:00+00:00",
@@ -6537,16 +6537,16 @@
         9492.405532
       ],
       [
-        "2026-09-22T19:45:00+00:00",
-        9497.03269
-      ],
-      [
         "2026-09-22T20:00:00+00:00",
         9541.967069
       ],
       [
         "2026-09-22T20:15:00+00:00",
         9513.649444
+      ],
+      [
+        "2026-09-22T20:30:00+00:00",
+        9538.794555
       ],
       [
         "2026-09-22T20:45:00+00:00",
@@ -6569,16 +6569,16 @@
         9498.198126
       ],
       [
-        "2026-09-22T22:00:00+00:00",
-        9500.63528
-      ],
-      [
         "2026-09-22T22:15:00+00:00",
         9473.144782
       ],
       [
         "2026-09-22T22:30:00+00:00",
         9430.272299
+      ],
+      [
+        "2026-09-22T22:45:00+00:00",
+        9404.28681
       ],
       [
         "2026-09-22T23:00:00+00:00",
@@ -6601,16 +6601,16 @@
         9350.637507
       ],
       [
-        "2026-09-23T00:15:00+00:00",
-        9357.800704
-      ],
-      [
         "2026-09-23T00:30:00+00:00",
         9348.843817
       ],
       [
         "2026-09-23T00:45:00+00:00",
         9329.21126
+      ],
+      [
+        "2026-09-23T01:00:00+00:00",
+        9350.713438
       ],
       [
         "2026-09-23T01:15:00+00:00",
@@ -6633,16 +6633,16 @@
         9304.771286
       ],
       [
-        "2026-09-23T02:30:00+00:00",
-        9300.42008
-      ],
-      [
         "2026-09-23T02:45:00+00:00",
         9334.957764
       ],
       [
         "2026-09-23T03:00:00+00:00",
         9359.754588
+      ],
+      [
+        "2026-09-23T03:15:00+00:00",
+        9368.455
       ],
       [
         "2026-09-23T03:30:00+00:00",
@@ -6665,10 +6665,6 @@
         9420.813991
       ],
       [
-        "2026-09-23T04:45:00+00:00",
-        9412.757047
-      ],
-      [
         "2026-09-23T05:00:00+00:00",
         9368.490791
       ],
@@ -6679,6 +6675,10 @@
       [
         "2026-09-23T05:30:00+00:00",
         9353.890504
+      ],
+      [
+        "2026-09-23T05:45:00+00:00",
+        9304.410361
       ],
       [
         "2026-09-23T06:00:00+00:00",
@@ -6697,10 +6697,6 @@
         9357.616222
       ],
       [
-        "2026-09-23T07:00:00+00:00",
-        9338.827111
-      ],
-      [
         "2026-09-23T07:15:00+00:00",
         9362.31838
       ],
@@ -6711,6 +6707,10 @@
       [
         "2026-09-23T07:45:00+00:00",
         9310.825544
+      ],
+      [
+        "2026-09-23T08:00:00+00:00",
+        9308.538556
       ],
       [
         "2026-09-23T08:15:00+00:00",
@@ -6729,10 +6729,6 @@
         9297.627143
       ],
       [
-        "2026-09-23T09:15:00+00:00",
-        9301.311557
-      ],
-      [
         "2026-09-23T09:30:00+00:00",
         9343.974143
       ],
@@ -6743,6 +6739,10 @@
       [
         "2026-09-23T10:00:00+00:00",
         9353.449786
+      ],
+      [
+        "2026-09-23T10:15:00+00:00",
+        9362.724311
       ],
       [
         "2026-09-23T10:30:00+00:00",
@@ -6761,10 +6761,6 @@
         9424.176831
       ],
       [
-        "2026-09-23T11:30:00+00:00",
-        9434.985415
-      ],
-      [
         "2026-09-23T11:45:00+00:00",
         9395.972256
       ],
@@ -6775,6 +6771,10 @@
       [
         "2026-09-23T12:15:00+00:00",
         9444.751869
+      ],
+      [
+        "2026-09-23T12:30:00+00:00",
+        9441.50286
       ],
       [
         "2026-09-23T12:45:00+00:00",
@@ -6793,10 +6793,6 @@
         9439.781723
       ],
       [
-        "2026-09-23T13:45:00+00:00",
-        9441.614854
-      ],
-      [
         "2026-09-23T14:00:00+00:00",
         9486.094277
       ],
@@ -6807,6 +6803,10 @@
       [
         "2026-09-23T14:30:00+00:00",
         9488.323314
+      ],
+      [
+        "2026-09-23T14:45:00+00:00",
+        9484.473159
       ],
       [
         "2026-09-23T15:00:00+00:00",
@@ -6825,10 +6825,6 @@
         9505.345052
       ],
       [
-        "2026-09-23T16:00:00+00:00",
-        9493.235631
-      ],
-      [
         "2026-09-23T16:15:00+00:00",
         9496.781826
       ],
@@ -6845,6 +6841,10 @@
         9511.979807
       ],
       [
+        "2026-09-23T17:15:00+00:00",
+        9505.596655
+      ],
+      [
         "2026-09-23T17:30:00+00:00",
         9503.772897
       ],
@@ -6854,10 +6854,6 @@
       ],
       [
         "2026-09-23T18:00:00+00:00",
-        9504.872552
-      ],
-      [
-        "2026-09-23T18:15:00+00:00",
         9504.872552
       ],
       [
@@ -6877,6 +6873,10 @@
         9504.872552
       ],
       [
+        "2026-09-23T19:30:00+00:00",
+        9504.872552
+      ],
+      [
         "2026-09-23T19:45:00+00:00",
         9504.872552
       ],
@@ -6886,10 +6886,6 @@
       ],
       [
         "2026-09-23T20:15:00+00:00",
-        9504.872552
-      ],
-      [
-        "2026-09-23T20:30:00+00:00",
         9504.872552
       ],
       [
@@ -6909,6 +6905,10 @@
         9504.872552
       ],
       [
+        "2026-09-23T21:45:00+00:00",
+        9504.872552
+      ],
+      [
         "2026-09-23T22:00:00+00:00",
         9504.872552
       ],
@@ -6918,10 +6918,6 @@
       ],
       [
         "2026-09-23T22:30:00+00:00",
-        9504.872552
-      ],
-      [
-        "2026-09-23T22:45:00+00:00",
         9504.872552
       ],
       [
@@ -6941,6 +6937,10 @@
         9504.872552
       ],
       [
+        "2026-09-24T00:00:00+00:00",
+        9504.872552
+      ],
+      [
         "2026-09-24T00:15:00+00:00",
         9504.872552
       ],
@@ -6950,10 +6950,6 @@
       ],
       [
         "2026-09-24T00:45:00+00:00",
-        9504.872552
-      ],
-      [
-        "2026-09-24T01:00:00+00:00",
         9504.872552
       ],
       [
@@ -6973,6 +6969,10 @@
         9504.872552
       ],
       [
+        "2026-09-24T02:15:00+00:00",
+        9504.872552
+      ],
+      [
         "2026-09-24T02:30:00+00:00",
         9504.872552
       ],
@@ -6983,10 +6983,6 @@
       [
         "2026-09-24T03:00:00+00:00",
         9486.772818
-      ],
-      [
-        "2026-09-24T03:15:00+00:00",
-        9466.980506
       ],
       [
         "2026-09-24T03:30:00+00:00",
@@ -7005,6 +7001,10 @@
         9429.913064
       ],
       [
+        "2026-09-24T04:30:00+00:00",
+        9452.298354
+      ],
+      [
         "2026-09-24T04:45:00+00:00",
         9457.010663
       ],
@@ -7015,10 +7015,6 @@
       [
         "2026-09-24T05:15:00+00:00",
         9457.354066
-      ],
-      [
-        "2026-09-24T05:30:00+00:00",
-        9460.386938
       ],
       [
         "2026-09-24T05:45:00+00:00",
@@ -7041,16 +7037,16 @@
         9464.776056
       ],
       [
+        "2026-09-24T07:00:00+00:00",
+        9447.69121
+      ],
+      [
         "2026-09-24T07:15:00+00:00",
         9453.809421
       ],
       [
         "2026-09-24T07:30:00+00:00",
         9458.927423
-      ],
-      [
-        "2026-09-24T07:45:00+00:00",
-        9474.306307
       ],
       [
         "2026-09-24T08:00:00+00:00",
@@ -7073,6 +7069,10 @@
         9267.527027
       ],
       [
+        "2026-09-24T09:15:00+00:00",
+        9227.619611
+      ],
+      [
         "2026-09-24T09:30:00+00:00",
         9165.919203
       ],
@@ -7083,10 +7083,6 @@
       [
         "2026-09-24T10:00:00+00:00",
         9172.968494
-      ],
-      [
-        "2026-09-24T10:15:00+00:00",
-        9154.934274
       ],
       [
         "2026-09-24T10:30:00+00:00",
@@ -7105,6 +7101,10 @@
         9164.614582
       ],
       [
+        "2026-09-24T11:30:00+00:00",
+        9163.52517
+      ],
+      [
         "2026-09-24T11:45:00+00:00",
         9164.776226
       ],
@@ -7115,10 +7115,6 @@
       [
         "2026-09-24T12:15:00+00:00",
         9148.536181
-      ],
-      [
-        "2026-09-24T12:30:00+00:00",
-        9159.682357
       ],
       [
         "2026-09-24T12:45:00+00:00",
@@ -7137,6 +7133,10 @@
         9101.174381
       ],
       [
+        "2026-09-24T13:45:00+00:00",
+        9088.491585
+      ],
+      [
         "2026-09-24T14:00:00+00:00",
         9084.143139
       ],
@@ -7147,10 +7147,6 @@
       [
         "2026-09-24T14:30:00+00:00",
         9054.621314
-      ],
-      [
-        "2026-09-24T14:45:00+00:00",
-        9053.200851
       ],
       [
         "2026-09-24T15:00:00+00:00",
@@ -7169,6 +7165,10 @@
         9101.171907
       ],
       [
+        "2026-09-24T16:00:00+00:00",
+        9088.528532
+      ],
+      [
         "2026-09-24T16:15:00+00:00",
         9148.335312
       ],
@@ -7179,10 +7179,6 @@
       [
         "2026-09-24T16:45:00+00:00",
         9141.840156
-      ],
-      [
-        "2026-09-24T17:00:00+00:00",
-        9142.514526
       ],
       [
         "2026-09-24T17:15:00+00:00",
@@ -7205,16 +7201,16 @@
         9128.028437
       ],
       [
+        "2026-09-24T18:30:00+00:00",
+        9123.817431
+      ],
+      [
         "2026-09-24T18:45:00+00:00",
         9151.521163
       ],
       [
         "2026-09-24T19:00:00+00:00",
         9147.28949
-      ],
-      [
-        "2026-09-24T19:15:00+00:00",
-        9154.203251
       ],
       [
         "2026-09-24T19:30:00+00:00",
@@ -7237,16 +7233,16 @@
         9124.260394
       ],
       [
+        "2026-09-24T20:45:00+00:00",
+        9119.340279
+      ],
+      [
         "2026-09-24T21:00:00+00:00",
         9121.302942
       ],
       [
         "2026-09-24T21:15:00+00:00",
         9117.732816
-      ],
-      [
-        "2026-09-24T21:30:00+00:00",
-        9110.89869
       ],
       [
         "2026-09-24T21:45:00+00:00",
@@ -7269,16 +7265,16 @@
         9124.201721
       ],
       [
+        "2026-09-24T23:00:00+00:00",
+        9123.349227
+      ],
+      [
         "2026-09-24T23:15:00+00:00",
         9085.749168
       ],
       [
         "2026-09-24T23:30:00+00:00",
         9095.854044
-      ],
-      [
-        "2026-09-24T23:45:00+00:00",
-        9100.653785
       ],
       [
         "2026-09-25T00:00:00+00:00",
@@ -7301,16 +7297,16 @@
         9065.101118
       ],
       [
+        "2026-09-25T01:15:00+00:00",
+        9078.284637
+      ],
+      [
         "2026-09-25T01:30:00+00:00",
         9084.211681
       ],
       [
         "2026-09-25T01:45:00+00:00",
         9082.572036
-      ],
-      [
-        "2026-09-25T02:00:00+00:00",
-        9083.64796
       ],
       [
         "2026-09-25T02:15:00+00:00",
@@ -7333,16 +7329,16 @@
         9075.534027
       ],
       [
+        "2026-09-25T03:30:00+00:00",
+        9053.592941
+      ],
+      [
         "2026-09-25T03:45:00+00:00",
         9055.575417
       ],
       [
         "2026-09-25T04:00:00+00:00",
         9053.588788
-      ],
-      [
-        "2026-09-25T04:15:00+00:00",
-        9045.881125
       ],
       [
         "2026-09-25T04:30:00+00:00",
@@ -7365,16 +7361,16 @@
         9046.999514
       ],
       [
+        "2026-09-25T05:45:00+00:00",
+        9037.983418
+      ],
+      [
         "2026-09-25T06:00:00+00:00",
         9031.601308
       ],
       [
         "2026-09-25T06:15:00+00:00",
         9036.887939
-      ],
-      [
-        "2026-09-25T06:30:00+00:00",
-        9037.415865
       ],
       [
         "2026-09-25T06:45:00+00:00",
@@ -7401,12 +7397,12 @@
         9072.314886
       ],
       [
-        "2026-09-25T08:30:00+00:00",
-        9037.709466
+        "2026-09-25T08:15:00+00:00",
+        9016.957959
       ],
       [
-        "2026-09-25T08:45:00+00:00",
-        9030.153001
+        "2026-09-25T08:30:00+00:00",
+        9037.709466
       ],
       [
         "2026-09-25T09:00:00+00:00",
@@ -7433,12 +7429,12 @@
         9011.338756
       ],
       [
-        "2026-09-25T10:45:00+00:00",
-        9012.496663
+        "2026-09-25T10:30:00+00:00",
+        9011.661324
       ],
       [
-        "2026-09-25T11:00:00+00:00",
-        9019.230413
+        "2026-09-25T10:45:00+00:00",
+        9012.496663
       ],
       [
         "2026-09-25T11:15:00+00:00",
@@ -7465,12 +7461,12 @@
         8953.488298
       ],
       [
-        "2026-09-25T13:00:00+00:00",
-        8944.970908
+        "2026-09-25T12:45:00+00:00",
+        8952.83426
       ],
       [
-        "2026-09-25T13:15:00+00:00",
-        8904.221816
+        "2026-09-25T13:00:00+00:00",
+        8944.970908
       ],
       [
         "2026-09-25T13:30:00+00:00",
@@ -7497,12 +7493,12 @@
         8832.903895
       ],
       [
-        "2026-09-25T15:15:00+00:00",
-        8840.755916
+        "2026-09-25T15:00:00+00:00",
+        8837.627822
       ],
       [
-        "2026-09-25T15:30:00+00:00",
-        8853.078971
+        "2026-09-25T15:15:00+00:00",
+        8840.755916
       ],
       [
         "2026-09-25T15:45:00+00:00",
@@ -7529,12 +7525,12 @@
         8831.616011
       ],
       [
-        "2026-09-25T17:30:00+00:00",
-        8843.854106
+        "2026-09-25T17:15:00+00:00",
+        8855.541376
       ],
       [
-        "2026-09-25T17:45:00+00:00",
-        8844.843031
+        "2026-09-25T17:30:00+00:00",
+        8843.854106
       ],
       [
         "2026-09-25T18:00:00+00:00",
@@ -7565,8 +7561,8 @@
         8812.090138
       ],
       [
-        "2026-09-25T20:00:00+00:00",
-        8806.303684
+        "2026-09-25T19:45:00+00:00",
+        8805.630808
       ],
       [
         "2026-09-25T20:15:00+00:00",
@@ -7597,8 +7593,8 @@
         8809.205692
       ],
       [
-        "2026-09-25T22:15:00+00:00",
-        8776.154805
+        "2026-09-25T22:00:00+00:00",
+        8789.743708
       ],
       [
         "2026-09-25T22:30:00+00:00",
@@ -7629,8 +7625,8 @@
         8758.917392
       ],
       [
-        "2026-09-26T00:30:00+00:00",
-        8788.207276
+        "2026-09-26T00:15:00+00:00",
+        8776.169731
       ],
       [
         "2026-09-26T00:45:00+00:00",
@@ -7661,8 +7657,8 @@
         8736.936703
       ],
       [
-        "2026-09-26T02:45:00+00:00",
-        8749.541273
+        "2026-09-26T02:30:00+00:00",
+        8746.507207
       ],
       [
         "2026-09-26T03:00:00+00:00",
@@ -7693,8 +7689,8 @@
         8751.751928
       ],
       [
-        "2026-09-26T05:00:00+00:00",
-        8763.283607
+        "2026-09-26T04:45:00+00:00",
+        8748.955947
       ],
       [
         "2026-09-26T05:15:00+00:00",
@@ -7725,8 +7721,8 @@
         8782.349893
       ],
       [
-        "2026-09-26T07:15:00+00:00",
-        8765.842124
+        "2026-09-26T07:00:00+00:00",
+        8756.397071
       ],
       [
         "2026-09-26T07:30:00+00:00",
@@ -7743,6 +7739,10 @@
       [
         "2026-09-26T08:15:00+00:00",
         8767.400958
+      ],
+      [
+        "2026-09-26T08:30:00+00:00",
+        8745.789112
       ]
     ],
     "scalp_patient": [
@@ -7959,8 +7959,8 @@
         10000.39145
       ],
       [
-        "2026-09-21T03:00:00+00:00",
-        10000.58279
+        "2026-09-21T03:15:00+00:00",
+        9999.065339
       ],
       [
         "2026-09-21T03:30:00+00:00",
@@ -7991,8 +7991,8 @@
         9996.153048
       ],
       [
-        "2026-09-21T05:15:00+00:00",
-        10003.00434
+        "2026-09-21T05:30:00+00:00",
+        10003.87999
       ],
       [
         "2026-09-21T05:45:00+00:00",
@@ -8023,8 +8023,8 @@
         10003.80725
       ],
       [
-        "2026-09-21T07:30:00+00:00",
-        10000.95931
+        "2026-09-21T07:45:00+00:00",
+        10007.06085
       ],
       [
         "2026-09-21T08:00:00+00:00",
@@ -8055,8 +8055,8 @@
         10050.95985
       ],
       [
-        "2026-09-21T09:45:00+00:00",
-        10051.7077
+        "2026-09-21T10:00:00+00:00",
+        10038.39598
       ],
       [
         "2026-09-21T10:15:00+00:00",
@@ -8087,8 +8087,8 @@
         10043.48136
       ],
       [
-        "2026-09-21T12:00:00+00:00",
-        10039.14383
+        "2026-09-21T12:15:00+00:00",
+        10034.20803
       ],
       [
         "2026-09-21T12:30:00+00:00",
@@ -8119,12 +8119,12 @@
         10063.22458
       ],
       [
-        "2026-09-21T14:15:00+00:00",
-        10060.53232
-      ],
-      [
         "2026-09-21T14:30:00+00:00",
         10061.57931
+      ],
+      [
+        "2026-09-21T14:45:00+00:00",
+        10062.92544
       ],
       [
         "2026-09-21T15:00:00+00:00",
@@ -8151,12 +8151,12 @@
         10080.2726
       ],
       [
-        "2026-09-21T16:30:00+00:00",
-        10078.62733
-      ],
-      [
         "2026-09-21T16:45:00+00:00",
         10079.07604
+      ],
+      [
+        "2026-09-21T17:00:00+00:00",
+        10092.53733
       ],
       [
         "2026-09-21T17:15:00+00:00",
@@ -8183,12 +8183,12 @@
         10104.20378
       ],
       [
-        "2026-09-21T18:45:00+00:00",
-        10103.15679
-      ],
-      [
         "2026-09-21T19:00:00+00:00",
         10092.98604
+      ],
+      [
+        "2026-09-21T19:15:00+00:00",
+        10095.6783
       ],
       [
         "2026-09-21T19:30:00+00:00",
@@ -8215,12 +8215,12 @@
         10068.00787
       ],
       [
-        "2026-09-21T21:00:00+00:00",
-        10063.22163
-      ],
-      [
         "2026-09-21T21:15:00+00:00",
         10047.36723
+      ],
+      [
+        "2026-09-21T21:30:00+00:00",
+        10042.28185
       ],
       [
         "2026-09-21T21:45:00+00:00",
@@ -8247,12 +8247,12 @@
         10050.43765
       ],
       [
-        "2026-09-21T23:15:00+00:00",
-        10049.97036
-      ],
-      [
         "2026-09-21T23:30:00+00:00",
         10048.7762
+      ],
+      [
+        "2026-09-21T23:45:00+00:00",
+        10049.39924
       ],
       [
         "2026-09-22T00:00:00+00:00",
@@ -8279,12 +8279,12 @@
         10043.5778
       ],
       [
-        "2026-09-22T01:30:00+00:00",
-        10043.88932
-      ],
-      [
         "2026-09-22T01:45:00+00:00",
         10046.22574
+      ],
+      [
+        "2026-09-22T02:00:00+00:00",
+        10044.46045
       ],
       [
         "2026-09-22T02:15:00+00:00",
@@ -8311,16 +8311,16 @@
         10005.55274
       ],
       [
-        "2026-09-22T03:45:00+00:00",
-        10002.81056
-      ],
-      [
         "2026-09-22T04:00:00+00:00",
         9983.384845
       ],
       [
         "2026-09-22T04:15:00+00:00",
         9978.235303
+      ],
+      [
+        "2026-09-22T04:30:00+00:00",
+        9944.862476
       ],
       [
         "2026-09-22T04:45:00+00:00",
@@ -8343,16 +8343,16 @@
         9936.718808
       ],
       [
-        "2026-09-22T06:00:00+00:00",
-        9942.465621
-      ],
-      [
         "2026-09-22T06:15:00+00:00",
         9922.614653
       ],
       [
         "2026-09-22T06:30:00+00:00",
         9907.070994
+      ],
+      [
+        "2026-09-22T06:45:00+00:00",
+        9901.126405
       ],
       [
         "2026-09-22T07:00:00+00:00",
@@ -8375,16 +8375,16 @@
         9880.244722
       ],
       [
-        "2026-09-22T08:15:00+00:00",
-        9892.203355
-      ],
-      [
         "2026-09-22T08:30:00+00:00",
         9794.156078
       ],
       [
         "2026-09-22T08:45:00+00:00",
         9795.398884
+      ],
+      [
+        "2026-09-22T09:00:00+00:00",
+        9833.656839
       ],
       [
         "2026-09-22T09:15:00+00:00",
@@ -8407,16 +8407,16 @@
         9833.457365
       ],
       [
-        "2026-09-22T10:30:00+00:00",
-        9833.037311
-      ],
-      [
         "2026-09-22T10:45:00+00:00",
         9832.608952
       ],
       [
         "2026-09-22T11:00:00+00:00",
         9840.567511
+      ],
+      [
+        "2026-09-22T11:15:00+00:00",
+        9828.879723
       ],
       [
         "2026-09-22T11:30:00+00:00",
@@ -8443,12 +8443,12 @@
         9797.381752
       ],
       [
-        "2026-09-22T13:00:00+00:00",
-        9782.402244
-      ],
-      [
         "2026-09-22T13:15:00+00:00",
         9805.792303
+      ],
+      [
+        "2026-09-22T13:30:00+00:00",
+        9750.610709
       ],
       [
         "2026-09-22T13:45:00+00:00",
@@ -8475,16 +8475,16 @@
         9687.763278
       ],
       [
-        "2026-09-22T15:15:00+00:00",
-        9698.027073
-      ],
-      [
         "2026-09-22T15:30:00+00:00",
         9655.390328
       ],
       [
         "2026-09-22T15:45:00+00:00",
         9652.970746
+      ],
+      [
+        "2026-09-22T16:00:00+00:00",
+        9646.128652
       ],
       [
         "2026-09-22T16:15:00+00:00",
@@ -8507,16 +8507,16 @@
         9676.105788
       ],
       [
-        "2026-09-22T17:30:00+00:00",
-        9670.73416
-      ],
-      [
         "2026-09-22T17:45:00+00:00",
         9669.301665
       ],
       [
         "2026-09-22T18:00:00+00:00",
         9664.408473
+      ],
+      [
+        "2026-09-22T18:15:00+00:00",
+        9636.483774
       ],
       [
         "2026-09-22T18:30:00+00:00",
@@ -8539,16 +8539,16 @@
         9636.032628
       ],
       [
-        "2026-09-22T19:45:00+00:00",
-        9628.035304
-      ],
-      [
         "2026-09-22T20:00:00+00:00",
         9607.596992
       ],
       [
         "2026-09-22T20:15:00+00:00",
         9617.275753
+      ],
+      [
+        "2026-09-22T20:30:00+00:00",
+        9607.812026
       ],
       [
         "2026-09-22T20:45:00+00:00",
@@ -8571,16 +8571,16 @@
         9610.842363
       ],
       [
-        "2026-09-22T22:00:00+00:00",
-        9597.139436
-      ],
-      [
         "2026-09-22T22:15:00+00:00",
         9616.631549
       ],
       [
         "2026-09-22T22:30:00+00:00",
         9631.945491
+      ],
+      [
+        "2026-09-22T22:45:00+00:00",
+        9631.712946
       ],
       [
         "2026-09-22T23:00:00+00:00",
@@ -8603,16 +8603,16 @@
         9655.484547
       ],
       [
-        "2026-09-23T00:15:00+00:00",
-        9657.346303
-      ],
-      [
         "2026-09-23T00:30:00+00:00",
         9651.257319
       ],
       [
         "2026-09-23T00:45:00+00:00",
         9641.983794
+      ],
+      [
+        "2026-09-23T01:00:00+00:00",
+        9663.593377
       ],
       [
         "2026-09-23T01:15:00+00:00",
@@ -8635,16 +8635,16 @@
         9623.302562
       ],
       [
-        "2026-09-23T02:30:00+00:00",
-        9614.713495
-      ],
-      [
         "2026-09-23T02:45:00+00:00",
         9626.324247
       ],
       [
         "2026-09-23T03:00:00+00:00",
         9629.930735
+      ],
+      [
+        "2026-09-23T03:15:00+00:00",
+        9647.14367
       ],
       [
         "2026-09-23T03:30:00+00:00",
@@ -8667,10 +8667,6 @@
         9733.241731
       ],
       [
-        "2026-09-23T04:45:00+00:00",
-        9733.603189
-      ],
-      [
         "2026-09-23T05:00:00+00:00",
         9673.591302
       ],
@@ -8681,6 +8677,10 @@
       [
         "2026-09-23T05:30:00+00:00",
         9653.157798
+      ],
+      [
+        "2026-09-23T05:45:00+00:00",
+        9596.446045
       ],
       [
         "2026-09-23T06:00:00+00:00",
@@ -8699,10 +8699,6 @@
         9663.758135
       ],
       [
-        "2026-09-23T07:00:00+00:00",
-        9639.172266
-      ],
-      [
         "2026-09-23T07:15:00+00:00",
         9667.892591
       ],
@@ -8713,6 +8709,10 @@
       [
         "2026-09-23T07:45:00+00:00",
         9602.734204
+      ],
+      [
+        "2026-09-23T08:00:00+00:00",
+        9599.674119
       ],
       [
         "2026-09-23T08:15:00+00:00",
@@ -8731,10 +8731,6 @@
         9600.661145
       ],
       [
-        "2026-09-23T09:15:00+00:00",
-        9638.674354
-      ],
-      [
         "2026-09-23T09:30:00+00:00",
         9632.68154
       ],
@@ -8745,6 +8741,10 @@
       [
         "2026-09-23T10:00:00+00:00",
         9609.180792
+      ],
+      [
+        "2026-09-23T10:15:00+00:00",
+        9562.661485
       ],
       [
         "2026-09-23T10:30:00+00:00",
@@ -8763,10 +8763,6 @@
         9461.744512
       ],
       [
-        "2026-09-23T11:30:00+00:00",
-        9437.515355
-      ],
-      [
         "2026-09-23T11:45:00+00:00",
         9449.78877
       ],
@@ -8777,6 +8773,10 @@
       [
         "2026-09-23T12:15:00+00:00",
         9441.238253
+      ],
+      [
+        "2026-09-23T12:30:00+00:00",
+        9435.227219
       ],
       [
         "2026-09-23T12:45:00+00:00",
@@ -8795,10 +8795,6 @@
         9459.667709
       ],
       [
-        "2026-09-23T13:45:00+00:00",
-        9467.098576
-      ],
-      [
         "2026-09-23T14:00:00+00:00",
         9447.195245
       ],
@@ -8809,6 +8805,10 @@
       [
         "2026-09-23T14:30:00+00:00",
         9413.854946
+      ],
+      [
+        "2026-09-23T14:45:00+00:00",
+        9409.997529
       ],
       [
         "2026-09-23T15:00:00+00:00",
@@ -8827,10 +8827,6 @@
         9430.908793
       ],
       [
-        "2026-09-23T16:00:00+00:00",
-        9418.776529
-      ],
-      [
         "2026-09-23T16:15:00+00:00",
         9422.329414
       ],
@@ -8847,6 +8843,10 @@
         9437.556063
       ],
       [
+        "2026-09-23T17:15:00+00:00",
+        9431.16087
+      ],
+      [
         "2026-09-23T17:30:00+00:00",
         9429.333672
       ],
@@ -8857,10 +8857,6 @@
       [
         "2026-09-23T18:00:00+00:00",
         9441.413481
-      ],
-      [
-        "2026-09-23T18:15:00+00:00",
-        9443.646722
       ],
       [
         "2026-09-23T18:30:00+00:00",
@@ -8879,6 +8875,10 @@
         9427.811008
       ],
       [
+        "2026-09-23T19:30:00+00:00",
+        9430.754826
+      ],
+      [
         "2026-09-23T19:45:00+00:00",
         9433.901667
       ],
@@ -8889,10 +8889,6 @@
       [
         "2026-09-23T20:15:00+00:00",
         9433.394112
-      ],
-      [
-        "2026-09-23T20:30:00+00:00",
-        9428.115541
       ],
       [
         "2026-09-23T20:45:00+00:00",
@@ -8911,6 +8907,10 @@
         9410.65565
       ],
       [
+        "2026-09-23T21:45:00+00:00",
+        9413.193425
+      ],
+      [
         "2026-09-23T22:00:00+00:00",
         9406.493699
       ],
@@ -8921,10 +8921,6 @@
       [
         "2026-09-23T22:30:00+00:00",
         9417.659908
-      ],
-      [
-        "2026-09-23T22:45:00+00:00",
-        9418.268974
       ],
       [
         "2026-09-23T23:00:00+00:00",
@@ -8943,6 +8939,10 @@
         9423.141502
       ],
       [
+        "2026-09-24T00:00:00+00:00",
+        9428.266508
+      ],
+      [
         "2026-09-24T00:15:00+00:00",
         9428.774063
       ],
@@ -8953,10 +8953,6 @@
       [
         "2026-09-24T00:45:00+00:00",
         9434.966233
-      ],
-      [
-        "2026-09-24T01:00:00+00:00",
-        9437.097964
       ],
       [
         "2026-09-24T01:15:00+00:00",
@@ -8975,6 +8971,10 @@
         9429.992195
       ],
       [
+        "2026-09-24T02:15:00+00:00",
+        9426.134777
+      ],
+      [
         "2026-09-24T02:30:00+00:00",
         9419.638073
       ],
@@ -8985,10 +8985,6 @@
       [
         "2026-09-24T03:00:00+00:00",
         9400.279688
-      ],
-      [
-        "2026-09-24T03:15:00+00:00",
-        9391.729772
       ],
       [
         "2026-09-24T03:30:00+00:00",
@@ -9007,6 +9003,10 @@
         9352.251466
       ],
       [
+        "2026-09-24T04:30:00+00:00",
+        9368.853881
+      ],
+      [
         "2026-09-24T04:45:00+00:00",
         9363.063968
       ],
@@ -9017,10 +9017,6 @@
       [
         "2026-09-24T05:15:00+00:00",
         9348.169978
-      ],
-      [
-        "2026-09-24T05:30:00+00:00",
-        9356.251908
       ],
       [
         "2026-09-24T05:45:00+00:00",
@@ -9043,16 +9039,16 @@
         9363.752468
       ],
       [
+        "2026-09-24T07:00:00+00:00",
+        9364.364842
+      ],
+      [
         "2026-09-24T07:15:00+00:00",
         9370.972583
       ],
       [
         "2026-09-24T07:30:00+00:00",
         9357.281668
-      ],
-      [
-        "2026-09-24T07:45:00+00:00",
-        9368.548354
       ],
       [
         "2026-09-24T08:00:00+00:00",
@@ -9075,6 +9071,10 @@
         9392.973147
       ],
       [
+        "2026-09-24T09:15:00+00:00",
+        9399.569308
+      ],
+      [
         "2026-09-24T09:30:00+00:00",
         9395.520354
       ],
@@ -9085,10 +9085,6 @@
       [
         "2026-09-24T10:00:00+00:00",
         9391.629267
-      ],
-      [
-        "2026-09-24T10:15:00+00:00",
-        9388.719442
       ],
       [
         "2026-09-24T10:30:00+00:00",
@@ -9107,6 +9103,10 @@
         9357.472924
       ],
       [
+        "2026-09-24T11:30:00+00:00",
+        9361.614653
+      ],
+      [
         "2026-09-24T11:45:00+00:00",
         9358.560242
       ],
@@ -9117,10 +9117,6 @@
       [
         "2026-09-24T12:15:00+00:00",
         9343.140093
-      ],
-      [
-        "2026-09-24T12:30:00+00:00",
-        9360.792351
       ],
       [
         "2026-09-24T12:45:00+00:00",
@@ -9139,6 +9135,10 @@
         9266.057086
       ],
       [
+        "2026-09-24T13:45:00+00:00",
+        9243.366189
+      ],
+      [
         "2026-09-24T14:00:00+00:00",
         9246.938711
       ],
@@ -9149,10 +9149,6 @@
       [
         "2026-09-24T14:30:00+00:00",
         9181.494741
-      ],
-      [
-        "2026-09-24T14:45:00+00:00",
-        9216.899452
       ],
       [
         "2026-09-24T15:00:00+00:00",
@@ -9171,6 +9167,10 @@
         9202.173641
       ],
       [
+        "2026-09-24T16:00:00+00:00",
+        9208.93428
+      ],
+      [
         "2026-09-24T16:15:00+00:00",
         9224.411109
       ],
@@ -9181,10 +9181,6 @@
       [
         "2026-09-24T16:45:00+00:00",
         9235.997947
-      ],
-      [
-        "2026-09-24T17:00:00+00:00",
-        9240.812263
       ],
       [
         "2026-09-24T17:15:00+00:00",
@@ -9207,16 +9203,16 @@
         9235.38395
       ],
       [
+        "2026-09-24T18:30:00+00:00",
+        9218.379401
+      ],
+      [
         "2026-09-24T18:45:00+00:00",
         9237.388586
       ],
       [
         "2026-09-24T19:00:00+00:00",
         9234.404257
-      ],
-      [
-        "2026-09-24T19:15:00+00:00",
-        9226.663317
       ],
       [
         "2026-09-24T19:30:00+00:00",
@@ -9239,16 +9235,16 @@
         9216.502106
       ],
       [
+        "2026-09-24T20:45:00+00:00",
+        9219.270162
+      ],
+      [
         "2026-09-24T21:00:00+00:00",
         9224.916456
       ],
       [
         "2026-09-24T21:15:00+00:00",
         9242.441933
-      ],
-      [
-        "2026-09-24T21:30:00+00:00",
-        9274.924915
       ],
       [
         "2026-09-24T21:45:00+00:00",
@@ -9271,16 +9267,16 @@
         9184.615634
       ],
       [
+        "2026-09-24T23:00:00+00:00",
+        9171.237867
+      ],
+      [
         "2026-09-24T23:15:00+00:00",
         9184.441097
       ],
       [
         "2026-09-24T23:30:00+00:00",
         9180.119133
-      ],
-      [
-        "2026-09-24T23:45:00+00:00",
-        9190.191143
       ],
       [
         "2026-09-25T00:00:00+00:00",
@@ -9303,16 +9299,16 @@
         9222.081436
       ],
       [
+        "2026-09-25T01:15:00+00:00",
+        9213.243227
+      ],
+      [
         "2026-09-25T01:30:00+00:00",
         9215.070943
       ],
       [
         "2026-09-25T01:45:00+00:00",
         9216.009914
-      ],
-      [
-        "2026-09-25T02:00:00+00:00",
-        9232.740735
       ],
       [
         "2026-09-25T02:15:00+00:00",
@@ -9335,16 +9331,16 @@
         9182.479269
       ],
       [
+        "2026-09-25T03:30:00+00:00",
+        9190.018508
+      ],
+      [
         "2026-09-25T03:45:00+00:00",
         9190.878689
       ],
       [
         "2026-09-25T04:00:00+00:00",
         9194.893698
-      ],
-      [
-        "2026-09-25T04:15:00+00:00",
-        9203.104668
       ],
       [
         "2026-09-25T04:30:00+00:00",
@@ -9367,16 +9363,16 @@
         9192.173963
       ],
       [
+        "2026-09-25T05:45:00+00:00",
+        9182.908052
+      ],
+      [
         "2026-09-25T06:00:00+00:00",
         9180.725465
       ],
       [
         "2026-09-25T06:15:00+00:00",
         9183.068356
-      ],
-      [
-        "2026-09-25T06:30:00+00:00",
-        9180.611436
       ],
       [
         "2026-09-25T06:45:00+00:00",
@@ -9403,12 +9399,12 @@
         9194.831625
       ],
       [
-        "2026-09-25T08:30:00+00:00",
-        9218.023981
+        "2026-09-25T08:15:00+00:00",
+        9226.522529
       ],
       [
-        "2026-09-25T08:45:00+00:00",
-        9227.322157
+        "2026-09-25T08:30:00+00:00",
+        9218.023981
       ],
       [
         "2026-09-25T09:00:00+00:00",
@@ -9435,12 +9431,12 @@
         9238.403557
       ],
       [
-        "2026-09-25T10:45:00+00:00",
-        9239.54571
+        "2026-09-25T10:30:00+00:00",
+        9242.080338
       ],
       [
-        "2026-09-25T11:00:00+00:00",
-        9262.48386
+        "2026-09-25T10:45:00+00:00",
+        9239.54571
       ],
       [
         "2026-09-25T11:15:00+00:00",
@@ -9467,12 +9463,12 @@
         9271.511068
       ],
       [
-        "2026-09-25T13:00:00+00:00",
-        9252.632256
+        "2026-09-25T12:45:00+00:00",
+        9267.249499
       ],
       [
-        "2026-09-25T13:15:00+00:00",
-        9234.84136
+        "2026-09-25T13:00:00+00:00",
+        9252.632256
       ],
       [
         "2026-09-25T13:30:00+00:00",
@@ -9499,12 +9495,12 @@
         9226.093576
       ],
       [
-        "2026-09-25T15:15:00+00:00",
-        9205.351273
+        "2026-09-25T15:00:00+00:00",
+        9236.717563
       ],
       [
-        "2026-09-25T15:30:00+00:00",
-        9188.815143
+        "2026-09-25T15:15:00+00:00",
+        9205.351273
       ],
       [
         "2026-09-25T15:45:00+00:00",
@@ -9531,12 +9527,12 @@
         9215.984573
       ],
       [
-        "2026-09-25T17:30:00+00:00",
-        9223.151649
+        "2026-09-25T17:15:00+00:00",
+        9218.057664
       ],
       [
-        "2026-09-25T17:45:00+00:00",
-        9219.892908
+        "2026-09-25T17:30:00+00:00",
+        9223.151649
       ],
       [
         "2026-09-25T18:00:00+00:00",
@@ -9567,8 +9563,8 @@
         9206.774185
       ],
       [
-        "2026-09-25T20:00:00+00:00",
-        9204.781237
+        "2026-09-25T19:45:00+00:00",
+        9204.039623
       ],
       [
         "2026-09-25T20:15:00+00:00",
@@ -9599,8 +9595,8 @@
         9207.409632
       ],
       [
-        "2026-09-25T22:15:00+00:00",
-        9205.348322
+        "2026-09-25T22:00:00+00:00",
+        9206.148707
       ],
       [
         "2026-09-25T22:30:00+00:00",
@@ -9631,8 +9627,8 @@
         9204.044335
       ],
       [
-        "2026-09-26T00:30:00+00:00",
-        9206.011663
+        "2026-09-26T00:15:00+00:00",
+        9205.29016
       ],
       [
         "2026-09-26T00:45:00+00:00",
@@ -9663,8 +9659,8 @@
         9204.131949
       ],
       [
-        "2026-09-26T02:45:00+00:00",
-        9204.709353
+        "2026-09-26T02:30:00+00:00",
+        9204.405858
       ],
       [
         "2026-09-26T03:00:00+00:00",
@@ -9695,8 +9691,8 @@
         9205.411232
       ],
       [
-        "2026-09-26T05:00:00+00:00",
-        9205.741562
+        "2026-09-26T04:45:00+00:00",
+        9205.168608
       ],
       [
         "2026-09-26T05:15:00+00:00",
@@ -9727,8 +9723,8 @@
         9206.583918
       ],
       [
-        "2026-09-26T07:15:00+00:00",
-        9205.225454
+        "2026-09-26T07:00:00+00:00",
+        9204.992492
       ],
       [
         "2026-09-26T07:30:00+00:00",
@@ -9745,6 +9741,10 @@
       [
         "2026-09-26T08:15:00+00:00",
         9205.196446
+      ],
+      [
+        "2026-09-26T08:30:00+00:00",
+        9203.981623
       ]
     ],
     "vwap_clone": [
@@ -9961,8 +9961,8 @@
         9283.907297
       ],
       [
-        "2026-09-21T03:00:00+00:00",
-        9275.205652
+        "2026-09-21T03:15:00+00:00",
+        9214.469485
       ],
       [
         "2026-09-21T03:30:00+00:00",
@@ -9993,8 +9993,8 @@
         9247.229836
       ],
       [
-        "2026-09-21T05:15:00+00:00",
-        9189.198523
+        "2026-09-21T05:30:00+00:00",
+        9155.569768
       ],
       [
         "2026-09-21T05:45:00+00:00",
@@ -10025,8 +10025,8 @@
         9118.91512
       ],
       [
-        "2026-09-21T07:30:00+00:00",
-        9162.76775
+        "2026-09-21T07:45:00+00:00",
+        9113.319308
       ],
       [
         "2026-09-21T08:00:00+00:00",
@@ -10057,8 +10057,8 @@
         8726.724468
       ],
       [
-        "2026-09-21T09:45:00+00:00",
-        8790.560914
+        "2026-09-21T10:00:00+00:00",
+        8711.275768
       ],
       [
         "2026-09-21T10:15:00+00:00",
@@ -10089,8 +10089,8 @@
         8635.382556
       ],
       [
-        "2026-09-21T12:00:00+00:00",
-        8636.440316
+        "2026-09-21T12:15:00+00:00",
+        8632.370747
       ],
       [
         "2026-09-21T12:30:00+00:00",
@@ -10121,12 +10121,12 @@
         8584.378959
       ],
       [
-        "2026-09-21T14:15:00+00:00",
-        8501.903731
-      ],
-      [
         "2026-09-21T14:30:00+00:00",
         8468.763162
+      ],
+      [
+        "2026-09-21T14:45:00+00:00",
+        8392.411452
       ],
       [
         "2026-09-21T15:00:00+00:00",
@@ -10153,12 +10153,12 @@
         8420.13524
       ],
       [
-        "2026-09-21T16:30:00+00:00",
-        8431.96295
-      ],
-      [
         "2026-09-21T16:45:00+00:00",
         8463.066912
+      ],
+      [
+        "2026-09-21T17:00:00+00:00",
+        8560.048626
       ],
       [
         "2026-09-21T17:15:00+00:00",
@@ -10185,12 +10185,12 @@
         8498.966409
       ],
       [
-        "2026-09-21T18:45:00+00:00",
-        8466.63129
-      ],
-      [
         "2026-09-21T19:00:00+00:00",
         8484.894014
+      ],
+      [
+        "2026-09-21T19:15:00+00:00",
+        8468.252152
       ],
       [
         "2026-09-21T19:30:00+00:00",
@@ -10217,12 +10217,12 @@
         8356.470633
       ],
       [
-        "2026-09-21T21:00:00+00:00",
-        8403.470735
-      ],
-      [
         "2026-09-21T21:15:00+00:00",
         8402.19957
+      ],
+      [
+        "2026-09-21T21:30:00+00:00",
+        8358.548132
       ],
       [
         "2026-09-21T21:45:00+00:00",
@@ -10249,12 +10249,12 @@
         8181.901929
       ],
       [
-        "2026-09-21T23:15:00+00:00",
-        8225.225581
-      ],
-      [
         "2026-09-21T23:30:00+00:00",
         8232.137886
+      ],
+      [
+        "2026-09-21T23:45:00+00:00",
+        8183.764217
       ],
       [
         "2026-09-22T00:00:00+00:00",
@@ -10281,12 +10281,12 @@
         8107.377771
       ],
       [
-        "2026-09-22T01:30:00+00:00",
-        8129.841767
-      ],
-      [
         "2026-09-22T01:45:00+00:00",
         8103.238186
+      ],
+      [
+        "2026-09-22T02:00:00+00:00",
+        8116.735281
       ],
       [
         "2026-09-22T02:15:00+00:00",
@@ -10313,16 +10313,16 @@
         8098.595391
       ],
       [
-        "2026-09-22T03:45:00+00:00",
-        8061.916516
-      ],
-      [
         "2026-09-22T04:00:00+00:00",
         8058.416518
       ],
       [
         "2026-09-22T04:15:00+00:00",
         8073.340104
+      ],
+      [
+        "2026-09-22T04:30:00+00:00",
+        8093.538521
       ],
       [
         "2026-09-22T04:45:00+00:00",
@@ -10345,16 +10345,16 @@
         8065.880588
       ],
       [
-        "2026-09-22T06:00:00+00:00",
-        8031.806262
-      ],
-      [
         "2026-09-22T06:15:00+00:00",
         8029.691901
       ],
       [
         "2026-09-22T06:30:00+00:00",
         8016.384738
+      ],
+      [
+        "2026-09-22T06:45:00+00:00",
+        8015.351229
       ],
       [
         "2026-09-22T07:00:00+00:00",
@@ -10377,16 +10377,16 @@
         8039.823428
       ],
       [
-        "2026-09-22T08:15:00+00:00",
-        8037.654172
-      ],
-      [
         "2026-09-22T08:30:00+00:00",
         7978.089578
       ],
       [
         "2026-09-22T08:45:00+00:00",
         7979.013328
+      ],
+      [
+        "2026-09-22T09:00:00+00:00",
+        7971.705387
       ],
       [
         "2026-09-22T09:15:00+00:00",
@@ -10409,16 +10409,16 @@
         7958.527891
       ],
       [
-        "2026-09-22T10:30:00+00:00",
-        7936.606621
-      ],
-      [
         "2026-09-22T10:45:00+00:00",
         7921.248391
       ],
       [
         "2026-09-22T11:00:00+00:00",
         7937.255937
+      ],
+      [
+        "2026-09-22T11:15:00+00:00",
+        7924.196834
       ],
       [
         "2026-09-22T11:30:00+00:00",
@@ -10445,12 +10445,12 @@
         7978.747845
       ],
       [
-        "2026-09-22T13:00:00+00:00",
-        7937.53046
-      ],
-      [
         "2026-09-22T13:15:00+00:00",
         7933.609512
+      ],
+      [
+        "2026-09-22T13:30:00+00:00",
+        7901.364459
       ],
       [
         "2026-09-22T13:45:00+00:00",
@@ -10477,16 +10477,16 @@
         7867.516783
       ],
       [
-        "2026-09-22T15:15:00+00:00",
-        7873.213897
-      ],
-      [
         "2026-09-22T15:30:00+00:00",
         7827.025312
       ],
       [
         "2026-09-22T15:45:00+00:00",
         7772.243423
+      ],
+      [
+        "2026-09-22T16:00:00+00:00",
+        7788.730346
       ],
       [
         "2026-09-22T16:15:00+00:00",
@@ -10509,16 +10509,16 @@
         7742.952093
       ],
       [
-        "2026-09-22T17:30:00+00:00",
-        7763.682086
-      ],
-      [
         "2026-09-22T17:45:00+00:00",
         7758.330819
       ],
       [
         "2026-09-22T18:00:00+00:00",
         7786.965469
+      ],
+      [
+        "2026-09-22T18:15:00+00:00",
+        7800.974309
       ],
       [
         "2026-09-22T18:30:00+00:00",
@@ -10541,16 +10541,16 @@
         7689.559197
       ],
       [
-        "2026-09-22T19:45:00+00:00",
-        7721.451124
-      ],
-      [
         "2026-09-22T20:00:00+00:00",
         7702.078369
       ],
       [
         "2026-09-22T20:15:00+00:00",
         7682.220692
+      ],
+      [
+        "2026-09-22T20:30:00+00:00",
+        7689.823243
       ],
       [
         "2026-09-22T20:45:00+00:00",
@@ -10573,16 +10573,16 @@
         7695.732334
       ],
       [
-        "2026-09-22T22:00:00+00:00",
-        7724.087518
-      ],
-      [
         "2026-09-22T22:15:00+00:00",
         7725.41538
       ],
       [
         "2026-09-22T22:30:00+00:00",
         7696.988904
+      ],
+      [
+        "2026-09-22T22:45:00+00:00",
+        7672.793333
       ],
       [
         "2026-09-22T23:00:00+00:00",
@@ -10605,16 +10605,16 @@
         7592.032009
       ],
       [
-        "2026-09-23T00:15:00+00:00",
-        7568.922936
-      ],
-      [
         "2026-09-23T00:30:00+00:00",
         7562.078656
       ],
       [
         "2026-09-23T00:45:00+00:00",
         7557.00297
+      ],
+      [
+        "2026-09-23T01:00:00+00:00",
+        7498.846591
       ],
       [
         "2026-09-23T01:15:00+00:00",
@@ -10637,16 +10637,16 @@
         7484.797628
       ],
       [
-        "2026-09-23T02:30:00+00:00",
-        7440.208774
-      ],
-      [
         "2026-09-23T02:45:00+00:00",
         7404.408963
       ],
       [
         "2026-09-23T03:00:00+00:00",
         7390.140434
+      ],
+      [
+        "2026-09-23T03:15:00+00:00",
+        7344.426702
       ],
       [
         "2026-09-23T03:30:00+00:00",
@@ -10669,10 +10669,6 @@
         7240.173504
       ],
       [
-        "2026-09-23T04:45:00+00:00",
-        7219.326117
-      ],
-      [
         "2026-09-23T05:00:00+00:00",
         7208.526281
       ],
@@ -10683,6 +10679,10 @@
       [
         "2026-09-23T05:30:00+00:00",
         7201.573633
+      ],
+      [
+        "2026-09-23T05:45:00+00:00",
+        7249.99489
       ],
       [
         "2026-09-23T06:00:00+00:00",
@@ -10701,10 +10701,6 @@
         7241.428504
       ],
       [
-        "2026-09-23T07:00:00+00:00",
-        7261.506707
-      ],
-      [
         "2026-09-23T07:15:00+00:00",
         7248.415395
       ],
@@ -10715,6 +10711,10 @@
       [
         "2026-09-23T07:45:00+00:00",
         7281.039202
+      ],
+      [
+        "2026-09-23T08:00:00+00:00",
+        7288.028398
       ],
       [
         "2026-09-23T08:15:00+00:00",
@@ -10733,10 +10733,6 @@
         7222.145805
       ],
       [
-        "2026-09-23T09:15:00+00:00",
-        7202.347985
-      ],
-      [
         "2026-09-23T09:30:00+00:00",
         7175.592585
       ],
@@ -10747,6 +10743,10 @@
       [
         "2026-09-23T10:00:00+00:00",
         7190.7706
+      ],
+      [
+        "2026-09-23T10:15:00+00:00",
+        7201.478374
       ],
       [
         "2026-09-23T10:30:00+00:00",
@@ -10765,10 +10765,6 @@
         7282.47046
       ],
       [
-        "2026-09-23T11:30:00+00:00",
-        7306.116809
-      ],
-      [
         "2026-09-23T11:45:00+00:00",
         7283.367638
       ],
@@ -10779,6 +10775,10 @@
       [
         "2026-09-23T12:15:00+00:00",
         7270.321478
+      ],
+      [
+        "2026-09-23T12:30:00+00:00",
+        7258.485003
       ],
       [
         "2026-09-23T12:45:00+00:00",
@@ -10797,10 +10797,6 @@
         7203.476434
       ],
       [
-        "2026-09-23T13:45:00+00:00",
-        7206.447389
-      ],
-      [
         "2026-09-23T14:00:00+00:00",
         7275.947939
       ],
@@ -10811,6 +10807,10 @@
       [
         "2026-09-23T14:30:00+00:00",
         7366.833612
+      ],
+      [
+        "2026-09-23T14:45:00+00:00",
+        7352.478871
       ],
       [
         "2026-09-23T15:00:00+00:00",
@@ -10829,10 +10829,6 @@
         7391.631727
       ],
       [
-        "2026-09-23T16:00:00+00:00",
-        7336.759263
-      ],
-      [
         "2026-09-23T16:15:00+00:00",
         7314.737184
       ],
@@ -10849,6 +10845,10 @@
         7270.085141
       ],
       [
+        "2026-09-23T17:15:00+00:00",
+        7339.928534
+      ],
+      [
         "2026-09-23T17:30:00+00:00",
         7347.04742
       ],
@@ -10859,10 +10859,6 @@
       [
         "2026-09-23T18:00:00+00:00",
         7313.030089
-      ],
-      [
-        "2026-09-23T18:15:00+00:00",
-        7281.852114
       ],
       [
         "2026-09-23T18:30:00+00:00",
@@ -10881,6 +10877,10 @@
         7336.789529
       ],
       [
+        "2026-09-23T19:30:00+00:00",
+        7328.822044
+      ],
+      [
         "2026-09-23T19:45:00+00:00",
         7349.268668
       ],
@@ -10891,10 +10891,6 @@
       [
         "2026-09-23T20:15:00+00:00",
         7304.428541
-      ],
-      [
-        "2026-09-23T20:30:00+00:00",
-        7333.670969
       ],
       [
         "2026-09-23T20:45:00+00:00",
@@ -10913,6 +10909,10 @@
         7322.928595
       ],
       [
+        "2026-09-23T21:45:00+00:00",
+        7301.518493
+      ],
+      [
         "2026-09-23T22:00:00+00:00",
         7289.474668
       ],
@@ -10923,10 +10923,6 @@
       [
         "2026-09-23T22:30:00+00:00",
         7291.217732
-      ],
-      [
-        "2026-09-23T22:45:00+00:00",
-        7310.618905
       ],
       [
         "2026-09-23T23:00:00+00:00",
@@ -10945,6 +10941,10 @@
         7307.947696
       ],
       [
+        "2026-09-24T00:00:00+00:00",
+        7301.022779
+      ],
+      [
         "2026-09-24T00:15:00+00:00",
         7313.255815
       ],
@@ -10955,10 +10955,6 @@
       [
         "2026-09-24T00:45:00+00:00",
         7294.361915
-      ],
-      [
-        "2026-09-24T01:00:00+00:00",
-        7291.338688
       ],
       [
         "2026-09-24T01:15:00+00:00",
@@ -10977,6 +10973,10 @@
         7281.998554
       ],
       [
+        "2026-09-24T02:15:00+00:00",
+        7333.345223
+      ],
+      [
         "2026-09-24T02:30:00+00:00",
         7376.701624
       ],
@@ -10987,10 +10987,6 @@
       [
         "2026-09-24T03:00:00+00:00",
         7386.567034
-      ],
-      [
-        "2026-09-24T03:15:00+00:00",
-        7328.634527
       ],
       [
         "2026-09-24T03:30:00+00:00",
@@ -11009,6 +11005,10 @@
         7360.630075
       ],
       [
+        "2026-09-24T04:30:00+00:00",
+        7356.319091
+      ],
+      [
         "2026-09-24T04:45:00+00:00",
         7395.924007
       ],
@@ -11019,10 +11019,6 @@
       [
         "2026-09-24T05:15:00+00:00",
         7417.528256
-      ],
-      [
-        "2026-09-24T05:30:00+00:00",
-        7409.753824
       ],
       [
         "2026-09-24T05:45:00+00:00",
@@ -11045,16 +11041,16 @@
         7354.52145
       ],
       [
+        "2026-09-24T07:00:00+00:00",
+        7319.777578
+      ],
+      [
         "2026-09-24T07:15:00+00:00",
         7349.977966
       ],
       [
         "2026-09-24T07:30:00+00:00",
         7353.81185
-      ],
-      [
-        "2026-09-24T07:45:00+00:00",
-        7370.166093
       ],
       [
         "2026-09-24T08:00:00+00:00",
@@ -11077,6 +11073,10 @@
         7256.762016
       ],
       [
+        "2026-09-24T09:15:00+00:00",
+        7250.729425
+      ],
+      [
         "2026-09-24T09:30:00+00:00",
         7182.662191
       ],
@@ -11087,10 +11087,6 @@
       [
         "2026-09-24T10:00:00+00:00",
         7177.45191
-      ],
-      [
-        "2026-09-24T10:15:00+00:00",
-        7174.222614
       ],
       [
         "2026-09-24T10:30:00+00:00",
@@ -11109,6 +11105,10 @@
         7211.565956
       ],
       [
+        "2026-09-24T11:30:00+00:00",
+        7194.518032
+      ],
+      [
         "2026-09-24T11:45:00+00:00",
         7206.127176
       ],
@@ -11119,10 +11119,6 @@
       [
         "2026-09-24T12:15:00+00:00",
         7238.886761
-      ],
-      [
-        "2026-09-24T12:30:00+00:00",
-        7210.639929
       ],
       [
         "2026-09-24T12:45:00+00:00",
@@ -11141,6 +11137,10 @@
         7301.030141
       ],
       [
+        "2026-09-24T13:45:00+00:00",
+        7327.713026
+      ],
+      [
         "2026-09-24T14:00:00+00:00",
         7339.619252
       ],
@@ -11151,10 +11151,6 @@
       [
         "2026-09-24T14:30:00+00:00",
         7364.424169
-      ],
-      [
-        "2026-09-24T14:45:00+00:00",
-        7428.154564
       ],
       [
         "2026-09-24T15:00:00+00:00",
@@ -11173,6 +11169,10 @@
         7510.526348
       ],
       [
+        "2026-09-24T16:00:00+00:00",
+        7490.098298
+      ],
+      [
         "2026-09-24T16:15:00+00:00",
         7566.853767
       ],
@@ -11183,10 +11183,6 @@
       [
         "2026-09-24T16:45:00+00:00",
         7511.756524
-      ],
-      [
-        "2026-09-24T17:00:00+00:00",
-        7526.553434
       ],
       [
         "2026-09-24T17:15:00+00:00",
@@ -11209,16 +11205,16 @@
         7461.196236
       ],
       [
+        "2026-09-24T18:30:00+00:00",
+        7495.592498
+      ],
+      [
         "2026-09-24T18:45:00+00:00",
         7507.635011
       ],
       [
         "2026-09-24T19:00:00+00:00",
         7474.621914
-      ],
-      [
-        "2026-09-24T19:15:00+00:00",
-        7358.342373
       ],
       [
         "2026-09-24T19:30:00+00:00",
@@ -11241,16 +11237,16 @@
         7231.869248
       ],
       [
+        "2026-09-24T20:45:00+00:00",
+        7231.997607
+      ],
+      [
         "2026-09-24T21:00:00+00:00",
         7196.01672
       ],
       [
         "2026-09-24T21:15:00+00:00",
         7163.084538
-      ],
-      [
-        "2026-09-24T21:30:00+00:00",
-        7151.714717
       ],
       [
         "2026-09-24T21:45:00+00:00",
@@ -11273,16 +11269,16 @@
         7014.496366
       ],
       [
+        "2026-09-24T23:00:00+00:00",
+        7018.652961
+      ],
+      [
         "2026-09-24T23:15:00+00:00",
         7021.366967
       ],
       [
         "2026-09-24T23:30:00+00:00",
         7011.915515
-      ],
-      [
-        "2026-09-24T23:45:00+00:00",
-        7015.245358
       ],
       [
         "2026-09-25T00:00:00+00:00",
@@ -11305,16 +11301,16 @@
         6919.457864
       ],
       [
+        "2026-09-25T01:15:00+00:00",
+        6894.12316
+      ],
+      [
         "2026-09-25T01:30:00+00:00",
         6905.630696
       ],
       [
         "2026-09-25T01:45:00+00:00",
         6884.278255
-      ],
-      [
-        "2026-09-25T02:00:00+00:00",
-        6880.82193
       ],
       [
         "2026-09-25T02:15:00+00:00",
@@ -11337,16 +11333,16 @@
         6840.801456
       ],
       [
+        "2026-09-25T03:30:00+00:00",
+        6822.267463
+      ],
+      [
         "2026-09-25T03:45:00+00:00",
         6840.231223
       ],
       [
         "2026-09-25T04:00:00+00:00",
         6840.522299
-      ],
-      [
-        "2026-09-25T04:15:00+00:00",
-        6853.197304
       ],
       [
         "2026-09-25T04:30:00+00:00",
@@ -11369,16 +11365,16 @@
         6832.489458
       ],
       [
+        "2026-09-25T05:45:00+00:00",
+        6812.744287
+      ],
+      [
         "2026-09-25T06:00:00+00:00",
         6795.488241
       ],
       [
         "2026-09-25T06:15:00+00:00",
         6773.495354
-      ],
-      [
-        "2026-09-25T06:30:00+00:00",
-        6755.85478
       ],
       [
         "2026-09-25T06:45:00+00:00",
@@ -11405,12 +11401,12 @@
         6728.72903
       ],
       [
-        "2026-09-25T08:30:00+00:00",
-        6737.542611
+        "2026-09-25T08:15:00+00:00",
+        6763.911785
       ],
       [
-        "2026-09-25T08:45:00+00:00",
-        6666.846684
+        "2026-09-25T08:30:00+00:00",
+        6737.542611
       ],
       [
         "2026-09-25T09:00:00+00:00",
@@ -11437,12 +11433,12 @@
         6541.234304
       ],
       [
-        "2026-09-25T10:45:00+00:00",
-        6557.739277
+        "2026-09-25T10:30:00+00:00",
+        6562.887595
       ],
       [
-        "2026-09-25T11:00:00+00:00",
-        6507.639807
+        "2026-09-25T10:45:00+00:00",
+        6557.739277
       ],
       [
         "2026-09-25T11:15:00+00:00",
@@ -11469,12 +11465,12 @@
         6441.375424
       ],
       [
-        "2026-09-25T13:00:00+00:00",
-        6382.180556
+        "2026-09-25T12:45:00+00:00",
+        6431.601982
       ],
       [
-        "2026-09-25T13:15:00+00:00",
-        6418.92058
+        "2026-09-25T13:00:00+00:00",
+        6382.180556
       ],
       [
         "2026-09-25T13:30:00+00:00",
@@ -11501,12 +11497,12 @@
         6443.282546
       ],
       [
-        "2026-09-25T15:15:00+00:00",
-        6445.507126
+        "2026-09-25T15:00:00+00:00",
+        6439.526408
       ],
       [
-        "2026-09-25T15:30:00+00:00",
-        6488.55126
+        "2026-09-25T15:15:00+00:00",
+        6445.507126
       ],
       [
         "2026-09-25T15:45:00+00:00",
@@ -11533,12 +11529,12 @@
         6441.655843
       ],
       [
-        "2026-09-25T17:30:00+00:00",
-        6431.112175
+        "2026-09-25T17:15:00+00:00",
+        6519.260721
       ],
       [
-        "2026-09-25T17:45:00+00:00",
-        6430.479433
+        "2026-09-25T17:30:00+00:00",
+        6431.112175
       ],
       [
         "2026-09-25T18:00:00+00:00",
@@ -11569,8 +11565,8 @@
         6318.779287
       ],
       [
-        "2026-09-25T20:00:00+00:00",
-        6320.491501
+        "2026-09-25T19:45:00+00:00",
+        6340.315484
       ],
       [
         "2026-09-25T20:15:00+00:00",
@@ -11601,8 +11597,8 @@
         6308.826737
       ],
       [
-        "2026-09-25T22:15:00+00:00",
-        6296.083387
+        "2026-09-25T22:00:00+00:00",
+        6271.003034
       ],
       [
         "2026-09-25T22:30:00+00:00",
@@ -11633,8 +11629,8 @@
         6262.086844
       ],
       [
-        "2026-09-26T00:30:00+00:00",
-        6298.278447
+        "2026-09-26T00:15:00+00:00",
+        6270.179291
       ],
       [
         "2026-09-26T00:45:00+00:00",
@@ -11665,8 +11661,8 @@
         6254.257169
       ],
       [
-        "2026-09-26T02:45:00+00:00",
-        6256.523067
+        "2026-09-26T02:30:00+00:00",
+        6247.97019
       ],
       [
         "2026-09-26T03:00:00+00:00",
@@ -11697,8 +11693,8 @@
         6239.248172
       ],
       [
-        "2026-09-26T05:00:00+00:00",
-        6264.321569
+        "2026-09-26T04:45:00+00:00",
+        6246.905903
       ],
       [
         "2026-09-26T05:15:00+00:00",
@@ -11729,8 +11725,8 @@
         6222.625399
       ],
       [
-        "2026-09-26T07:15:00+00:00",
-        6230.233275
+        "2026-09-26T07:00:00+00:00",
+        6203.768555
       ],
       [
         "2026-09-26T07:30:00+00:00",
@@ -11747,6 +11743,10 @@
       [
         "2026-09-26T08:15:00+00:00",
         6261.435042
+      ],
+      [
+        "2026-09-26T08:30:00+00:00",
+        6229.01627
       ]
     ],
     "vwap_managed": [
@@ -11963,7 +11963,7 @@
         10084.95605
       ],
       [
-        "2026-09-21T03:00:00+00:00",
+        "2026-09-21T03:15:00+00:00",
         10084.95605
       ],
       [
@@ -11995,7 +11995,7 @@
         10084.95605
       ],
       [
-        "2026-09-21T05:15:00+00:00",
+        "2026-09-21T05:30:00+00:00",
         10084.95605
       ],
       [
@@ -12027,7 +12027,7 @@
         10084.95605
       ],
       [
-        "2026-09-21T07:30:00+00:00",
+        "2026-09-21T07:45:00+00:00",
         10084.95605
       ],
       [
@@ -12059,7 +12059,7 @@
         10084.95605
       ],
       [
-        "2026-09-21T09:45:00+00:00",
+        "2026-09-21T10:00:00+00:00",
         10084.95605
       ],
       [
@@ -12091,7 +12091,7 @@
         10084.95605
       ],
       [
-        "2026-09-21T12:00:00+00:00",
+        "2026-09-21T12:15:00+00:00",
         10084.95605
       ],
       [
@@ -12123,12 +12123,12 @@
         10094.15621
       ],
       [
-        "2026-09-21T14:15:00+00:00",
-        10064.09736
-      ],
-      [
         "2026-09-21T14:30:00+00:00",
         10097.46778
+      ],
+      [
+        "2026-09-21T14:45:00+00:00",
+        10091.60885
       ],
       [
         "2026-09-21T15:00:00+00:00",
@@ -12155,12 +12155,12 @@
         10106.64292
       ],
       [
-        "2026-09-21T16:30:00+00:00",
-        10127.78601
-      ],
-      [
         "2026-09-21T16:45:00+00:00",
         10140.26807
+      ],
+      [
+        "2026-09-21T17:00:00+00:00",
+        10142.30596
       ],
       [
         "2026-09-21T17:15:00+00:00",
@@ -12187,12 +12187,12 @@
         10145.42965
       ],
       [
-        "2026-09-21T18:45:00+00:00",
-        10165.97893
-      ],
-      [
         "2026-09-21T19:00:00+00:00",
         10206.4146
+      ],
+      [
+        "2026-09-21T19:15:00+00:00",
+        10228.28963
       ],
       [
         "2026-09-21T19:30:00+00:00",
@@ -12219,12 +12219,12 @@
         10171.03075
       ],
       [
-        "2026-09-21T21:00:00+00:00",
-        10239.41671
-      ],
-      [
         "2026-09-21T21:15:00+00:00",
         10263.84336
+      ],
+      [
+        "2026-09-21T21:30:00+00:00",
+        10225.27498
       ],
       [
         "2026-09-21T21:45:00+00:00",
@@ -12251,12 +12251,12 @@
         10182.59099
       ],
       [
-        "2026-09-21T23:15:00+00:00",
-        10254.29116
-      ],
-      [
         "2026-09-21T23:30:00+00:00",
         10277.37481
+      ],
+      [
+        "2026-09-21T23:45:00+00:00",
+        10259.51252
       ],
       [
         "2026-09-22T00:00:00+00:00",
@@ -12283,12 +12283,12 @@
         10360.38149
       ],
       [
-        "2026-09-22T01:30:00+00:00",
-        10368.11645
-      ],
-      [
         "2026-09-22T01:45:00+00:00",
         10373.01527
+      ],
+      [
+        "2026-09-22T02:00:00+00:00",
+        10372.75743
       ],
       [
         "2026-09-22T02:15:00+00:00",
@@ -12315,15 +12315,15 @@
         10343.11001
       ],
       [
-        "2026-09-22T03:45:00+00:00",
-        10343.11001
-      ],
-      [
         "2026-09-22T04:00:00+00:00",
         10343.11001
       ],
       [
         "2026-09-22T04:15:00+00:00",
+        10343.11001
+      ],
+      [
+        "2026-09-22T04:30:00+00:00",
         10343.11001
       ],
       [
@@ -12347,15 +12347,15 @@
         10343.11001
       ],
       [
-        "2026-09-22T06:00:00+00:00",
-        10343.11001
-      ],
-      [
         "2026-09-22T06:15:00+00:00",
         10343.11001
       ],
       [
         "2026-09-22T06:30:00+00:00",
+        10343.11001
+      ],
+      [
+        "2026-09-22T06:45:00+00:00",
         10343.11001
       ],
       [
@@ -12379,15 +12379,15 @@
         10343.11001
       ],
       [
-        "2026-09-22T08:15:00+00:00",
-        10343.11001
-      ],
-      [
         "2026-09-22T08:30:00+00:00",
         10343.11001
       ],
       [
         "2026-09-22T08:45:00+00:00",
+        10343.11001
+      ],
+      [
+        "2026-09-22T09:00:00+00:00",
         10343.11001
       ],
       [
@@ -12411,15 +12411,15 @@
         10343.11001
       ],
       [
-        "2026-09-22T10:30:00+00:00",
-        10343.11001
-      ],
-      [
         "2026-09-22T10:45:00+00:00",
         10343.11001
       ],
       [
         "2026-09-22T11:00:00+00:00",
+        10343.11001
+      ],
+      [
+        "2026-09-22T11:15:00+00:00",
         10343.11001
       ],
       [
@@ -12447,11 +12447,11 @@
         10343.11001
       ],
       [
-        "2026-09-22T13:00:00+00:00",
+        "2026-09-22T13:15:00+00:00",
         10343.11001
       ],
       [
-        "2026-09-22T13:15:00+00:00",
+        "2026-09-22T13:30:00+00:00",
         10343.11001
       ],
       [
@@ -12479,15 +12479,15 @@
         10343.11001
       ],
       [
-        "2026-09-22T15:15:00+00:00",
-        10343.11001
-      ],
-      [
         "2026-09-22T15:30:00+00:00",
         10343.11001
       ],
       [
         "2026-09-22T15:45:00+00:00",
+        10343.11001
+      ],
+      [
+        "2026-09-22T16:00:00+00:00",
         10343.11001
       ],
       [
@@ -12511,15 +12511,15 @@
         10343.11001
       ],
       [
-        "2026-09-22T17:30:00+00:00",
-        10343.11001
-      ],
-      [
         "2026-09-22T17:45:00+00:00",
         10343.11001
       ],
       [
         "2026-09-22T18:00:00+00:00",
+        10343.11001
+      ],
+      [
+        "2026-09-22T18:15:00+00:00",
         10343.11001
       ],
       [
@@ -12543,15 +12543,15 @@
         10282.98516
       ],
       [
-        "2026-09-22T19:45:00+00:00",
-        10232.2572
-      ],
-      [
         "2026-09-22T20:00:00+00:00",
         10232.2572
       ],
       [
         "2026-09-22T20:15:00+00:00",
+        10232.2572
+      ],
+      [
+        "2026-09-22T20:30:00+00:00",
         10232.2572
       ],
       [
@@ -12575,16 +12575,16 @@
         10261.32226
       ],
       [
-        "2026-09-22T22:00:00+00:00",
-        10269.02622
-      ],
-      [
         "2026-09-22T22:15:00+00:00",
         10253.01009
       ],
       [
         "2026-09-22T22:30:00+00:00",
         10230.70915
+      ],
+      [
+        "2026-09-22T22:45:00+00:00",
+        10253.41556
       ],
       [
         "2026-09-22T23:00:00+00:00",
@@ -12607,16 +12607,16 @@
         10230.60833
       ],
       [
-        "2026-09-23T00:15:00+00:00",
-        10256.15305
-      ],
-      [
         "2026-09-23T00:30:00+00:00",
         10264.26248
       ],
       [
         "2026-09-23T00:45:00+00:00",
         10256.15305
+      ],
+      [
+        "2026-09-23T01:00:00+00:00",
+        10236.0822
       ],
       [
         "2026-09-23T01:15:00+00:00",
@@ -12639,15 +12639,15 @@
         10233.93098
       ],
       [
-        "2026-09-23T02:30:00+00:00",
-        10233.93098
-      ],
-      [
         "2026-09-23T02:45:00+00:00",
         10233.93098
       ],
       [
         "2026-09-23T03:00:00+00:00",
+        10233.93098
+      ],
+      [
+        "2026-09-23T03:15:00+00:00",
         10233.93098
       ],
       [
@@ -12671,10 +12671,6 @@
         10233.93098
       ],
       [
-        "2026-09-23T04:45:00+00:00",
-        10233.93098
-      ],
-      [
         "2026-09-23T05:00:00+00:00",
         10233.93098
       ],
@@ -12684,6 +12680,10 @@
       ],
       [
         "2026-09-23T05:30:00+00:00",
+        10233.93098
+      ],
+      [
+        "2026-09-23T05:45:00+00:00",
         10233.93098
       ],
       [
@@ -12703,10 +12703,6 @@
         10233.93098
       ],
       [
-        "2026-09-23T07:00:00+00:00",
-        10233.93098
-      ],
-      [
         "2026-09-23T07:15:00+00:00",
         10233.93098
       ],
@@ -12716,6 +12712,10 @@
       ],
       [
         "2026-09-23T07:45:00+00:00",
+        10233.93098
+      ],
+      [
+        "2026-09-23T08:00:00+00:00",
         10233.93098
       ],
       [
@@ -12735,10 +12735,6 @@
         10233.93098
       ],
       [
-        "2026-09-23T09:15:00+00:00",
-        10233.93098
-      ],
-      [
         "2026-09-23T09:30:00+00:00",
         10233.93098
       ],
@@ -12748,6 +12744,10 @@
       ],
       [
         "2026-09-23T10:00:00+00:00",
+        10233.93098
+      ],
+      [
+        "2026-09-23T10:15:00+00:00",
         10233.93098
       ],
       [
@@ -12767,10 +12767,6 @@
         10233.93098
       ],
       [
-        "2026-09-23T11:30:00+00:00",
-        10233.93098
-      ],
-      [
         "2026-09-23T11:45:00+00:00",
         10233.93098
       ],
@@ -12780,6 +12776,10 @@
       ],
       [
         "2026-09-23T12:15:00+00:00",
+        10233.93098
+      ],
+      [
+        "2026-09-23T12:30:00+00:00",
         10233.93098
       ],
       [
@@ -12799,10 +12799,6 @@
         10233.93098
       ],
       [
-        "2026-09-23T13:45:00+00:00",
-        10233.93098
-      ],
-      [
         "2026-09-23T14:00:00+00:00",
         10233.93098
       ],
@@ -12812,6 +12808,10 @@
       ],
       [
         "2026-09-23T14:30:00+00:00",
+        10233.93098
+      ],
+      [
+        "2026-09-23T14:45:00+00:00",
         10233.93098
       ],
       [
@@ -12831,10 +12831,6 @@
         10233.93098
       ],
       [
-        "2026-09-23T16:00:00+00:00",
-        10233.93098
-      ],
-      [
         "2026-09-23T16:15:00+00:00",
         10233.93098
       ],
@@ -12851,6 +12847,10 @@
         10233.93098
       ],
       [
+        "2026-09-23T17:15:00+00:00",
+        10233.93098
+      ],
+      [
         "2026-09-23T17:30:00+00:00",
         10233.93098
       ],
@@ -12860,10 +12860,6 @@
       ],
       [
         "2026-09-23T18:00:00+00:00",
-        10233.93098
-      ],
-      [
-        "2026-09-23T18:15:00+00:00",
         10233.93098
       ],
       [
@@ -12883,6 +12879,10 @@
         10233.93098
       ],
       [
+        "2026-09-23T19:30:00+00:00",
+        10233.93098
+      ],
+      [
         "2026-09-23T19:45:00+00:00",
         10233.93098
       ],
@@ -12892,10 +12892,6 @@
       ],
       [
         "2026-09-23T20:15:00+00:00",
-        10233.93098
-      ],
-      [
-        "2026-09-23T20:30:00+00:00",
         10233.93098
       ],
       [
@@ -12915,6 +12911,10 @@
         10233.93098
       ],
       [
+        "2026-09-23T21:45:00+00:00",
+        10233.93098
+      ],
+      [
         "2026-09-23T22:00:00+00:00",
         10233.93098
       ],
@@ -12924,10 +12924,6 @@
       ],
       [
         "2026-09-23T22:30:00+00:00",
-        10233.93098
-      ],
-      [
-        "2026-09-23T22:45:00+00:00",
         10233.93098
       ],
       [
@@ -12947,6 +12943,10 @@
         10233.93098
       ],
       [
+        "2026-09-24T00:00:00+00:00",
+        10233.93098
+      ],
+      [
         "2026-09-24T00:15:00+00:00",
         10233.93098
       ],
@@ -12956,10 +12956,6 @@
       ],
       [
         "2026-09-24T00:45:00+00:00",
-        10233.93098
-      ],
-      [
-        "2026-09-24T01:00:00+00:00",
         10233.93098
       ],
       [
@@ -12979,6 +12975,10 @@
         10233.93098
       ],
       [
+        "2026-09-24T02:15:00+00:00",
+        10233.93098
+      ],
+      [
         "2026-09-24T02:30:00+00:00",
         10233.93098
       ],
@@ -12988,10 +12988,6 @@
       ],
       [
         "2026-09-24T03:00:00+00:00",
-        10233.93098
-      ],
-      [
-        "2026-09-24T03:15:00+00:00",
         10233.93098
       ],
       [
@@ -13011,6 +13007,10 @@
         10233.93098
       ],
       [
+        "2026-09-24T04:30:00+00:00",
+        10233.93098
+      ],
+      [
         "2026-09-24T04:45:00+00:00",
         10233.93098
       ],
@@ -13020,10 +13020,6 @@
       ],
       [
         "2026-09-24T05:15:00+00:00",
-        10233.93098
-      ],
-      [
-        "2026-09-24T05:30:00+00:00",
         10233.93098
       ],
       [
@@ -13047,15 +13043,15 @@
         10233.93098
       ],
       [
+        "2026-09-24T07:00:00+00:00",
+        10233.93098
+      ],
+      [
         "2026-09-24T07:15:00+00:00",
         10233.93098
       ],
       [
         "2026-09-24T07:30:00+00:00",
-        10233.93098
-      ],
-      [
-        "2026-09-24T07:45:00+00:00",
         10233.93098
       ],
       [
@@ -13079,6 +13075,10 @@
         10233.93098
       ],
       [
+        "2026-09-24T09:15:00+00:00",
+        10233.93098
+      ],
+      [
         "2026-09-24T09:30:00+00:00",
         10233.93098
       ],
@@ -13088,10 +13088,6 @@
       ],
       [
         "2026-09-24T10:00:00+00:00",
-        10233.93098
-      ],
-      [
-        "2026-09-24T10:15:00+00:00",
         10233.93098
       ],
       [
@@ -13111,6 +13107,10 @@
         10233.93098
       ],
       [
+        "2026-09-24T11:30:00+00:00",
+        10233.93098
+      ],
+      [
         "2026-09-24T11:45:00+00:00",
         10233.93098
       ],
@@ -13120,10 +13120,6 @@
       ],
       [
         "2026-09-24T12:15:00+00:00",
-        10233.93098
-      ],
-      [
-        "2026-09-24T12:30:00+00:00",
         10233.93098
       ],
       [
@@ -13143,6 +13139,10 @@
         10233.93098
       ],
       [
+        "2026-09-24T13:45:00+00:00",
+        10233.93098
+      ],
+      [
         "2026-09-24T14:00:00+00:00",
         10233.93098
       ],
@@ -13153,10 +13153,6 @@
       [
         "2026-09-24T14:30:00+00:00",
         10233.93098
-      ],
-      [
-        "2026-09-24T14:45:00+00:00",
-        10309.1766
       ],
       [
         "2026-09-24T15:00:00+00:00",
@@ -13175,6 +13171,10 @@
         10217.41578
       ],
       [
+        "2026-09-24T16:00:00+00:00",
+        10217.41578
+      ],
+      [
         "2026-09-24T16:15:00+00:00",
         10217.41578
       ],
@@ -13184,10 +13184,6 @@
       ],
       [
         "2026-09-24T16:45:00+00:00",
-        10217.41578
-      ],
-      [
-        "2026-09-24T17:00:00+00:00",
         10217.41578
       ],
       [
@@ -13211,16 +13207,16 @@
         10217.41578
       ],
       [
+        "2026-09-24T18:30:00+00:00",
+        10217.41578
+      ],
+      [
         "2026-09-24T18:45:00+00:00",
         10217.41578
       ],
       [
         "2026-09-24T19:00:00+00:00",
         10217.41578
-      ],
-      [
-        "2026-09-24T19:15:00+00:00",
-        10230.4528
       ],
       [
         "2026-09-24T19:30:00+00:00",
@@ -13243,16 +13239,16 @@
         10250.34624
       ],
       [
+        "2026-09-24T20:45:00+00:00",
+        10235.11916
+      ],
+      [
         "2026-09-24T21:00:00+00:00",
         10242.2415
       ],
       [
         "2026-09-24T21:15:00+00:00",
         10224.31285
-      ],
-      [
-        "2026-09-24T21:30:00+00:00",
-        10213.50653
       ],
       [
         "2026-09-24T21:45:00+00:00",
@@ -13275,15 +13271,15 @@
         10224.80404
       ],
       [
+        "2026-09-24T23:00:00+00:00",
+        10227.26002
+      ],
+      [
         "2026-09-24T23:15:00+00:00",
         10218.66409
       ],
       [
         "2026-09-24T23:30:00+00:00",
-        10215.24915
-      ],
-      [
-        "2026-09-24T23:45:00+00:00",
         10215.24915
       ],
       [
@@ -13307,15 +13303,15 @@
         10215.24915
       ],
       [
+        "2026-09-25T01:15:00+00:00",
+        10215.24915
+      ],
+      [
         "2026-09-25T01:30:00+00:00",
         10215.24915
       ],
       [
         "2026-09-25T01:45:00+00:00",
-        10215.24915
-      ],
-      [
-        "2026-09-25T02:00:00+00:00",
         10215.24915
       ],
       [
@@ -13339,15 +13335,15 @@
         10215.24915
       ],
       [
+        "2026-09-25T03:30:00+00:00",
+        10215.24915
+      ],
+      [
         "2026-09-25T03:45:00+00:00",
         10215.24915
       ],
       [
         "2026-09-25T04:00:00+00:00",
-        10215.24915
-      ],
-      [
-        "2026-09-25T04:15:00+00:00",
         10215.24915
       ],
       [
@@ -13371,15 +13367,15 @@
         10215.24915
       ],
       [
+        "2026-09-25T05:45:00+00:00",
+        10215.24915
+      ],
+      [
         "2026-09-25T06:00:00+00:00",
         10215.24915
       ],
       [
         "2026-09-25T06:15:00+00:00",
-        10215.24915
-      ],
-      [
-        "2026-09-25T06:30:00+00:00",
         10215.24915
       ],
       [
@@ -13407,11 +13403,11 @@
         10215.24915
       ],
       [
-        "2026-09-25T08:30:00+00:00",
+        "2026-09-25T08:15:00+00:00",
         10215.24915
       ],
       [
-        "2026-09-25T08:45:00+00:00",
+        "2026-09-25T08:30:00+00:00",
         10215.24915
       ],
       [
@@ -13439,11 +13435,11 @@
         10215.24915
       ],
       [
-        "2026-09-25T10:45:00+00:00",
+        "2026-09-25T10:30:00+00:00",
         10215.24915
       ],
       [
-        "2026-09-25T11:00:00+00:00",
+        "2026-09-25T10:45:00+00:00",
         10215.24915
       ],
       [
@@ -13471,11 +13467,11 @@
         10215.24915
       ],
       [
-        "2026-09-25T13:00:00+00:00",
+        "2026-09-25T12:45:00+00:00",
         10215.24915
       ],
       [
-        "2026-09-25T13:15:00+00:00",
+        "2026-09-25T13:00:00+00:00",
         10215.24915
       ],
       [
@@ -13503,11 +13499,11 @@
         10215.24915
       ],
       [
-        "2026-09-25T15:15:00+00:00",
+        "2026-09-25T15:00:00+00:00",
         10215.24915
       ],
       [
-        "2026-09-25T15:30:00+00:00",
+        "2026-09-25T15:15:00+00:00",
         10215.24915
       ],
       [
@@ -13535,11 +13531,11 @@
         10215.24915
       ],
       [
-        "2026-09-25T17:30:00+00:00",
+        "2026-09-25T17:15:00+00:00",
         10215.24915
       ],
       [
-        "2026-09-25T17:45:00+00:00",
+        "2026-09-25T17:30:00+00:00",
         10215.24915
       ],
       [
@@ -13571,7 +13567,7 @@
         10215.24915
       ],
       [
-        "2026-09-25T20:00:00+00:00",
+        "2026-09-25T19:45:00+00:00",
         10215.24915
       ],
       [
@@ -13603,7 +13599,7 @@
         10215.24915
       ],
       [
-        "2026-09-25T22:15:00+00:00",
+        "2026-09-25T22:00:00+00:00",
         10215.24915
       ],
       [
@@ -13635,8 +13631,8 @@
         10196.5735
       ],
       [
-        "2026-09-26T00:30:00+00:00",
-        10196.5735
+        "2026-09-26T00:15:00+00:00",
+        10166.63506
       ],
       [
         "2026-09-26T00:45:00+00:00",
@@ -13667,8 +13663,8 @@
         10212.74715
       ],
       [
-        "2026-09-26T02:45:00+00:00",
-        10227.54431
+        "2026-09-26T02:30:00+00:00",
+        10220.31779
       ],
       [
         "2026-09-26T03:00:00+00:00",
@@ -13699,7 +13695,7 @@
         10232.11526
       ],
       [
-        "2026-09-26T05:00:00+00:00",
+        "2026-09-26T04:45:00+00:00",
         10232.11526
       ],
       [
@@ -13731,7 +13727,7 @@
         10232.11526
       ],
       [
-        "2026-09-26T07:15:00+00:00",
+        "2026-09-26T07:00:00+00:00",
         10232.11526
       ],
       [
@@ -13749,17 +13745,46 @@
       [
         "2026-09-26T08:15:00+00:00",
         10232.11526
+      ],
+      [
+        "2026-09-26T08:30:00+00:00",
+        10232.11526
       ]
     ]
   },
-  "generated_at": "2026-09-26T08:31:23.133515+00:00",
+  "generated_at": "2026-09-26T08:46:09.185748+00:00",
   "layer": "scalp",
   "model_trades": {
     "limit": 50,
     "models": {
       "scalp_fixed": {
-        "total": 60,
+        "total": 61,
         "trades": [
+          {
+            "closed_at": "2026-09-26T08:30:00+00:00",
+            "direction": "short",
+            "entry_price": 1.55832045,
+            "exit_price": 1.5497745,
+            "exit_reason": "signal",
+            "exit_rule": "time_stop",
+            "fee": 4.779596168,
+            "funding": 0.4338803528,
+            "is_partial": false,
+            "leverage": 1.0,
+            "margin": 4357.034583,
+            "model": "scalp_fixed",
+            "notes": "exit_rule=time_stop",
+            "notional": 4357.034583,
+            "opened_at": "2026-09-26T04:15:00+00:00",
+            "pnl": 19.54859918,
+            "qty": 2795.981137,
+            "r": 0.22352232618236298,
+            "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.050% < 0.200%; engel Bollinger(20) orta bandı 1.56561; stop 1.96% (1.5896), hedef 1.4981 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+            "risk_amount": 87.45703176,
+            "slippage_cost": 4.345094485,
+            "stop_price": 1.5896,
+            "symbol": "XRP-USDT-SWAP"
+          },
           {
             "closed_at": "2026-09-26T03:00:00+00:00",
             "direction": "short",
@@ -14984,31 +15009,6 @@
             "slippage_cost": 2.939400416,
             "stop_price": 1.562957143,
             "symbol": "XRP-USDT-SWAP"
-          },
-          {
-            "closed_at": "2026-09-22T10:15:00+00:00",
-            "direction": "long",
-            "entry_price": 1.5171582,
-            "exit_price": 1.52673625,
-            "exit_reason": "signal",
-            "exit_rule": "time_stop",
-            "fee": 3.508112794,
-            "funding": -0.3181550802,
-            "is_partial": false,
-            "leverage": 3.273306826,
-            "margin": 971.2374562,
-            "model": "scalp_fixed",
-            "notes": "boyut komisyon+marj nakde sığsın diye 0.9982 oranında kırpıldı | exit_rule=time_stop",
-            "notional": 3179.158195,
-            "opened_at": "2026-09-22T07:45:00+00:00",
-            "pnl": 16.24424036,
-            "qty": 2095.469144,
-            "r": 0.16851956307725377,
-            "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.153% < 0.200%; engel Bollinger(20) orta bandı 1.51584; stop 2.98% (1.47116), hedef 1.60659 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
-            "risk_amount": 96.39379585,
-            "slippage_cost": 3.189199264,
-            "stop_price": 1.471157143,
-            "symbol": "XRP-USDT-SWAP"
           }
         ]
       },
@@ -15618,8 +15618,108 @@
         ]
       },
       "vwap_clone": {
-        "total": 425,
+        "total": 429,
         "trades": [
+          {
+            "closed_at": "2026-09-26T08:30:00+00:00",
+            "direction": "short",
+            "entry_price": 121.948995,
+            "exit_price": 121.2060342,
+            "exit_reason": "stop",
+            "exit_rule": "giveback",
+            "fee": 1.701923794,
+            "funding": 0.04205107077,
+            "is_partial": false,
+            "leverage": 10.0,
+            "margin": 155.1930932,
+            "model": "vwap_clone",
+            "notes": "exit_rule=giveback",
+            "notional": 1551.930932,
+            "opened_at": "2026-09-26T02:00:00+00:00",
+            "pnl": 7.795094703,
+            "qty": 12.72606578,
+            "r": 1.3386650612429378,
+            "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=117.357 (300 bar), σ=0.396563; bu bar +11.72σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2×0.5σ (122.407), hedef VWAP mesafesinin %100'i (117.357); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp2 | combo_r=-0.75 | combo_n=11 | pick=explore",
+            "risk_amount": 5.823035895,
+            "slippage_cost": 3.086602218,
+            "stop_price": 122.4065626,
+            "symbol": "SOL-USDT-SWAP"
+          },
+          {
+            "closed_at": "2026-09-26T08:30:00+00:00",
+            "direction": "long",
+            "entry_price": 772.48605,
+            "exit_price": 773.3666854,
+            "exit_reason": "tp",
+            "exit_rule": "",
+            "fee": 3.417277616,
+            "funding": -0.3107313894,
+            "is_partial": false,
+            "leverage": 10.0,
+            "margin": 310.484625,
+            "model": "vwap_clone",
+            "notes": "",
+            "notional": 3104.84625,
+            "opened_at": "2026-09-26T06:45:00+00:00",
+            "pnl": -0.1884791553,
+            "qty": 4.019291028,
+            "r": -0.03533278693980335,
+            "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=774.305 (300 bar), σ=1.25487; bu bar -1.84σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 1.5×0.5σ (771.159), hedef VWAP mesafesinin %75'i (773.754); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band0_tp1 | combo_r=0.786 | combo_n=4 | pick=exploit",
+            "risk_amount": 5.334398207,
+            "slippage_cost": 3.106617677,
+            "stop_price": 771.1588512,
+            "symbol": "BNB-USDT-SWAP"
+          },
+          {
+            "closed_at": "2026-09-26T08:30:00+00:00",
+            "direction": "long",
+            "entry_price": 84109.33365,
+            "exit_price": 84215.58647,
+            "exit_reason": "partial",
+            "exit_rule": "",
+            "fee": 1.723017265,
+            "funding": 0.0,
+            "is_partial": true,
+            "leverage": 10.0,
+            "margin": 156.5390576,
+            "model": "vwap_clone",
+            "notes": "",
+            "notional": 1565.390576,
+            "opened_at": "2026-09-26T08:30:00+00:00",
+            "pnl": 0.2544941218,
+            "qty": 0.01861137769,
+            "r": 0.13823251558150537,
+            "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=84325.2 (300 bar), σ=56.8875; bu bar -5.03σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (84010.4), hedef VWAP mesafesinin %50'i (84196.3); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp0 | combo_r=-0.03429 | combo_n=37 | pick=exploit",
+            "risk_amount": 1.841058312,
+            "slippage_cost": 1.566380217,
+            "stop_price": 84010.41253,
+            "symbol": "BTC-USDT-SWAP"
+          },
+          {
+            "closed_at": "2026-09-26T08:30:00+00:00",
+            "direction": "long",
+            "entry_price": 84109.33365,
+            "exit_price": 84154.16564,
+            "exit_reason": "tp",
+            "exit_rule": "",
+            "fee": 1.722388545,
+            "funding": 0.0,
+            "is_partial": false,
+            "leverage": 10.0,
+            "margin": 156.5390576,
+            "model": "vwap_clone",
+            "notes": "",
+            "notional": 1565.390576,
+            "opened_at": "2026-09-26T08:30:00+00:00",
+            "pnl": -0.8880033755,
+            "qty": 0.01861137769,
+            "r": -0.48233310683969255,
+            "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=84325.2 (300 bar), σ=56.8875; bu bar -5.03σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (84010.4), hedef VWAP mesafesinin %50'i (84196.3); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp0 | combo_r=-0.03429 | combo_n=37 | pick=exploit",
+            "risk_amount": 1.841058312,
+            "slippage_cost": 1.565808368,
+            "stop_price": 84010.41253,
+            "symbol": "BTC-USDT-SWAP"
+          },
           {
             "closed_at": "2026-09-26T08:00:00+00:00",
             "direction": "long",
@@ -16769,106 +16869,6 @@
             "slippage_cost": 6.420706054,
             "stop_price": 0.7197459242,
             "symbol": "ETHFI-USDT-SWAP"
-          },
-          {
-            "closed_at": "2026-09-25T15:45:00+00:00",
-            "direction": "short",
-            "entry_price": 13.9700115,
-            "exit_price": 13.81770206,
-            "exit_reason": "stop",
-            "exit_rule": "partial",
-            "fee": 1.761216221,
-            "funding": 0.0,
-            "is_partial": false,
-            "leverage": 10.0,
-            "margin": 160.9881602,
-            "model": "vwap_clone",
-            "notes": "exit_rule=partial",
-            "notional": 1609.881602,
-            "opened_at": "2026-09-25T15:15:00+00:00",
-            "pnl": 15.79067772,
-            "qty": 115.2383878,
-            "r": 1.1880544198143288,
-            "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=13.0394 (300 bar), σ=0.110348; bu bar +8.73σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2×0.5σ (14.0853), hedef VWAP mesafesinin %100'i (13.0394); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp2 | combo_r=0.4289 | combo_n=3 | pick=exploit",
-            "risk_amount": 13.29120742,
-            "slippage_cost": 3.190260659,
-            "stop_price": 14.08534813,
-            "symbol": "LINK-USDT-SWAP"
-          },
-          {
-            "closed_at": "2026-09-25T15:45:00+00:00",
-            "direction": "short",
-            "entry_price": 0.7154421,
-            "exit_price": 0.7165152632,
-            "exit_reason": "stop",
-            "exit_rule": "breakeven",
-            "fee": 3.542534578,
-            "funding": 0.0,
-            "is_partial": false,
-            "leverage": 10.0,
-            "margin": 321.8072426,
-            "model": "vwap_clone",
-            "notes": "exit_rule=breakeven",
-            "notional": 3218.072426,
-            "opened_at": "2026-09-25T15:15:00+00:00",
-            "pnl": -8.369643217,
-            "qty": 4498.019373,
-            "r": -0.23148342062728125,
-            "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=0.68428 (300 bar), σ=0.00646434; bu bar +5.15σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2.5×0.5σ (0.72348), hedef VWAP mesafesinin %75'i (0.69206); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=0.7346 | combo_n=10 | pick=exploit",
-            "risk_amount": 36.15655581,
-            "slippage_cost": 6.436949772,
-            "stop_price": 0.7234804282,
-            "symbol": "ETHFI-USDT-SWAP"
-          },
-          {
-            "closed_at": "2026-09-25T15:30:00+00:00",
-            "direction": "short",
-            "entry_price": 13.9700115,
-            "exit_price": 13.80390506,
-            "exit_reason": "partial",
-            "exit_rule": "",
-            "fee": 1.760341751,
-            "funding": 0.0,
-            "is_partial": true,
-            "leverage": 10.0,
-            "margin": 160.9881602,
-            "model": "vwap_clone",
-            "notes": "",
-            "notional": 1609.881602,
-            "opened_at": "2026-09-25T15:15:00+00:00",
-            "pnl": 17.38149698,
-            "qty": 115.2383878,
-            "r": 1.3077440168336492,
-            "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=13.0394 (300 bar), σ=0.110348; bu bar +8.73σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2×0.5σ (14.0853), hedef VWAP mesafesinin %100'i (13.0394); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp2 | combo_r=0.4289 | combo_n=3 | pick=exploit",
-            "risk_amount": 13.29120742,
-            "slippage_cost": 1.600315868,
-            "stop_price": 14.08534813,
-            "symbol": "LINK-USDT-SWAP"
-          },
-          {
-            "closed_at": "2026-09-25T15:15:00+00:00",
-            "direction": "long",
-            "entry_price": 10.3141545,
-            "exit_price": 10.30899742,
-            "exit_reason": "stop",
-            "exit_rule": "breakeven",
-            "fee": 3.573900359,
-            "funding": 0.0,
-            "is_partial": false,
-            "leverage": 10.0,
-            "margin": 324.981278,
-            "model": "vwap_clone",
-            "notes": "exit_rule=breakeven",
-            "notional": 3249.81278,
-            "opened_at": "2026-09-25T14:30:00+00:00",
-            "pnl": -5.19880675,
-            "qty": 315.0828097,
-            "r": -0.19354088988109336,
-            "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=10.6089 (300 bar), σ=0.10413; bu bar -2.89σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 1.5×0.5σ (10.2289), hedef VWAP mesafesinin %75'i (10.5334); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band0_tp1 | combo_r=0.3098 | combo_n=6 | pick=explore",
-            "risk_amount": 26.86154204,
-            "slippage_cost": 3.249000733,
-            "stop_price": 10.22890218,
-            "symbol": "AVAX-USDT-SWAP"
           }
         ]
       },
@@ -17182,19 +17182,19 @@
   "models": [
     {
       "account": {
-        "bars": 561,
-        "days": 5.833333333333333,
-        "final_equity": 8767.400958,
+        "bars": 562,
+        "days": 5.84375,
+        "final_equity": 8745.789112,
         "initial_capital": 10000.0,
         "max_drawdown": -0.12871043298065998,
-        "sharpe": -23.138295286797685,
-        "total_return": -0.12325990419999999
+        "sharpe": -23.524854030605432,
+        "total_return": -0.1254210887999999
       },
       "friction": {
-        "cost_drag_pct_per_day": 0.9057720786881727,
-        "days": 5.833333333333333,
-        "trades_per_day": 10.285714285714286,
-        "turnover_per_day": 4.141294467852617
+        "cost_drag_pct_per_day": 0.9197719556011705,
+        "days": 5.84375,
+        "trades_per_day": 10.438502673796792,
+        "turnover_per_day": 4.2084713618436105
       },
       "is_benchmark": false,
       "is_replica": false,
@@ -17235,83 +17235,83 @@
       "short": {
         "avg_loss_pct": -1.1758727681838133,
         "avg_loss_r": -0.4539141649967485,
-        "avg_r": -0.2720792965554951,
-        "avg_r_ci_high": -0.0882622896455306,
-        "avg_r_ci_low": -0.4571701697721276,
-        "avg_stop_distance_pct": 2.941702798594724,
-        "avg_win_pct": 1.6970306412224438,
-        "avg_win_r": 0.4249543658026427,
-        "cost_pct": 0.22741203690544923,
-        "cost_per_r": 0.10410897750799522,
+        "avg_r": -0.25555924246423317,
+        "avg_r_ci_high": -0.07161051096040305,
+        "avg_r_ci_low": -0.43906189040692917,
+        "avg_stop_distance_pct": 2.910554720143286,
+        "avg_win_pct": 1.5186930530367602,
+        "avg_win_r": 0.3961783601426027,
+        "cost_pct": 0.2267977917142818,
+        "cost_per_r": 0.1041164587057854,
         "direction": "short",
-        "fees": 135.89264420299997,
-        "funding": 2.2228806812000004,
+        "fees": 140.672240371,
+        "funding": 2.6567610340000005,
         "liquidations": 0,
-        "market_measured": 29,
-        "market_r": -0.1299060788361989,
-        "market_tailwind_pct": -0.27302189303061164,
+        "market_measured": 30,
+        "market_r": -0.13351750514425312,
+        "market_tailwind_pct": -0.27986208089528897,
         "max_drawdown_pnl": -740.3893177995001,
         "max_drawdown_r": -7.890299600109358,
-        "median_r": -0.2514865538703498,
-        "notional": 123235.40767699998,
-        "payoff": 1.4432094076330908,
-        "pnl": -740.3893177995001,
-        "profit_factor": 0.24422604358460978,
-        "r_sharpe": -0.5339809508129356,
-        "slippage_cost": 144.359506584,
-        "total_r": -7.890299600109358,
-        "trades": 29,
+        "median_r": -0.235008158649274,
+        "notional": 127592.44225999998,
+        "payoff": 1.2915453900530818,
+        "pnl": -720.8407186195001,
+        "profit_factor": 0.26563617518514804,
+        "r_sharpe": -0.5022994646894978,
+        "slippage_cost": 148.704601069,
+        "total_r": -7.6667772739269955,
+        "trades": 30,
         "unmeasured": 0,
-        "win_rate": 0.20689655172413793
+        "win_rate": 0.23333333333333334
       },
       "total": {
         "avg_loss_pct": -1.3263443846513243,
         "avg_loss_r": -0.4678864982578015,
-        "avg_r": -0.23781059757578285,
-        "avg_r_ci_high": -0.10810519597946991,
-        "avg_r_ci_low": -0.3684140043528906,
-        "avg_stop_distance_pct": 3.0358193582071284,
-        "avg_win_pct": 1.540333068454517,
-        "avg_win_r": 0.3948981292997687,
-        "cost_pct": 0.21871713922285801,
-        "cost_per_r": 0.09820675582125775,
+        "avg_r": -0.23024776276007553,
+        "avg_r_ci_high": -0.10226648189732636,
+        "avg_r_ci_low": -0.3625481454574374,
+        "avg_stop_distance_pct": 3.018957736679988,
+        "avg_win_pct": 1.4761174481879369,
+        "avg_win_r": 0.3848171997046272,
+        "cost_pct": 0.21855250434643445,
+        "cost_per_r": 0.09830719283142893,
         "direction": "total",
-        "fees": 265.857623583508,
-        "funding": -1.4762534743,
+        "fees": 270.637219751508,
+        "funding": -1.0423731215,
         "liquidations": 0,
-        "market_measured": 60,
-        "market_r": -0.13367697114214633,
-        "market_tailwind_pct": -0.25255794771180406,
+        "market_measured": 61,
+        "market_r": -0.1353912645345345,
+        "market_tailwind_pct": -0.2562574490439209,
         "max_drawdown_pnl": -1254.296823891051,
         "max_drawdown_r": -14.268635854546972,
-        "median_r": -0.20278352414185968,
-        "notional": 241575.510624736,
-        "payoff": 1.1613371958893217,
-        "pnl": -1254.296823891051,
-        "profit_factor": 0.3069105868198155,
-        "r_sharpe": -0.4519574566487079,
-        "slippage_cost": 262.509422317926,
-        "total_r": -14.268635854546972,
-        "trades": 60,
+        "median_r": -0.18703728485552112,
+        "notional": 245932.545207736,
+        "payoff": 1.1129217006305536,
+        "pnl": -1234.7482247110509,
+        "profit_factor": 0.31776803384317864,
+        "r_sharpe": -0.4384764262249756,
+        "slippage_cost": 266.854516802926,
+        "total_r": -14.045113528364608,
+        "trades": 61,
         "unmeasured": 0,
-        "win_rate": 0.26666666666666666
+        "win_rate": 0.2786885245901639
       }
     },
     {
       "account": {
-        "bars": 561,
-        "days": 5.833333333333333,
-        "final_equity": 9205.196446,
+        "bars": 562,
+        "days": 5.84375,
+        "final_equity": 9203.981623,
         "initial_capital": 10000.0,
         "max_drawdown": -0.09424918270305904,
-        "sharpe": -16.412343710321956,
-        "total_return": -0.07948035539999998
+        "sharpe": -16.424115526689558,
+        "total_return": -0.07960183770000007
       },
       "friction": {
-        "cost_drag_pct_per_day": 0.3686616534308572,
-        "days": 5.833333333333333,
-        "trades_per_day": 4.114285714285715,
-        "turnover_per_day": 1.5026495593542861
+        "cost_drag_pct_per_day": 0.36800450253347594,
+        "days": 5.84375,
+        "trades_per_day": 4.106951871657754,
+        "turnover_per_day": 1.499971039640642
       },
       "is_benchmark": false,
       "is_replica": false,
@@ -17416,136 +17416,136 @@
     },
     {
       "account": {
-        "bars": 561,
-        "days": 5.833333333333333,
-        "final_equity": 6261.435042,
+        "bars": 562,
+        "days": 5.84375,
+        "final_equity": 6229.01627,
         "initial_capital": 10000.0,
         "max_drawdown": -0.3806926783,
-        "sharpe": -33.71469236907484,
-        "total_return": -0.3738564958
+        "sharpe": -34.03467897011626,
+        "total_return": -0.37709837300000004
       },
       "friction": {
-        "cost_drag_pct_per_day": 5.861488597122856,
-        "days": 5.833333333333333,
-        "trades_per_day": 56.91428571428572,
-        "turnover_per_day": 21.883676406068584
+        "cost_drag_pct_per_day": 5.881654241463099,
+        "days": 5.84375,
+        "trades_per_day": 57.155080213903744,
+        "turnover_per_day": 21.977931100543323
       },
       "is_benchmark": false,
       "is_replica": true,
       "long": {
-        "avg_loss_pct": -0.6548662603943973,
-        "avg_loss_r": -1.180179315101829,
-        "avg_r": -0.3678972475980143,
-        "avg_r_ci_high": -0.1440852186003173,
-        "avg_r_ci_low": -0.5959143574448454,
+        "avg_loss_pct": -0.6367898212985633,
+        "avg_loss_r": -1.1498557158393676,
+        "avg_r": -0.3631367844211933,
+        "avg_r_ci_high": -0.14728784158184907,
+        "avg_r_ci_low": -0.5822633788299515,
         "avg_stop_distance_pct": null,
         "avg_win_pct": 0.6314515447569702,
         "avg_win_r": 1.033289318846066,
-        "cost_pct": 0.20992698924630981,
+        "cost_pct": 0.20992972736173718,
         "cost_per_r": null,
         "direction": "long",
-        "fees": 443.92811204400004,
-        "funding": -1.426378818707,
+        "fees": 450.79079547000003,
+        "funding": -1.737110208107,
         "liquidations": 0,
-        "market_measured": 109,
-        "market_r": 0.12289687613955891,
-        "market_tailwind_pct": 0.012323808659233675,
-        "max_drawdown_pnl": -763.9556557657597,
-        "max_drawdown_r": -41.212557513744336,
-        "median_r": -0.7682273549824395,
-        "notional": 403711.3840120001,
-        "payoff": 0.9642450419978493,
-        "pnl": -726.1006167157598,
-        "profit_factor": 0.5075570238482311,
-        "r_sharpe": -0.31062919634262665,
-        "slippage_cost": 403.571041657,
-        "total_r": -40.10079998818356,
-        "trades": 109,
+        "market_measured": 111,
+        "market_r": 0.14493598459261833,
+        "market_tailwind_pct": 0.016268716374283176,
+        "max_drawdown_pnl": -764.7776441747598,
+        "max_drawdown_r": -41.41994059631323,
+        "median_r": -0.5799008218980214,
+        "notional": 409947.0114140001,
+        "payoff": 0.9916168940472272,
+        "pnl": -726.9226051247598,
+        "profit_factor": 0.5062677164621178,
+        "r_sharpe": -0.3092862693991537,
+        "slippage_cost": 409.809847919,
+        "total_r": -40.308183070752456,
+        "trades": 111,
         "unmeasured": 0,
-        "win_rate": 0.3669724770642202
+        "win_rate": 0.36036036036036034
       },
       "model": "vwap_clone",
       "name": "vwap_clone",
       "short": {
         "avg_loss_pct": -0.7765732192686498,
         "avg_loss_r": -1.330347996661193,
-        "avg_r": -0.7146752029797224,
-        "avg_r_ci_high": -0.561613575943252,
-        "avg_r_ci_low": -0.870985572205747,
+        "avg_r": -0.7140841980855297,
+        "avg_r_ci_high": -0.5612362855277198,
+        "avg_r_ci_low": -0.8698503248386559,
         "avg_stop_distance_pct": null,
-        "avg_win_pct": 0.864224883072212,
-        "avg_win_r": 0.9966864608128424,
-        "cost_pct": 0.29463740390158966,
+        "avg_win_pct": 0.8650630316390198,
+        "avg_win_r": 0.9989202589722486,
+        "cost_pct": 0.2946621019670148,
         "cost_per_r": null,
         "direction": "short",
-        "fees": 961.3233149039999,
-        "funding": 7.465997395947999,
+        "fees": 963.0252386979998,
+        "funding": 7.508048466717999,
         "liquidations": 0,
         "market_measured": 223,
-        "market_r": -0.17226517683011297,
-        "market_tailwind_pct": -0.07299485739038133,
+        "market_r": -0.17713298312668357,
+        "market_tailwind_pct": -0.07482131807124773,
         "max_drawdown_pnl": -3175.7538414463984,
         "max_drawdown_r": -162.6267761666899,
         "median_r": -1.2247543277042394,
-        "notional": 872836.4063420001,
-        "payoff": 1.1128697998188883,
-        "pnl": -3141.6171950553985,
-        "profit_factor": 0.26952649422089964,
-        "r_sharpe": -0.6125644875845968,
-        "slippage_cost": 1610.3792130499994,
-        "total_r": -159.3725702644781,
+        "notional": 874388.337274,
+        "payoff": 1.1139490909224332,
+        "pnl": -3133.822100352398,
+        "profit_factor": 0.27013056361521126,
+        "r_sharpe": -0.6115632468457114,
+        "slippage_cost": 1613.4658152679992,
+        "total_r": -159.24077617307313,
         "trades": 223,
         "unmeasured": 0,
         "win_rate": 0.2645739910313901
       },
       "total": {
-        "avg_loss_pct": -0.7405312443230556,
-        "avg_loss_r": -1.285877442894686,
-        "avg_r": -0.6008234043754871,
-        "avg_r_ci_high": -0.47100395211502766,
-        "avg_r_ci_low": -0.7260800695938786,
+        "avg_loss_pct": -0.7343407883925811,
+        "avg_loss_r": -1.2758162862852374,
+        "avg_r": -0.5974519737839091,
+        "avg_r_ci_high": -0.47669920925027515,
+        "avg_r_ci_low": -0.7208297047871977,
         "avg_stop_distance_pct": null,
-        "avg_win_pct": 0.7701750494094882,
-        "avg_win_r": 1.0114754943616198,
-        "cost_pct": 0.2678475265471116,
+        "avg_win_pct": 0.7706745520907173,
+        "avg_win_r": 1.0128067478101548,
+        "cost_pct": 0.2676163745602832,
         "cost_per_r": null,
         "direction": "total",
-        "fees": 1405.251426947999,
-        "funding": 6.039618577241001,
+        "fees": 1413.816034167999,
+        "funding": 5.770938258611001,
         "liquidations": 0,
-        "market_measured": 332,
-        "market_r": -0.07535956305392558,
-        "market_tailwind_pct": -0.04498360859698363,
-        "max_drawdown_pnl": -3867.7178117711596,
-        "max_drawdown_r": -199.4733702526617,
-        "median_r": -1.1462508500986588,
-        "notional": 1276547.7903540006,
-        "payoff": 1.0400304582874569,
-        "pnl": -3867.7178117711596,
-        "profit_factor": 0.33422202097476916,
-        "r_sharpe": -0.5082943898431505,
-        "slippage_cost": 2013.9502547069992,
-        "total_r": -199.4733702526617,
-        "trades": 332,
+        "market_measured": 334,
+        "market_r": -0.07009808666907132,
+        "market_tailwind_pct": -0.04454888147408027,
+        "max_drawdown_pnl": -3873.9780230241595,
+        "max_drawdown_r": -200.54844713109472,
+        "median_r": -1.1412273249439013,
+        "notional": 1284335.3486880006,
+        "payoff": 1.049478068319844,
+        "pnl": -3860.744705477159,
+        "profit_factor": 0.33443042188074995,
+        "r_sharpe": -0.5064421065991366,
+        "slippage_cost": 2023.275663186999,
+        "total_r": -199.54895924382564,
+        "trades": 334,
         "unmeasured": 0,
-        "win_rate": 0.29819277108433734
+        "win_rate": 0.2964071856287425
       }
     },
     {
       "account": {
-        "bars": 561,
-        "days": 5.833333333333333,
+        "bars": 562,
+        "days": 5.84375,
         "final_equity": 10232.11526,
         "initial_capital": 10000.0,
         "max_drawdown": -0.019895874500144184,
-        "sharpe": 5.7557388408631,
+        "sharpe": 5.750610975082647,
         "total_return": 0.023211526000000093
       },
       "friction": {
-        "cost_drag_pct_per_day": 0.16415427411257144,
-        "days": 5.833333333333333,
-        "trades_per_day": 2.0571428571428574,
-        "turnover_per_day": 0.7073630735485715
+        "cost_drag_pct_per_day": 0.16386166399828878,
+        "days": 5.84375,
+        "trades_per_day": 2.053475935828877,
+        "turnover_per_day": 0.7061021768042781
       },
       "is_benchmark": false,
       "is_replica": false,
@@ -17657,23 +17657,23 @@
       "entry_fee": 2.5136395949801758,
       "entry_price": 120.529705,
       "funding": 0.12529366722903126,
-      "gross_pnl": -0.01118583069330917,
+      "gross_pnl": -17.074317397095985,
       "initial_qty": 37.91807014756126,
       "initial_stop_price": 122.83571428571429,
       "leverage": 1.0425423118137895,
       "liq_price": 235.53838815352475,
       "margin": 4383.758584439272,
-      "mark_price": 120.53,
+      "mark_price": 120.98,
       "marked": true,
       "model": "scalp_fixed",
       "notional": 4570.253809054865,
       "opened_at": "2026-09-26T05:00:00+00:00",
       "partial_done": false,
       "partial_tp": null,
-      "pnl": -2.3995317584444535,
-      "pnl_pct": -0.05250324946265249,
+      "pnl": -19.46266332484713,
+      "pnl_pct": -0.42585519618815304,
       "qty": 37.91807014756126,
-      "r": -0.02744221893848431,
+      "r": -0.22258453809034165,
       "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.056% < 0.200%; engel Bollinger(20) orta bandı 121.3; stop 1.85% (122.836), hedef 116.129 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
       "risk_amount": 87.43942185664177,
       "stop_moved": false,
@@ -17693,67 +17693,27 @@
     {
       "breakeven_at_r": null,
       "breakeven_done": false,
-      "direction": "short",
-      "entry_fee": 2.3963690205828696,
-      "entry_price": 1.55832045,
-      "funding": 0.43388035276762194,
-      "gross_pnl": 26.059802384025296,
-      "initial_qty": 2795.9811365357773,
-      "initial_stop_price": 1.5896000000000001,
-      "leverage": 1.0,
-      "liq_price": 3.1088492977500004,
-      "margin": 4357.034582877945,
-      "mark_price": 1.549,
-      "marked": true,
-      "model": "scalp_fixed",
-      "notional": 4357.034582877945,
-      "opened_at": "2026-09-26T04:15:00+00:00",
-      "partial_done": false,
-      "partial_tp": null,
-      "pnl": 24.09731371621005,
-      "pnl_pct": 0.5530668453013079,
-      "qty": 2795.9811365357773,
-      "r": 0.2755331759088649,
-      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.050% < 0.200%; engel Bollinger(20) orta bandı 1.56561; stop 1.96% (1.5896), hedef 1.4981 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
-      "risk_amount": 87.4570317593278,
-      "stop_moved": false,
-      "stop_price": 1.5896000000000001,
-      "stop_rule": "",
-      "symbol": "XRP-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 1.4980999999999998
-        }
-      ],
-      "trail_giveback_pct": null,
-      "trailing_active": false,
-      "trailing_atr": null
-    },
-    {
-      "breakeven_at_r": null,
-      "breakeven_done": false,
       "direction": "long",
       "entry_fee": 2.885998726848676,
       "entry_price": 779.6896499999999,
       "funding": -1.5639725000194018,
-      "gross_pnl": -45.02099330760643,
+      "gross_pnl": -38.96404055569187,
       "initial_qty": 6.729947502127466,
       "initial_stop_price": 765.9714285714285,
       "leverage": 3.714855079035148,
       "liq_price": 573.7038272860549,
       "margin": 1412.510125109645,
-      "mark_price": 773.0,
+      "mark_price": 773.9,
       "marked": true,
       "model": "scalp_patient",
       "notional": 5247.270412452138,
       "opened_at": "2026-09-25T11:45:00+00:00",
       "partial_done": false,
       "partial_tp": null,
-      "pnl": -49.47096453447451,
-      "pnl_pct": -0.9427942653208127,
+      "pnl": -43.414011782559946,
+      "pnl_pct": -0.8273637218988272,
       "qty": 6.729947502127466,
-      "r": -0.5358471100481016,
+      "r": -0.47024093765278524,
       "reason": "RSI(2) aşırılık dönüşü: RSI=4.17 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.110% < 0.200%; engel Bollinger(20) orta bandı 775.705; stop 1.72% (765.971), hedef 806.257 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
       "risk_amount": 92.32291003684546,
       "stop_moved": false,
@@ -17777,23 +17737,23 @@
       "entry_fee": 2.95172417056667,
       "entry_price": 772.6135,
       "funding": 1.0765307667462392,
-      "gross_pnl": -2.68472797359255,
+      "gross_pnl": -8.936358442502026,
       "initial_qty": 6.946256076566261,
       "initial_stop_price": 785.8857142857142,
       "leverage": 1.0,
       "liq_price": 1541.3639325,
       "margin": 5366.771219212127,
-      "mark_price": 773.0,
+      "mark_price": 773.9,
       "marked": true,
       "model": "scalp_patient",
       "notional": 5366.771219212127,
       "opened_at": "2026-09-25T18:00:00+00:00",
       "partial_done": false,
       "partial_tp": null,
-      "pnl": -4.559921377412981,
-      "pnl_pct": -0.08496582379157955,
+      "pnl": -10.811551846322457,
+      "pnl_pct": -0.20145356313343382,
       "qty": 6.946256076566261,
-      "r": -0.04946103271603638,
+      "r": -0.11727187276317978,
       "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.110% < 0.200%; engel Bollinger(20) orta bandı 773.595; stop 1.65% (785.886), hedef 747.529 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
       "risk_amount": 92.1921991316318,
       "stop_moved": false,
@@ -17817,23 +17777,23 @@
       "entry_fee": 1.5914783180601477,
       "entry_price": 2690.654,
       "funding": 0.17376082124676354,
-      "gross_pnl": 1.7464904196859712,
+      "gross_pnl": -2.7595408971147912,
       "initial_qty": 1.0754251352747477,
       "initial_stop_price": 2776.296428571429,
       "leverage": 1.4279562026552897,
       "liq_price": 4561.470005904064,
       "margin": 2026.3905409331796,
-      "mark_price": 2689.03,
+      "mark_price": 2693.22,
       "marked": true,
       "model": "scalp_patient",
       "notional": 2893.596941927541,
       "opened_at": "2026-09-25T16:15:00+00:00",
       "partial_done": false,
       "partial_tp": null,
-      "pnl": 0.32877292287258697,
-      "pnl_pct": 0.011362084266427864,
+      "pnl": -4.1772583939281756,
+      "pnl_pct": -0.1443621374283571,
       "qty": 1.0754251352747477,
-      "r": 0.0035696602711707947,
+      "r": -0.04535468797410336,
       "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.022% < 0.200%; engel Bollinger(20) orta bandı 2699.72; stop 3.13% (2776.3), hedef 2523.41 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
       "risk_amount": 92.10202033168675,
       "stop_moved": false,
@@ -17857,23 +17817,23 @@
       "entry_fee": 1.231508831267771,
       "entry_price": 2691.9252899999997,
       "funding": -0.13439512520654773,
-      "gross_pnl": -2.4082629750171525,
+      "gross_pnl": 1.0769222276128874,
       "initial_qty": 0.831786444541855,
       "initial_stop_price": 2649.037142857143,
       "leverage": 5.0,
       "liq_price": 2166.9998584499995,
       "margin": 447.82139318828035,
-      "mark_price": 2689.03,
+      "mark_price": 2693.22,
       "marked": true,
       "model": "scalp_patient",
       "notional": 2239.1069659414015,
       "opened_at": "2026-09-25T19:45:00+00:00",
       "partial_done": false,
       "partial_tp": null,
-      "pnl": -3.7741669314914716,
-      "pnl_pct": -0.16855679469089924,
+      "pnl": -0.2889817288614315,
+      "pnl_pct": -0.012906115395873153,
       "qty": 0.831786444541855,
-      "r": -0.10579666613211171,
+      "r": -0.00810067600124708,
       "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.026% < 0.200%; engel Bollinger(20) orta bandı 2688.79; stop 1.54% (2649.04), hedef 2773.67 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
       "risk_amount": 35.67377942494471,
       "stop_moved": false,
@@ -17897,23 +17857,23 @@
       "entry_fee": 0.00010780345339988087,
       "entry_price": 1.5657824999999999,
       "funding": -1.9425593504256894e-05,
-      "gross_pnl": -0.0021008507732000886,
+      "gross_pnl": -0.0013998369594106859,
       "initial_qty": 0.125181038176678,
       "initial_stop_price": 1.5338928571428572,
       "leverage": 5.0,
       "liq_price": 1.2604549124999997,
       "margin": 0.03920125578177485,
-      "mark_price": 1.549,
+      "mark_price": 1.5546,
       "marked": true,
       "model": "scalp_patient",
       "notional": 0.19600627890887432,
       "opened_at": "2026-09-26T00:15:00+00:00",
       "partial_done": false,
       "partial_tp": null,
-      "pnl": -0.0022280798201042267,
-      "pnl_pct": -1.1367390027031163,
+      "pnl": -0.0015270660063148235,
+      "pnl_pct": -0.7790903509906307,
       "qty": 0.125181038176678,
-      "r": -0.5581392195182051,
+      "r": -0.38253361536996816,
       "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.036% < 0.200%; engel Bollinger(20) orta bandı 1.56437; stop 1.99% (1.53389), hedef 1.62721 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
       "risk_amount": 0.003991978599940605,
       "stop_moved": false,
@@ -17933,60 +17893,17 @@
     {
       "breakeven_at_r": 1.0,
       "breakeven_done": false,
-      "direction": "long",
-      "entry_fee": 1.707665437536834,
-      "entry_price": 772.48605,
-      "funding": -0.3107313893793649,
-      "gross_pnl": 2.065714623871835,
-      "initial_qty": 4.019291028060598,
-      "initial_stop_price": 771.158851205539,
-      "leverage": 10.0,
-      "liq_price": 699.0998752499999,
-      "margin": 310.48462500669706,
-      "mark_price": 773.0,
-      "marked": true,
-      "model": "vwap_clone",
-      "notional": 3104.8462500669707,
-      "opened_at": "2026-09-26T06:45:00+00:00",
-      "partial_done": false,
-      "partial_tp": {
-        "fraction": 0.5,
-        "r": 1.5
-      },
-      "pnl": 0.04731779695563593,
-      "pnl_pct": 0.0015239980709065802,
-      "qty": 4.019291028060598,
-      "r": 0.008870315848051848,
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=774.305 (300 bar), σ=1.25487; bu bar -1.84σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 1.5×0.5σ (771.159), hedef VWAP mesafesinin %75'i (773.754); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band0_tp1 | combo_r=0.786 | combo_n=4 | pick=exploit",
-      "risk_amount": 5.334398207029815,
-      "stop_moved": false,
-      "stop_price": 771.158851205539,
-      "stop_rule": "",
-      "symbol": "BNB-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 773.7535621532919
-        }
-      ],
-      "trail_giveback_pct": 0.5,
-      "trailing_active": false,
-      "trailing_atr": null
-    },
-    {
-      "breakeven_at_r": 1.0,
-      "breakeven_done": false,
       "direction": "short",
       "entry_fee": 1.7234164157505765,
       "entry_price": 0.09763116000000001,
       "funding": 0.314243379723774,
-      "gross_pnl": -0.6046721758751352,
+      "gross_pnl": -11.8379663136876,
       "initial_qty": 32095.126108035332,
       "initial_stop_price": 0.09821577367576466,
       "leverage": 10.0,
       "liq_price": 0.10690612020000001,
       "margin": 313.3484392273775,
-      "mark_price": 0.09765,
+      "mark_price": 0.098,
       "marked": true,
       "model": "vwap_clone",
       "notional": 3133.484392273775,
@@ -17996,10 +17913,10 @@
         "fraction": 0.5,
         "r": 1.5
       },
-      "pnl": -2.0138452119019377,
-      "pnl_pct": -0.06426855729256131,
+      "pnl": -13.247139349714402,
+      "pnl_pct": -0.42276066165760523,
       "qty": 32095.126108035332,
-      "r": -0.1073292339901609,
+      "r": -0.70601519449599,
       "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=0.0964612 (300 bar), σ=0.000436619; bu bar +3.28σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2.5×0.5σ (0.0982158), hedef VWAP mesafesinin %100'i (0.0964612); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp2 | combo_r=0.7413 | combo_n=15 | pick=exploit",
       "risk_amount": 18.76324964814853,
       "stop_moved": false,
@@ -18023,13 +17940,13 @@
       "entry_fee": 1.7713782415935801,
       "entry_price": 5.039479,
       "funding": 0.3014691975023495,
-      "gross_pnl": 115.3425775902512,
+      "gross_pnl": 104.47802371398686,
       "initial_qty": 639.0914044861239,
       "initial_stop_price": 5.25125631049802,
       "leverage": 10.0,
       "liq_price": 5.518229505,
       "margin": 322.06877119883274,
-      "mark_price": 4.859,
+      "mark_price": 4.876,
       "marked": true,
       "model": "vwap_clone",
       "notional": 3220.6877119883275,
@@ -18039,10 +17956,10 @@
         "fraction": 0.5,
         "r": 1.5
       },
-      "pnl": 113.87266854615996,
-      "pnl_pct": 3.535663148038013,
+      "pnl": 103.00811466989562,
+      "pnl_pct": 3.19832668924931,
       "qty": 639.0914044861239,
-      "r": 0.8413507633896437,
+      "r": 0.761077763604998,
       "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=4.5079 (300 bar), σ=0.168205; bu bar +3.27σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2.5×0.5σ (5.25126), hedef VWAP mesafesinin %75'i (4.64117); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=0.3656 | combo_n=11 | pick=exploit",
       "risk_amount": 135.34505880447347,
       "stop_moved": true,
@@ -18057,49 +17974,6 @@
       ],
       "trail_giveback_pct": 0.5,
       "trailing_active": false,
-      "trailing_atr": null
-    },
-    {
-      "breakeven_at_r": 1.0,
-      "breakeven_done": true,
-      "direction": "short",
-      "entry_fee": 0.8535620128026928,
-      "entry_price": 121.94899500000001,
-      "funding": 0.04205107076831508,
-      "gross_pnl": 18.05822371374442,
-      "initial_qty": 25.45213156317577,
-      "initial_stop_price": 122.40656264070515,
-      "leverage": 10.0,
-      "liq_price": 133.534149525,
-      "margin": 155.19309323685323,
-      "mark_price": 120.53,
-      "marked": true,
-      "model": "vwap_clone",
-      "notional": 1551.9309323685322,
-      "opened_at": "2026-09-26T02:00:00+00:00",
-      "partial_done": true,
-      "partial_tp": {
-        "fraction": 0.5,
-        "r": 1.5
-      },
-      "pnl": 17.246712771710044,
-      "pnl_pct": 1.111306721967864,
-      "qty": 12.726065781587884,
-      "r": 2.9618077377997643,
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=117.357 (300 bar), σ=0.396563; bu bar +11.72σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2×0.5σ (122.407), hedef VWAP mesafesinin %100'i (117.357); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp2 | combo_r=-0.75 | combo_n=11 | pick=explore",
-      "risk_amount": 5.823035895139532,
-      "stop_moved": true,
-      "stop_price": 121.0244975,
-      "stop_rule": "giveback",
-      "symbol": "SOL-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 117.3572027196608
-        }
-      ],
-      "trail_giveback_pct": 0.5,
-      "trailing_active": true,
       "trailing_atr": null
     }
   ],
@@ -18140,66 +18014,66 @@
       "short": {
         "avg_loss_pct": -1.3995325748991325,
         "avg_loss_r": -0.5510414943455991,
-        "avg_r": -0.2022185718199341,
-        "avg_r_ci_high": -0.022988715689261422,
-        "avg_r_ci_low": -0.3890501866889797,
-        "avg_stop_distance_pct": 3.1128910316103564,
-        "avg_win_pct": 1.7359932626571772,
-        "avg_win_r": 0.49542727323139624,
-        "cost_pct": 0.23919191094535333,
-        "cost_per_r": 0.10435596682580553,
+        "avg_r": -0.19403124685835144,
+        "avg_r_ci_high": -0.009534863859438053,
+        "avg_r_ci_low": -0.3773666933988051,
+        "avg_stop_distance_pct": 3.0916289049457646,
+        "avg_win_pct": 1.6644751660608152,
+        "avg_win_r": 0.4803214428397833,
+        "cost_pct": 0.23859138343536743,
+        "cost_per_r": 0.10435553310688042,
         "direction": "short",
-        "fees": 233.18941509000007,
-        "funding": 6.675494722799998,
+        "fees": 237.96901125800008,
+        "funding": 7.109375075599998,
         "liquidations": 0,
-        "market_measured": 51,
-        "market_r": -0.128443925602877,
-        "market_tailwind_pct": -0.26876543269501435,
+        "market_measured": 52,
+        "market_r": -0.13055555911201064,
+        "market_tailwind_pct": -0.2727935499310897,
         "max_drawdown_pnl": -1075.0459798525,
         "max_drawdown_r": -11.32418379568998,
-        "median_r": -0.16137692957159264,
-        "notional": 211617.02240199997,
-        "payoff": 1.2404093293664809,
-        "pnl": -973.2238200175001,
-        "profit_factor": 0.44953717489075057,
-        "r_sharpe": -0.3077531548951214,
-        "slippage_cost": 272.9813846790001,
-        "total_r": -10.31314716281664,
-        "trades": 51,
+        "median_r": -0.15077440939221495,
+        "notional": 215974.05698499997,
+        "payoff": 1.189307913165778,
+        "pnl": -953.6752208375001,
+        "profit_factor": 0.4614676486057917,
+        "r_sharpe": -0.29701091105965044,
+        "slippage_cost": 277.3264791640001,
+        "total_r": -10.089624836634275,
+        "trades": 52,
         "unmeasured": 0,
-        "win_rate": 0.3333333333333333
+        "win_rate": 0.34615384615384615
       },
       "total": {
         "avg_loss_pct": -1.7086989558063714,
         "avg_loss_r": -0.5614183982949316,
-        "avg_r": -0.20296051287066783,
-        "avg_r_ci_high": -0.06734005514867131,
-        "avg_r_ci_low": -0.3369509138975377,
-        "avg_stop_distance_pct": 3.314639271288975,
-        "avg_win_pct": 1.9051420966171393,
-        "avg_win_r": 0.5486447307608527,
-        "cost_pct": 0.22650266841300815,
-        "cost_per_r": 0.09454408262819312,
+        "avg_r": -0.19856378257115204,
+        "avg_r_ci_high": -0.0597736134114651,
+        "avg_r_ci_low": -0.33841943672276475,
+        "avg_stop_distance_pct": 3.3011611390597237,
+        "avg_win_pct": 1.8596272662204367,
+        "avg_win_r": 0.5384846556177749,
+        "cost_pct": 0.22630415993152986,
+        "cost_per_r": 0.09464500356441485,
         "direction": "total",
-        "fees": 407.6209452255081,
-        "funding": -1.628748037889999,
+        "fees": 412.4005413935081,
+        "funding": -1.194867685089999,
         "liquidations": 0,
-        "market_measured": 96,
-        "market_r": -0.1261062859006826,
-        "market_tailwind_pct": -0.26891597652960875,
+        "market_measured": 97,
+        "market_r": -0.1272623949952923,
+        "market_tailwind_pct": -0.27107382758570486,
         "max_drawdown_pnl": -1973.9683790010506,
         "max_drawdown_r": -21.620780423715537,
-        "median_r": -0.18107129726360438,
-        "notional": 370492.914210736,
-        "payoff": 1.1149665013507672,
-        "pnl": -1759.5066121990508,
-        "profit_factor": 0.46607188850024056,
-        "r_sharpe": -0.29578086781365887,
-        "slippage_cost": 431.5553917429259,
-        "total_r": -19.48420923558411,
-        "trades": 96,
+        "median_r": -0.1751053096716876,
+        "notional": 374849.948793736,
+        "payoff": 1.0883293747568534,
+        "pnl": -1739.9580130190507,
+        "profit_factor": 0.4721970974863267,
+        "r_sharpe": -0.2903088363411806,
+        "slippage_cost": 435.9004862279259,
+        "total_r": -19.26068690940175,
+        "trades": 97,
         "unmeasured": 0,
-        "win_rate": 0.3229166666666667
+        "win_rate": 0.32989690721649484
       }
     },
     "models": [
@@ -18209,6 +18083,131 @@
     ]
   },
   "recent_trades": [
+    {
+      "closed_at": "2026-09-26T08:30:00+00:00",
+      "direction": "short",
+      "entry_price": 1.55832045,
+      "exit_price": 1.5497745,
+      "exit_reason": "signal",
+      "exit_rule": "time_stop",
+      "fee": 4.779596168,
+      "funding": 0.4338803528,
+      "is_partial": false,
+      "leverage": 1.0,
+      "margin": 4357.034583,
+      "model": "scalp_fixed",
+      "notes": "exit_rule=time_stop",
+      "notional": 4357.034583,
+      "opened_at": "2026-09-26T04:15:00+00:00",
+      "pnl": 19.54859918,
+      "qty": 2795.981137,
+      "r": 0.22352232618236298,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.050% < 0.200%; engel Bollinger(20) orta bandı 1.56561; stop 1.96% (1.5896), hedef 1.4981 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+      "risk_amount": 87.45703176,
+      "slippage_cost": 4.345094485,
+      "stop_price": 1.5896,
+      "symbol": "XRP-USDT-SWAP"
+    },
+    {
+      "closed_at": "2026-09-26T08:30:00+00:00",
+      "direction": "short",
+      "entry_price": 121.948995,
+      "exit_price": 121.2060342,
+      "exit_reason": "stop",
+      "exit_rule": "giveback",
+      "fee": 1.701923794,
+      "funding": 0.04205107077,
+      "is_partial": false,
+      "leverage": 10.0,
+      "margin": 155.1930932,
+      "model": "vwap_clone",
+      "notes": "exit_rule=giveback",
+      "notional": 1551.930932,
+      "opened_at": "2026-09-26T02:00:00+00:00",
+      "pnl": 7.795094703,
+      "qty": 12.72606578,
+      "r": 1.3386650612429378,
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=117.357 (300 bar), σ=0.396563; bu bar +11.72σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2×0.5σ (122.407), hedef VWAP mesafesinin %100'i (117.357); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp2 | combo_r=-0.75 | combo_n=11 | pick=explore",
+      "risk_amount": 5.823035895,
+      "slippage_cost": 3.086602218,
+      "stop_price": 122.4065626,
+      "symbol": "SOL-USDT-SWAP"
+    },
+    {
+      "closed_at": "2026-09-26T08:30:00+00:00",
+      "direction": "long",
+      "entry_price": 772.48605,
+      "exit_price": 773.3666854,
+      "exit_reason": "tp",
+      "exit_rule": "",
+      "fee": 3.417277616,
+      "funding": -0.3107313894,
+      "is_partial": false,
+      "leverage": 10.0,
+      "margin": 310.484625,
+      "model": "vwap_clone",
+      "notes": "",
+      "notional": 3104.84625,
+      "opened_at": "2026-09-26T06:45:00+00:00",
+      "pnl": -0.1884791553,
+      "qty": 4.019291028,
+      "r": -0.03533278693980335,
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=774.305 (300 bar), σ=1.25487; bu bar -1.84σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 1.5×0.5σ (771.159), hedef VWAP mesafesinin %75'i (773.754); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band0_tp1 | combo_r=0.786 | combo_n=4 | pick=exploit",
+      "risk_amount": 5.334398207,
+      "slippage_cost": 3.106617677,
+      "stop_price": 771.1588512,
+      "symbol": "BNB-USDT-SWAP"
+    },
+    {
+      "closed_at": "2026-09-26T08:30:00+00:00",
+      "direction": "long",
+      "entry_price": 84109.33365,
+      "exit_price": 84215.58647,
+      "exit_reason": "partial",
+      "exit_rule": "",
+      "fee": 1.723017265,
+      "funding": 0.0,
+      "is_partial": true,
+      "leverage": 10.0,
+      "margin": 156.5390576,
+      "model": "vwap_clone",
+      "notes": "",
+      "notional": 1565.390576,
+      "opened_at": "2026-09-26T08:30:00+00:00",
+      "pnl": 0.2544941218,
+      "qty": 0.01861137769,
+      "r": 0.13823251558150537,
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=84325.2 (300 bar), σ=56.8875; bu bar -5.03σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (84010.4), hedef VWAP mesafesinin %50'i (84196.3); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp0 | combo_r=-0.03429 | combo_n=37 | pick=exploit",
+      "risk_amount": 1.841058312,
+      "slippage_cost": 1.566380217,
+      "stop_price": 84010.41253,
+      "symbol": "BTC-USDT-SWAP"
+    },
+    {
+      "closed_at": "2026-09-26T08:30:00+00:00",
+      "direction": "long",
+      "entry_price": 84109.33365,
+      "exit_price": 84154.16564,
+      "exit_reason": "tp",
+      "exit_rule": "",
+      "fee": 1.722388545,
+      "funding": 0.0,
+      "is_partial": false,
+      "leverage": 10.0,
+      "margin": 156.5390576,
+      "model": "vwap_clone",
+      "notes": "",
+      "notional": 1565.390576,
+      "opened_at": "2026-09-26T08:30:00+00:00",
+      "pnl": -0.8880033755,
+      "qty": 0.01861137769,
+      "r": -0.48233310683969255,
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=84325.2 (300 bar), σ=56.8875; bu bar -5.03σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (84010.4), hedef VWAP mesafesinin %50'i (84196.3); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp0 | combo_r=-0.03429 | combo_n=37 | pick=exploit",
+      "risk_amount": 1.841058312,
+      "slippage_cost": 1.565808368,
+      "stop_price": 84010.41253,
+      "symbol": "BTC-USDT-SWAP"
+    },
     {
       "closed_at": "2026-09-26T08:00:00+00:00",
       "direction": "long",
@@ -18583,146 +18582,21 @@
       "slippage_cost": 1.547095739,
       "stop_price": 1.580679275,
       "symbol": "XRP-USDT-SWAP"
-    },
-    {
-      "closed_at": "2026-09-26T02:00:00+00:00",
-      "direction": "short",
-      "entry_price": 2679.79943,
-      "exit_price": 2692.535595,
-      "exit_reason": "signal",
-      "exit_rule": "time_stop",
-      "fee": 8.248161354,
-      "funding": 0.2578868533,
-      "is_partial": false,
-      "leverage": 1.25539575,
-      "margin": 5958.720393,
-      "model": "scalp_fixed",
-      "notes": "boyut komisyon+marj nakde sığsın diye 0.9993 oranında kırpıldı | exit_rule=time_stop",
-      "notional": 7480.552258,
-      "opened_at": "2026-09-25T21:45:00+00:00",
-      "pnl": -43.54276652,
-      "qty": 2.791459754,
-      "r": -0.49427574339639274,
-      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.091% < 0.200%; engel Bollinger(20) orta bandı 2687.78; stop 1.13% (2711.36), hedef 2620.7 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
-      "risk_amount": 88.09407927,
-      "slippage_cost": 7.49832149,
-      "stop_price": 2711.357857,
-      "symbol": "ETH-USDT-SWAP"
-    },
-    {
-      "closed_at": "2026-09-26T01:30:00+00:00",
-      "direction": "short",
-      "entry_price": 122.068935,
-      "exit_price": 122.2520384,
-      "exit_reason": "stop",
-      "exit_rule": "breakeven",
-      "fee": 3.447264932,
-      "funding": 0.1205115689,
-      "is_partial": false,
-      "leverage": 10.0,
-      "margin": 313.1528564,
-      "model": "vwap_clone",
-      "notes": "exit_rule=breakeven",
-      "notional": 3131.528564,
-      "opened_at": "2026-09-25T23:00:00+00:00",
-      "pnl": -8.02404621,
-      "qty": 25.65377149,
-      "r": -0.4926512201264527,
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=117.301 (300 bar), σ=0.459065; bu bar +10.69σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2.5×0.5σ (122.704), hedef VWAP mesafesinin %75'i (118.508); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=-0.08141 | combo_n=14 | pick=exploit",
-      "risk_amount": 16.28747861,
-      "slippage_cost": 6.263840403,
-      "stop_price": 122.7038311,
-      "symbol": "SOL-USDT-SWAP"
-    },
-    {
-      "closed_at": "2026-09-26T01:30:00+00:00",
-      "direction": "short",
-      "entry_price": 13.9100415,
-      "exit_price": 14.01116947,
-      "exit_reason": "stop",
-      "exit_rule": "",
-      "fee": 3.448762841,
-      "funding": 0.0,
-      "is_partial": false,
-      "leverage": 10.0,
-      "margin": 312.3883409,
-      "model": "vwap_clone",
-      "notes": "",
-      "notional": 3123.883409,
-      "opened_at": "2026-09-26T01:30:00+00:00",
-      "pnl": -26.15983691,
-      "qty": 224.5775765,
-      "r": -1.4534654543372039,
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=13.1343 (300 bar), σ=0.0731842; bu bar +10.93σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2×0.5σ (13.9902), hedef VWAP mesafesinin %100'i (13.1343); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp2 | combo_r=0.3837 | combo_n=6 | pick=exploit",
-      "risk_amount": 17.99825158,
-      "slippage_cost": 6.275545557,
-      "stop_price": 13.99018419,
-      "symbol": "LINK-USDT-SWAP"
-    },
-    {
-      "closed_at": "2026-09-26T01:15:00+00:00",
-      "direction": "short",
-      "entry_price": 0.25697145,
-      "exit_price": 0.2594368029,
-      "exit_reason": "stop",
-      "exit_rule": "",
-      "fee": 3.4857066,
-      "funding": 0.0,
-      "is_partial": false,
-      "leverage": 10.0,
-      "margin": 315.3696093,
-      "model": "vwap_clone",
-      "notes": "",
-      "notional": 3153.696093,
-      "opened_at": "2026-09-26T01:00:00+00:00",
-      "pnl": -33.74188364,
-      "qty": 12272.55437,
-      "r": -1.32386517483316,
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=0.248447 (300 bar), σ=0.00194823; bu bar +4.58σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2×0.5σ (0.259048), hedef VWAP mesafesinin %50'i (0.252773); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp0 | combo_r=-0.1448 | combo_n=61 | pick=explore",
-      "risk_amount": 25.4874018,
-      "slippage_cost": 6.346412107,
-      "stop_price": 0.2590482305,
-      "symbol": "ADA-USDT-SWAP"
-    },
-    {
-      "closed_at": "2026-09-26T00:45:00+00:00",
-      "direction": "short",
-      "entry_price": 0.09919038,
-      "exit_price": 0.098537585,
-      "exit_reason": "stop",
-      "exit_rule": "partial",
-      "fee": 1.707760882,
-      "funding": 0.1553546598,
-      "is_partial": false,
-      "leverage": 10.0,
-      "margin": 155.7635474,
-      "model": "vwap_clone",
-      "notes": "exit_rule=partial",
-      "notional": 1557.635474,
-      "opened_at": "2026-09-25T23:15:00+00:00",
-      "pnl": 8.698755725,
-      "qty": 15703.49336,
-      "r": 0.7491187789725453,
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=0.0965658 (300 bar), σ=0.000559866; bu bar +4.70σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2.5×0.5σ (0.0999298), hedef VWAP mesafesinin %100'i (0.0965658); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp2 | combo_r=0.6977 | combo_n=13 | pick=exploit",
-      "risk_amount": 11.6119846,
-      "slippage_cost": 3.096807408,
-      "stop_price": 0.09992983232,
-      "symbol": "DOGE-USDT-SWAP"
     }
   ],
   "replicas": [
     "vwap_clone"
   ],
   "round": {
-    "as_of": "2026-09-26T08:15:00+00:00",
+    "as_of": "2026-09-26T08:30:00+00:00",
     "models": [
       {
         "ambiguous_stop_exits": 0,
         "bars_processed": 1,
-        "closed": 0,
+        "closed": 1,
         "emitted": [],
-        "exits": 1,
-        "filled": 0,
+        "exits": 0,
+        "filled": 1,
         "missing_bars": 0,
         "model": "scalp_fixed",
         "rejections": {},
@@ -18753,52 +18627,26 @@
       {
         "ambiguous_stop_exits": 0,
         "bars_processed": 1,
-        "closed": 0,
-        "emitted": [
-          {
-            "bar": "2026-09-26T08:15:00+00:00",
-            "close": 84067.3,
-            "direction": "long",
-            "fills_at": "2026-09-26T08:30:00+00:00",
-            "model": "vwap_clone",
-            "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=84325.2 (300 bar), σ=56.8875; bu bar -5.03σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (84010.4), hedef VWAP mesafesinin %50'i (84196.3); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp0 | combo_r=-0.03429 | combo_n=37 | pick=exploit",
-            "reward_risk": 2.26699794142547,
-            "stop_price": 84010.41253073781,
-            "symbol": "BTC-USDT-SWAP",
-            "target_price": 84196.2637757103
-          },
-          {
-            "bar": "2026-09-26T08:15:00+00:00",
-            "close": 0.7138,
-            "direction": "short",
-            "fills_at": "2026-09-26T08:30:00+00:00",
-            "model": "vwap_clone",
-            "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=0.683675 (300 bar), σ=0.00315403; bu bar +9.47σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2.5×0.5σ (0.717743), hedef VWAP mesafesinin %75'i (0.691206); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=0.4207 | combo_n=16 | pick=exploit",
-            "reward_risk": 5.730818645164821,
-            "stop_price": 0.7177425347443255,
-            "symbol": "ETHFI-USDT-SWAP",
-            "target_price": 0.6912060483780094
-          }
-        ],
+        "closed": 4,
+        "emitted": [],
         "exits": 0,
-        "filled": 0,
+        "filled": 1,
         "missing_bars": 0,
         "model": "vwap_clone",
         "rejections": {
-          "duplicate_position": 2,
-          "max_short_positions": 3
+          "max_positions": 1
         },
-        "signals": 2,
+        "signals": 0,
         "skipped": "",
         "skipped_signals": 0,
-        "stop_exits": 0,
+        "stop_exits": 1,
         "survey": {
           "band_yok": 0,
-          "bant_ici": 4,
+          "bant_ici": 2,
           "bar_yok": 0,
-          "donus_yok": 6,
+          "donus_yok": 10,
           "gecersiz_geometri": 0,
-          "kurulum": 2
+          "kurulum": 0
         },
         "unchecked_position_bars": 0
       },
@@ -18817,14 +18665,14 @@
         "skipped_signals": 0,
         "stop_exits": 0,
         "survey": {
-          "bant_ici": 12,
+          "bant_ici": 13,
           "donus_yok": 0,
-          "kurulum": 1,
+          "kurulum": 0,
           "vwap_gecildi": 0,
           "vwap_yok": 0,
-          "z_ge_1_0": 6,
-          "z_ge_1_5": 1,
-          "z_ge_2_0": 1,
+          "z_ge_1_0": 5,
+          "z_ge_1_5": 0,
+          "z_ge_2_0": 0,
           "z_ge_2_5": 0
         },
         "unchecked_position_bars": 0
