@@ -1,9 +1,34 @@
 {
   "cash": 10264.571598778253,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-09-26T20:30:00+00:00",
+  "last_processed_bar": "2026-09-26T20:45:00+00:00",
   "model": "vwap_managed",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": 1.0,
+      "created_at": "2026-09-26T20:45:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "reason": "VWAP sapma-dönüş: gün-çapalı VWAP=0.0101424 (84 bar), sapma=0.000142553; önceki bar -2.93σ ile bandın dışında kapandı, bu bar -2.72σ ile VWAP'e döndü (yön long, ATR=7.7e-05); stop 2.5×ATR = %1.97 (0.0095625), hedef 0.01014 (2.00R), zaman stop'u 16 bar; yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert | rr=2",
+      "sizing": "risk",
+      "stop_price": 0.0095625,
+      "symbol": "PENGU-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.01014
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    }
+  ],
   "positions": [],
   "version": 1
 }
