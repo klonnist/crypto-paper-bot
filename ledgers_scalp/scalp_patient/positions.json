@@ -1,9 +1,31 @@
 {
   "cash": -0.051045792068742886,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-09-28T19:45:00+00:00",
+  "last_processed_bar": "2026-09-28T20:00:00+00:00",
   "model": "scalp_patient",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-09-28T20:00:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.100% < 0.200%; engel Bollinger(20) orta bandı 119.21; stop 3.01% (122.411), hedef 111.697 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 122.41142857142856,
+      "symbol": "SOL-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 111.69714285714288
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -117,7 +139,7 @@
       "initial_stop_price": 1.5620857142857143,
       "leverage": 1.9371509727879699,
       "liq_price": 2.2502928651702554,
-      "low_water": 1.4788,
+      "low_water": 1.4751,
       "margin": 943.4369726184951,
       "notes": "boyut komisyon+marj nakde sığsın diye 0.9989 oranında kırpıldı",
       "opened_at": "2026-09-28T15:45:00+00:00",
