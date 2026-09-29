@@ -1,27 +1,43 @@
 {
   "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-09-29T04:15:00+00:00",
+  "last_processed_bar": "2026-09-29T04:30:00+00:00",
   "model": "scalp_patient",
   "pending_orders": [
     {
       "breakeven_at_r": null,
-      "created_at": "2026-09-29T04:15:00+00:00",
+      "created_at": "2026-09-29T04:30:00+00:00",
       "direction": "short",
       "fraction": 1.0,
       "kind": "open",
       "notional_fraction": null,
       "partial_tp": null,
-      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.158% < 0.200%; engel Bollinger(20) orta bandı 10.5278; stop 5.53% (11.0185), hedef 9.286 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
+      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.086% < 0.200%; engel Bollinger(20) orta bandı 15.1346; stop 5.69% (15.5558), hedef 13.0454 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
       "sizing": "risk",
-      "stop_price": 11.018500000000001,
-      "symbol": "AVAX-USDT-SWAP",
+      "stop_price": 15.555785714285715,
+      "symbol": "LINK-USDT-SWAP",
       "take_profits": [
         {
           "fraction": 1.0,
-          "price": 9.286
+          "price": 13.045428571428568
         }
       ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-09-29T04:30:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "exit",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "zaman stop'u: pozisyon 100 bardır açık (100 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
+      "sizing": "risk",
+      "stop_price": null,
+      "symbol": "DOGE-USDT-SWAP",
+      "take_profits": [],
       "trail_giveback_pct": null,
       "trailing_atr": null
     }
