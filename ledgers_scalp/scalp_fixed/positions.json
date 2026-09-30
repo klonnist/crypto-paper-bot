@@ -1,9 +1,26 @@
 {
-  "cash": 0.0,
+  "cash": 1485.1912847331512,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-09-30T14:00:00+00:00",
+  "last_processed_bar": "2026-09-30T14:15:00+00:00",
   "model": "scalp_fixed",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-09-30T14:15:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "exit",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "zaman stop'u: pozisyon 16 bardır açık (16 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
+      "sizing": "risk",
+      "stop_price": null,
+      "symbol": "PENGU-USDT-SWAP",
+      "take_profits": [],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -18,7 +35,7 @@
       "initial_stop_price": 0.009455285714285715,
       "leverage": 1.0,
       "liq_price": 4.9559767499998686e-05,
-      "low_water": 0.0099,
+      "low_water": 0.009831,
       "margin": 1731.630610114143,
       "notes": "",
       "opened_at": "2026-09-30T10:15:00+00:00",
@@ -51,7 +68,7 @@
       "initial_stop_price": 82885.02857142857,
       "leverage": 1.4671690276271205,
       "liq_price": 27130.86208855055,
-      "low_water": 83713.4,
+      "low_water": 83601.7,
       "margin": 4531.043847757097,
       "notes": "boyut komisyon+marj nakde sığsın diye 0.9992 oranında kırpıldı",
       "opened_at": "2026-09-30T12:15:00+00:00",
@@ -66,39 +83,6 @@
         {
           "fraction": 1.0,
           "price": 85769.74285714288
-        }
-      ],
-      "trail_giveback_pct": null,
-      "trailing_atr": null
-    },
-    {
-      "breakeven_at_r": null,
-      "direction": "long",
-      "entry_fee": 1.2961604768049928,
-      "entry_price": 14.669331,
-      "entry_slippage": 1.1777388367677908,
-      "final_target_price": 15.646285714285714,
-      "funding": 0.0,
-      "high_water": 14.753,
-      "initial_qty": 160.65186697148724,
-      "initial_stop_price": 14.169857142857143,
-      "leverage": 1.5031393613630661,
-      "liq_price": 4.983548610107139,
-      "low_water": 14.359,
-      "margin": 1567.8223010777049,
-      "notes": "boyut komisyon+marj nakde sığsın diye 0.9992 oranında kırpıldı",
-      "opened_at": "2026-09-30T13:30:00+00:00",
-      "partial_done": false,
-      "partial_tp": null,
-      "qty": 160.65186697148724,
-      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.093% < 0.200%; engel Bollinger(20) orta bandı 14.4357; stop 3.36% (14.1699), hedef 15.6463 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
-      "stop_price": 14.169857142857143,
-      "stop_rule": "",
-      "symbol": "LINK-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 15.646285714285714
         }
       ],
       "trail_giveback_pct": null,
