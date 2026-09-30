@@ -1,9 +1,31 @@
 {
   "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-09-30T11:00:00+00:00",
+  "last_processed_bar": "2026-09-30T11:15:00+00:00",
   "model": "scalp_patient",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-09-30T11:15:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.097% < 0.200%; engel Bollinger(20) orta bandı 83389.7; stop 1.11% (82876.4), hedef 85674.8 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 82876.41428571429,
+      "symbol": "BTC-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 85674.77142857143
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -112,7 +134,7 @@
       "entry_slippage": 0.6190002854448334,
       "final_target_price": 5.7128571428571435,
       "funding": 0.0,
-      "high_water": 5.333,
+      "high_water": 5.336,
       "initial_qty": 247.4021924240157,
       "initial_stop_price": 4.651071428571428,
       "leverage": 1.0,
