@@ -1,27 +1,22 @@
 {
-  "cash": 294.96641481605184,
+  "cash": 5.684341886080802e-14,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-01T00:15:00+00:00",
+  "last_processed_bar": "2026-10-01T00:30:00+00:00",
   "model": "scalp_fixed",
   "pending_orders": [
     {
       "breakeven_at_r": null,
-      "created_at": "2026-10-01T00:15:00+00:00",
-      "direction": "long",
+      "created_at": "2026-10-01T00:30:00+00:00",
+      "direction": "short",
       "fraction": 1.0,
-      "kind": "open",
+      "kind": "exit",
       "notional_fraction": null,
       "partial_tp": null,
-      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.000% < 0.200%; engel Bollinger(20) orta bandı 0.767385; stop 4.23% (0.743143), hedef 0.841714 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+      "reason": "zaman stop'u: pozisyon 16 bardır açık (16 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
       "sizing": "risk",
-      "stop_price": 0.7431428571428571,
-      "symbol": "ETHFI-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 0.841714285714286
-        }
-      ],
+      "stop_price": null,
+      "symbol": "BNB-USDT-SWAP",
+      "take_profits": [],
       "trail_giveback_pct": null,
       "trailing_atr": null
     }
@@ -68,7 +63,7 @@
       "entry_slippage": 1.0645721064294693,
       "final_target_price": 1.2476285714285715,
       "funding": 0.0,
-      "high_water": 1.1653,
+      "high_water": 1.1778,
       "initial_qty": 1829.7904888785356,
       "initial_stop_price": 1.1217357142857143,
       "leverage": 1.0,
@@ -101,7 +96,7 @@
       "entry_slippage": 1.8842602193804119,
       "final_target_price": 14.92542857142857,
       "funding": 0.0,
-      "high_water": 14.387,
+      "high_water": 14.425,
       "initial_qty": 262.63296667091873,
       "initial_stop_price": 14.060785714285714,
       "leverage": 1.0,
@@ -121,6 +116,39 @@
         {
           "fraction": 1.0,
           "price": 14.92542857142857
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": null,
+      "direction": "long",
+      "entry_fee": 0.8089330747884743,
+      "entry_price": 0.77628795,
+      "entry_slippage": 0.7350261912573681,
+      "final_target_price": 0.841714285714286,
+      "funding": 0.0,
+      "high_water": 0.7807,
+      "initial_qty": 1894.6415549878325,
+      "initial_stop_price": 0.7431428571428571,
+      "leverage": 5.0,
+      "liq_price": 0.6249117997499999,
+      "low_water": 0.7728,
+      "margin": 294.1574817412633,
+      "notes": "boyut leverage_cap=5 nedeniyle 0.8111 oranında kırpıldı (gereken kaldıraç 6.16); boyut komisyon+marj nakde sığsın diye 0.9973 oranında kırpıldı",
+      "opened_at": "2026-10-01T00:30:00+00:00",
+      "partial_done": false,
+      "partial_tp": null,
+      "qty": 1894.6415549878325,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.000% < 0.200%; engel Bollinger(20) orta bandı 0.767385; stop 4.23% (0.743143), hedef 0.841714 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+      "stop_price": 0.7431428571428571,
+      "stop_rule": "",
+      "symbol": "ETHFI-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.841714285714286
         }
       ],
       "trail_giveback_pct": null,
