@@ -1,60 +1,32 @@
 {
-  "cash": -2.2737367544323206e-13,
+  "cash": 5318.593890704564,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-02T06:15:00+00:00",
+  "last_processed_bar": "2026-10-02T06:30:00+00:00",
   "model": "scalp_fixed",
   "pending_orders": [
     {
       "breakeven_at_r": null,
-      "created_at": "2026-10-02T06:15:00+00:00",
+      "created_at": "2026-10-02T06:30:00+00:00",
       "direction": "long",
       "fraction": 1.0,
-      "kind": "exit",
+      "kind": "open",
       "notional_fraction": null,
       "partial_tp": null,
-      "reason": "zaman stop'u: pozisyon 16 bardır açık (16 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
+      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.084% < 0.200%; engel Bollinger(20) orta bandı 0.731555; stop 4.05% (0.705514), hedef 0.794871 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
       "sizing": "risk",
-      "stop_price": null,
-      "symbol": "ETH-USDT-SWAP",
-      "take_profits": [],
+      "stop_price": 0.7055142857142858,
+      "symbol": "ETHFI-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.7948714285714283
+        }
+      ],
       "trail_giveback_pct": null,
       "trailing_atr": null
     }
   ],
   "positions": [
-    {
-      "breakeven_at_r": null,
-      "direction": "long",
-      "entry_fee": 3.27302272314019,
-      "entry_price": 2719.429035,
-      "entry_slippage": 2.9739882087502307,
-      "final_target_price": 2784.231428571429,
-      "funding": 0.0,
-      "high_water": 2747.59,
-      "initial_qty": 2.1883087696419463,
-      "initial_stop_price": 2684.974285714285,
-      "leverage": 1.12186645432983,
-      "liq_price": 309.0041189890212,
-      "low_water": 2707.69,
-      "margin": 5304.508734298824,
-      "notes": "boyut komisyon+marj nakde sığsın diye 0.9994 oranında kırpıldı",
-      "opened_at": "2026-10-02T02:15:00+00:00",
-      "partial_done": false,
-      "partial_tp": null,
-      "qty": 2.1883087696419463,
-      "reason": "Açılış aralığı kırılımı: ilk 4 bar [2699.31, 2708.53], kapanış 2718.06 üstte (5. bar); hacim 309421 ≥ 1.5× SMA20(108604); engel ölçülü hareket 2717.75 (aralık genişliği 9.22); stop 1.22% (2684.97), hedef 2784.23 (2.00R), zaman stop'u 16 bar | arm=opening_range_breakout | post_r=nan",
-      "stop_price": 2684.974285714285,
-      "stop_rule": "",
-      "symbol": "ETH-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 2784.231428571429
-        }
-      ],
-      "trail_giveback_pct": null,
-      "trailing_atr": null
-    },
     {
       "breakeven_at_r": null,
       "direction": "long",
