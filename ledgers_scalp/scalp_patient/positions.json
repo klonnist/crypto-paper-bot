@@ -1,9 +1,31 @@
 {
   "cash": -2.2737367544323206e-13,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-03T19:15:00+00:00",
+  "last_processed_bar": "2026-10-03T19:30:00+00:00",
   "model": "scalp_patient",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-10-03T19:30:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.012% < 0.200%; engel Bollinger(20) orta bandı 0.24514; stop 1.75% (0.249386), hedef 0.236529 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 0.2493857142857143,
+      "symbol": "ADA-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.23652857142857145
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -79,7 +101,7 @@
       "entry_slippage": 1.2471934013538986,
       "final_target_price": 4.988857142857142,
       "funding": 0.0,
-      "high_water": 4.746,
+      "high_water": 4.748,
       "initial_qty": 532.4198084754861,
       "initial_stop_price": 4.534571428571429,
       "leverage": 1.0,
