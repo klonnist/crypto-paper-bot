@@ -1,12 +1,12 @@
 {
-  "cash": 3974.6439913082686,
+  "cash": 3755.1212879870795,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-03T06:45:00+00:00",
+  "last_processed_bar": "2026-10-03T07:00:00+00:00",
   "model": "vwap_clone",
   "pending_orders": [
     {
       "breakeven_at_r": 1.0,
-      "created_at": "2026-10-03T06:45:00+00:00",
+      "created_at": "2026-10-03T07:00:00+00:00",
       "direction": "long",
       "fraction": 1.0,
       "kind": "open",
@@ -15,86 +15,38 @@
         "fraction": 0.5,
         "r": 1.5
       },
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=2702.37 (300 bar), σ=2.1288; bu bar -11.11σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2.5×0.5σ (2676.22), hedef VWAP mesafesinin %75'i (2696.5); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=-0.2177 | combo_n=51 | pick=exploit",
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=84733.3 (300 bar), σ=41.6591; bu bar -4.40σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (84505.5), hedef VWAP mesafesinin %50'i (84640.2); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp0 | combo_r=-0.499 | combo_n=76 | pick=exploit",
       "sizing": "notional_fraction",
-      "stop_price": 2676.2190004855847,
+      "stop_price": 84505.54093138094,
+      "symbol": "BTC-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 84640.24435314428
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": 1.0,
+      "created_at": "2026-10-03T07:00:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": 0.5,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=2702.36 (300 bar), σ=2.16679; bu bar -10.87σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2.5×0.5σ (2677.07), hedef VWAP mesafesinin %75'i (2696.72); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=-0.2177 | combo_n=51 | pick=exploit",
+      "sizing": "notional_fraction",
+      "stop_price": 2677.071512060081,
       "symbol": "ETH-USDT-SWAP",
       "take_profits": [
         {
           "fraction": 1.0,
-          "price": 2696.4970338569483
-        }
-      ],
-      "trail_giveback_pct": 0.5,
-      "trailing_atr": null
-    },
-    {
-      "breakeven_at_r": 1.0,
-      "created_at": "2026-10-03T06:45:00+00:00",
-      "direction": "long",
-      "fraction": 1.0,
-      "kind": "open",
-      "notional_fraction": 0.5,
-      "partial_tp": {
-        "fraction": 0.5,
-        "r": 1.5
-      },
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=0.747418 (300 bar), σ=0.0029395; bu bar -18.81σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2.5×0.5σ (0.688626), hedef VWAP mesafesinin %75'i (0.733638); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=0.3741 | combo_n=38 | pick=exploit",
-      "sizing": "notional_fraction",
-      "stop_price": 0.6886256294087579,
-      "symbol": "ETHFI-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 0.7336384949346494
-        }
-      ],
-      "trail_giveback_pct": 0.5,
-      "trailing_atr": null
-    },
-    {
-      "breakeven_at_r": 1.0,
-      "created_at": "2026-10-03T06:45:00+00:00",
-      "direction": "long",
-      "fraction": 1.0,
-      "kind": "open",
-      "notional_fraction": 0.5,
-      "partial_tp": {
-        "fraction": 0.5,
-        "r": 1.5
-      },
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=0.00961855 (300 bar), σ=3.16906e-05; bu bar -19.88σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2.5×0.5σ (0.00894639), hedef VWAP mesafesinin %75'i (0.00946041); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=0.5249 | combo_n=21 | pick=exploit",
-      "sizing": "notional_fraction",
-      "stop_price": 0.008946386766560671,
-      "symbol": "PENGU-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 0.009460413180513794
-        }
-      ],
-      "trail_giveback_pct": 0.5,
-      "trailing_atr": null
-    },
-    {
-      "breakeven_at_r": 1.0,
-      "created_at": "2026-10-03T06:45:00+00:00",
-      "direction": "long",
-      "fraction": 1.0,
-      "kind": "open",
-      "notional_fraction": 0.5,
-      "partial_tp": {
-        "fraction": 0.5,
-        "r": 1.5
-      },
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=5.05317 (300 bar), σ=0.0247035; bu bar -13.84σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 1.5×0.5σ (4.69847), hedef VWAP mesafesinin %100'i (5.05317); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band0_tp2 | combo_r=-0.4945 | combo_n=58 | pick=explore",
-      "sizing": "notional_fraction",
-      "stop_price": 4.698472398800639,
-      "symbol": "NEAR-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 5.0531719688946115
+          "price": 2696.717681402292
         }
       ],
       "trail_giveback_pct": 0.5,
@@ -169,6 +121,42 @@
         {
           "fraction": 1.0,
           "price": 11.07564283866815
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": 1.0,
+      "direction": "long",
+      "entry_fee": 1.2007706298026244,
+      "entry_price": 2680.21944,
+      "entry_slippage": 1.0910641313910243,
+      "final_target_price": 2696.4970338569483,
+      "funding": 0.0,
+      "high_water": 2680.21944,
+      "initial_qty": 0.8145673799432865,
+      "initial_stop_price": 2676.2190004855847,
+      "leverage": 10.0,
+      "liq_price": 2425.5985931999994,
+      "low_water": 2676.65,
+      "margin": 218.32193269138625,
+      "notes": "",
+      "opened_at": "2026-10-03T07:00:00+00:00",
+      "partial_done": false,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "qty": 0.8145673799432865,
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=2702.37 (300 bar), σ=2.1288; bu bar -11.11σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2.5×0.5σ (2676.22), hedef VWAP mesafesinin %75'i (2696.5); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=-0.2177 | combo_n=51 | pick=exploit",
+      "stop_price": 2676.2190004855847,
+      "stop_rule": "",
+      "symbol": "ETH-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 2696.4970338569483
         }
       ],
       "trail_giveback_pct": 0.5,
