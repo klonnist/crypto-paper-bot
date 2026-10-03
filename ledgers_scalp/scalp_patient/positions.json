@@ -1,60 +1,32 @@
 {
-  "cash": 1915.1892821799818,
+  "cash": 3755.2635725834807,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-03T17:15:00+00:00",
+  "last_processed_bar": "2026-10-03T17:30:00+00:00",
   "model": "scalp_patient",
   "pending_orders": [
     {
       "breakeven_at_r": null,
-      "created_at": "2026-10-03T17:15:00+00:00",
-      "direction": "short",
+      "created_at": "2026-10-03T17:30:00+00:00",
+      "direction": "long",
       "fraction": 1.0,
-      "kind": "exit",
+      "kind": "open",
       "notional_fraction": null,
       "partial_tp": null,
-      "reason": "zaman stop'u: pozisyon 100 bardır açık (100 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
+      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.007% < 0.200%; engel Bollinger(20) orta bandı 0.24497; stop 1.79% (0.241107), hedef 0.254286 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
       "sizing": "risk",
-      "stop_price": null,
-      "symbol": "SOL-USDT-SWAP",
-      "take_profits": [],
+      "stop_price": 0.24110714285714285,
+      "symbol": "ADA-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.2542857142857143
+        }
+      ],
       "trail_giveback_pct": null,
       "trailing_atr": null
     }
   ],
   "positions": [
-    {
-      "breakeven_at_r": null,
-      "direction": "short",
-      "entry_fee": 1.3216274205139398,
-      "entry_price": 119.92001,
-      "entry_slippage": 1.202080513451198,
-      "final_target_price": 111.90142857142857,
-      "funding": 0.29948946070826304,
-      "high_water": 120.39,
-      "initial_qty": 20.038014893335824,
-      "initial_stop_price": 124.01928571428572,
-      "leverage": 1.3078163877070663,
-      "liq_price": 211.01524657018504,
-      "low_water": 117.03,
-      "margin": 1837.382501837263,
-      "notes": "boyut komisyon+marj nakde sığsın diye 0.9993 oranında kırpıldı",
-      "opened_at": "2026-10-02T16:15:00+00:00",
-      "partial_done": false,
-      "partial_tp": null,
-      "qty": 20.038014893335824,
-      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.022% < 0.200%; engel Bollinger(20) orta bandı 121.424; stop 3.37% (124.019), hedef 111.901 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
-      "stop_price": 124.01928571428572,
-      "stop_rule": "",
-      "symbol": "SOL-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 111.90142857142857
-        }
-      ],
-      "trail_giveback_pct": null,
-      "trailing_atr": null
-    },
     {
       "breakeven_at_r": null,
       "direction": "long",
