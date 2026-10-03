@@ -1,18 +1,39 @@
 {
-  "cash": 0.0,
+  "cash": 4700.976390007578,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-03T11:15:00+00:00",
+  "last_processed_bar": "2026-10-03T11:30:00+00:00",
   "model": "scalp_fixed",
   "pending_orders": [
     {
       "breakeven_at_r": null,
-      "created_at": "2026-10-03T11:15:00+00:00",
+      "created_at": "2026-10-03T11:30:00+00:00",
       "direction": "short",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.032% < 0.200%; engel Bollinger(20) orta bandı 13.9555; stop 1.12% (14.0821), hedef 13.6139 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 14.08207142857143,
+      "symbol": "LINK-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 13.61385714285714
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-10-03T11:30:00+00:00",
+      "direction": "long",
       "fraction": 1.0,
       "kind": "exit",
       "notional_fraction": null,
       "partial_tp": null,
-      "reason": "zaman stop'u: pozisyon 16 bardır açık (16 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
+      "reason": "zaman stop'u: pozisyon 17 bardır açık (16 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
       "sizing": "risk",
       "stop_price": null,
       "symbol": "LINK-USDT-SWAP",
@@ -50,39 +71,6 @@
         {
           "fraction": 1.0,
           "price": 14.517714285714286
-        }
-      ],
-      "trail_giveback_pct": null,
-      "trailing_atr": null
-    },
-    {
-      "breakeven_at_r": null,
-      "direction": "short",
-      "entry_fee": 2.5873174520996867,
-      "entry_price": 13.921036,
-      "entry_slippage": 2.35328341634424,
-      "final_target_price": 13.489000000000003,
-      "funding": 0.0,
-      "high_water": 13.945,
-      "initial_qty": 337.9212257817706,
-      "initial_stop_price": 14.149,
-      "leverage": 1.0,
-      "liq_price": 27.77246682,
-      "low_water": 13.898,
-      "margin": 4704.213549272157,
-      "notes": "",
-      "opened_at": "2026-10-03T10:15:00+00:00",
-      "partial_done": false,
-      "partial_tp": null,
-      "qty": 337.9212257817706,
-      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.039% < 0.200%; engel Bollinger(20) orta bandı 13.9885; stop 1.58% (14.149), hedef 13.489 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
-      "stop_price": 14.149,
-      "stop_rule": "",
-      "symbol": "LINK-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 13.489000000000003
         }
       ],
       "trail_giveback_pct": null,
