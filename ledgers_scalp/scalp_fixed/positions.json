@@ -1,9 +1,31 @@
 {
   "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-04T03:00:00+00:00",
+  "last_processed_bar": "2026-10-04T03:15:00+00:00",
   "model": "scalp_fixed",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-10-04T03:15:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "Açılış aralığı kırılımı: ilk 4 bar [0.7191, 0.7262], kapanış 0.7381 üstte (10. bar); hacim 220975 ≥ 1.5× SMA20(113440); engel ölçülü hareket 0.7333 (aralık genişliği 0.0071); stop 3.17% (0.714707), hedef 0.784886 (2.00R), zaman stop'u 16 bar | arm=opening_range_breakout | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 0.7147071428571429,
+      "symbol": "ETHFI-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.7848857142857142
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -51,7 +73,7 @@
       "initial_stop_price": 0.009329214285714284,
       "leverage": 2.319213950146786,
       "liq_price": 0.013094344296467952,
-      "low_water": 0.009157,
+      "low_water": 0.009134,
       "margin": 2077.8942291096114,
       "notes": "boyut komisyon+marj nakde sığsın diye 0.9987 oranında kırpıldı",
       "opened_at": "2026-10-04T02:45:00+00:00",
