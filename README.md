@@ -120,8 +120,9 @@ açık pozisyonlarda sıfır kayıt. Bu yüzden aşağıdaki eksenlerin hepsi be
 Kol tanımları SİLİNMEDİ: `momentum_burst`un ölü olma sebebi ölçüldü ve yazıldı (karar
 34 — `hedef/stop ≥ 1.5` kapısı, `stop = 5×ATR` iken yapısal engelin 7.5×ATR ötede
 olmasını istiyor, `burst` ise tipik olarak 1–2.25×ATR), `funding_spike_fade`in sebebi
-ise **BİLİNMİYOR** — `ScalpModel` `take_survey` uygulamadığı için hangi kapıda elendiği
-hiçbir yere yazılmıyor. Onu öğrenmek açık bir iştir.
+ise **BİLİNMİYOR** — `ScalpModel` artık `take_survey` uygular (karar 52): hangi kapıda
+(stop tabanı / 1.5R / rejim) elendiği tur raporuna düşer, ama kolun KENDİ İÇ kapıları
+(funding serisi, tazelik, taban, çarpan) hâlâ sayılmaz. Onu öğrenmek açık bir iştir.
 
 Modeller birbirinden **tek bir eksende** ayrışır ve her eksen bir soruyu ölçer
 (bkz. [Ölçüm eksenleri](#ölçüm-eksenleri)): `scalp_bandit` kol tahsisini öğrenir,

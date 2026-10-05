@@ -817,3 +817,133 @@ def test_the_buckets_never_change_the_candidates() -> None:
 
     assert [item.symbol for item in candidates] == [item.symbol for item in _candidates(data)]
     assert survey.candidates == len(candidates)
+
+
+# --------------------------------------------------------------------------- #
+# Model 14 — kapı sayımı (`Survey.gates`): adayların ev kapılarındaki akıbeti
+# --------------------------------------------------------------------------- #
+def _gate_candidate(symbol: str, *, atr: float, vwap: float) -> Any:
+    """Giriş 100, long. Stop = 2.5×ATR; hedef = projeksiyon ile VWAP'in YAKIN olanı."""
+    return vwap_signal.VwapCandidate(
+        symbol=symbol,
+        direction="long",
+        entry_price=100.0,
+        atr=atr,
+        vwap=vwap,
+        deviation=1.0,
+        z_prev=-2.5,
+        z_now=-2.0,
+        vwap_bars=20,
+    )
+
+
+def _patched_scan(monkeypatch: pytest.MonkeyPatch, candidates: list[Any]) -> None:
+    counts = {
+        vwap_signal.SETUP: len(candidates),
+        vwap_signal.INSIDE_BAND: 3,
+        vwap_signal.STILL_EXTENDING: 0,
+        vwap_signal.CROSSED: 0,
+        vwap_signal.NO_VWAP: 0,
+    }
+    survey = vwap_signal.Survey(
+        examined=sum(counts.values()),
+        counts=counts,
+        extensions={key: 0 for key in vwap_signal._bucket_keys()},
+        furthest_symbol=None,
+        max_extension=float("nan"),
+    )
+    monkeypatch.setattr(vwap_signal, "scan", lambda *args, **kwargs: (list(candidates), survey))
+
+
+def _gate_fixture() -> list[Any]:
+    return [
+        _gate_candidate("A", atr=0.1, vwap=110.0),    # stop %0.25 < %1        -> stop_tabani
+        _gate_candidate("B", atr=1.0, vwap=100.5),    # VWAP çok yakın, R:R 0.2 -> rr_kapisi
+        _gate_candidate("C", atr=1.0, vwap=110.0),    # R:R 2.0                -> gecti (SEÇİLEN)
+        _gate_candidate("D", atr=1.0, vwap=110.0),    # gecti ama barda tek sinyal: seçilmez
+        _gate_candidate("E", atr=0.1, vwap=110.0),    # seçimden SONRA, stop tabanı
+    ]
+
+
+def test_managed_survey_counts_every_candidate_at_the_gates(
+    config: dict[str, Any], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Seçimden sonraki adaylar da sayılır; seçim eskisi gibi güç sırasındaki İLK geçendir."""
+    _patched_scan(monkeypatch, _gate_fixture())
+    model = VwapManaged(config=config)
+
+    signals = model.generate_signals(_market())
+    survey = model.take_survey()
+
+    assert [signal.symbol for signal in signals] == ["C"]
+    assert survey is not None
+    assert survey["stop_tabani"] == 2      # A ve E (E seçimden sonra)
+    assert survey["rr_kapisi"] == 1        # B
+    assert survey["gecti"] == 2            # C ve D (D barda tek sinyal yüzünden oynanmaz)
+
+
+def test_managed_gate_counts_sum_to_the_candidates(
+    config: dict[str, Any], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Σ gates = counts[kurulum]; mevcut `Σ counts = examined` değişmezi ayrıca korunur."""
+    _patched_scan(monkeypatch, _gate_fixture())
+    model = VwapManaged(config=config)
+    model.generate_signals(_market())
+    survey = model.take_survey()
+
+    assert survey is not None
+    assert survey["stop_tabani"] + survey["rr_kapisi"] + survey["gecti"] == survey["kurulum"]
+    reasons = (
+        vwap_signal.SETUP, vwap_signal.INSIDE_BAND, vwap_signal.STILL_EXTENDING,
+        vwap_signal.CROSSED, vwap_signal.NO_VWAP,
+    )
+    assert sum(survey[reason] for reason in reasons) == 5 + 3   # kapılar ÜSTÜNE eklenmedi
+
+
+def test_managed_gate_keys_are_present_with_zeros_when_nothing_is_a_setup(
+    config: dict[str, Any], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _patched_scan(monkeypatch, [])
+    model = VwapManaged(config=config)
+
+    assert model.generate_signals(_market()) == []
+    survey = model.take_survey()
+
+    assert survey is not None
+    assert [survey[key] for key in vwap_signal.GATE_KEYS] == [0, 0, 0]
+
+
+def test_managed_rejection_logs_stop_at_the_chosen_candidate(
+    config: dict[str, Any], monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
+) -> None:
+    """Eleme logları eski davranışla AYNI: yalnızca seçilene kadar. Sonrası sayılır, loglanmaz."""
+    _patched_scan(monkeypatch, _gate_fixture())
+    model = VwapManaged(config=config)
+
+    with caplog.at_level("INFO", logger="strategies.vwap_managed"):
+        model.generate_signals(_market())
+
+    skipped = [record.getMessage() for record in caplog.records if "kurulum atlandı" in record.getMessage()]
+    assert len(skipped) == 2
+    assert "vwap_managed A:" in skipped[0] and "stop mesafesi" in skipped[0]
+    assert "vwap_managed B:" in skipped[1] and "hedef/stop" in skipped[1]
+
+
+def test_the_scan_alone_carries_no_gate_counts() -> None:
+    """Kapılar modelin kuralıdır: `scan` doldurmaz, rapor yalnızca model ekleyince büyür."""
+    _, survey = vwap_signal.scan(_market(), atr_period=14, band_mult=2.0, min_vwap_bars=8)
+
+    assert survey.gates == {}
+    assert not set(vwap_signal.GATE_KEYS) & set(survey.report())
+
+
+def test_gate_counting_never_changes_the_chosen_signal(config: dict[str, Any]) -> None:
+    """Gerçek taramada da seçilen sinyal, kapıdan geçen en güçlü adaydır (sayım bunu değiştirmez)."""
+    data = _market()
+    model = VwapManaged(config=config)
+
+    signals = model.generate_signals(data)
+    survey = model.take_survey()
+
+    assert [signal.symbol for signal in signals] == [SYMBOL]
+    assert survey is not None and survey["gecti"] == 1

@@ -4092,3 +4092,145 @@ kısıt bir sayfa boyu değil, uç noktanın tuttuğu **~3 aylık kayan penceren
 hesaplanmıştı — yani ölçülmemiş bir mekanizma, ölçülmüş bir sayıdan türetilmişti. Doğru
 yol karar 50'nin yaptığıdır: soruyu soran ayrı bir probe yazmak ve ön-kaydını koşudan önce
 commit etmek. Bir araç kendi teşhisini üretemez; teşhis de ölçülür.
+
+---
+
+## 52. Dışarıdan gelen 13 bulgunun doğrulanması (P0) ve denetim izi turu (P1)
+
+**Bağlam.** 2026-10-05'te `vwap_managed` (model 14) ve `scalp_patient` (model 16) için bir
+iyileştirme paketi önerildi; öneri canlı defterden (2026-09-20 → 2026-10-05) ve git
+geçmişinden türetilmiş 13 bulguya dayanıyordu (V1–V7, S1–S6; her biri aşağıdaki tabloda). Kural: **ön-kayıt commit'lenmeden hiçbir getiri/R sayısına
+dayanılarak model kurulmaz** (§7) ve önerilen her paket bu belgelerin kurallarına uymak
+zorundadır. Bu karar iki şeyi kaydeder: (a) bulguların bağımsız olarak yeniden üretilmesi,
+(b) hiçbir modelin davranışına dokunmayan ilk paket (denetim izi). Model kurulumu (P4) ve
+motor kuralları (P3) bu kararın KONUSU DEĞİLDİR; P3 için karar taslağı AYRI yazılır ve
+onaya bağlıdır.
+
+### Yöntem
+
+- **Defter:** `ledgers_scalp/*/trades.csv` + `positions.json`, `core/metrics.py::merge_fills`
+  ile pozisyon birimine indirgenmiş ve `r_multiple` ile okunmuştur (kural 7: ikinci bir R
+  tanımı yok). Pencere `2026-09-20T12:15Z → 2026-10-05T19:15Z`, **1468 tur / 1469 bar**
+  (`docs/data/metrics_scalp.json`ın git geçmişindeki her sürümünden `round.models[]` okundu,
+  `dry_run` turları hariç).
+- **MFE (V4)** defterde yoktur: OKX'in herkese açık 15m mumlarından (yalnız kapanmış barlar)
+  hesaplandı; birim ilk stop mesafesi (`|giriş − ilk stop|`), pencere dolum barının
+  açılışından çıkış dolumunun barına kadar. Bu tek sayı ölçümün parçası DEĞİL bir yol
+  istatistiğidir (`scripts/diagnose_ema_exits.py` ile aynı statü) ve defterden yeniden
+  üretilemez.
+- Sayımlar öneriyi yazanın anlık görüntüsünden **2 bar daha yeni** veriyle alındı; bu yüzden
+  birkaç sayı 1–2 birim farklıdır ve aşağıda belirtilmiştir.
+
+### P0 tablosu
+
+| # | Bulgu (önerideki) | Sonuç | Yeniden üretilen değer |
+|---|---|---|---|
+| V1 | vwap_managed n=25, ort. +0.19R, GA [−0.11, +0.48], market_r +0.11 | **tuttu** | n=25, +0.1908R, GA [−0.106, +0.478] (rapor), market_r +0.109 (ölçülen 25). Önceki pencereler karar 37 (−0.30, n=25) ve karar 30 (+0.07, n=15, IS) ile eşleşiyor |
+| V2 | survey toplamı: z_ge_2_0=611, kurulum=457, donus_yok=140, vwap_gecildi=14; bant dışı barların %75'i "dönüş"; 0.01σ'lık geri adım yetiyor (`signal.py:306-313`) | **tuttu** (+2 bar) | z_ge_2_0=613, kurulum=459, donus_yok=140, vwap_gecildi=14: **459+140+14 = 613 tam** (bant dışı sembol-bar = kurulum ∪ donus_yok ∪ vwap_gecildi), kurulum/bant dışı = %74.9. Kural bugünkü dosyada `signal.py:324-328`'dedir (`0 < z_now < z_prev` / `z_prev < z_now < 0`): **herhangi bir azalma yeter**; canlı 25 pozisyonun en küçük geri adımı gerçekten 0.01σ'dır (dağılım 0.01 … 0.64σ, medyan ≈0.15σ) |
+| V3 | kapanışı bandın içine dönmüş (\|z_now\| < band_mult) 13 pozisyon +0.46R; hâlâ dışında 12 pozisyon −0.10R; tek yönlü permütasyon p≈0.03 — POST-HOC | **tuttu** | 13 → +0.461R; 12 → −0.103R; fark +0.564R; tek yönlü permütasyon (200 bin) **p = 0.029**. **Bu bir hipotez kaynağıdır, kanıt değil:** bölme sonuç görüldükten sonra seçildi ve §6c'nin paydasını büyütür |
+| V4 | 25 çıkışın 17'si zaman stop'u (ort. +0.29R); MFE ort. 0.71R, hedef ort. 1.70R | **tuttu** | zaman stop'u 17 (+0.293R); MFE ort. **0.707R**; dolumdaki hedef ort. **1.704R**. Çıkış dağılımı: zaman stop'u 17, ilk stop 4 (−1.075R), breakeven stop 1 (−0.161R), kısmi sonrası stop 2 (+1.386R), tp 1 (+1.48R) |
+| V5 | 35 sinyalin 9'u `duplicate_position` ile reddedildi | **tuttu** | 35 sinyal, 9 `duplicate_position`; başka ret yok |
+| V6 | dolumdan sonra 24 pozisyonun 5'inde gerçek R:R 1.45–1.49; `partial_tp.r` (1.5) = `min_reward_risk` (1.5), hedef ≤ 2.0R → üç aşama dejenere, takip hiç çalışmadı | **tuttu** (payda 25) | **5/25** pozisyonda dolumdaki R:R < 1.5 (1.445, 1.449, 1.464, 1.478, 1.492); ort. 1.674. Config: `exit_management.partial_tp.r = 1.5`, `scalp.min_reward_risk = 1.5`, `vwap.managed.target_reward_risk = 2.0`. `giveback` ile kapanan pozisyon **0** (kısmi tetiklenen 2, breakeven tetiklenen 1) |
+| V7 | kurulumlar 01–23 UTC'nin her saatinde var, sinyaller yalnız 11–22 UTC | **tuttu** | tek barlık turlardan: kurulum saat 1–23'te var (saat 0'da yok: `min_vwap_bars` gün çapası); 35 sinyalin **tamamı 11–22 UTC** |
+| S1 | scalp_patient n=80, ort. −0.28R, GA [−0.48, −0.08]; brüt sürüklenme −%0.61, maliyet %0.23; scalp_fixed OOS'u tekrarladı | **tuttu** | n=80, −0.2798R, GA [−0.481, −0.079]; brüt **−%0.605**/pozisyon, maliyet **%0.230**/pozisyon (karar 35'in özdeşliğiyle −%0.586: ortalamaların oranı ↔ oranların ortalaması farkı); scalp_fixed n=198, **−0.1546R** (OOS: −0.15) |
+| S2 | 80/80 R:R tam 2.00; rsi2_reversal'ın 71/71'inde Bollinger orta bandı girişin GERİSİNDE | **tuttu** | 80/80 `2.00R`; kollar: rsi2 71, orb 8, vwap_pullback 1; rsi2 için orta bant **71/71** girişin gerisinde (sinyal kapanışı = (2·stop + hedef)/3). Karar 34'ün öngörüsü canlıda %100 |
+| S3 | 455 sinyal → 84 pozisyon; retler: max_positions 132, zero_size 90, duplicate_position 132, max_short_positions 17; scalp_fixed aynı 455'ten 201 | **tuttu** | 455 → **84** (80 kapanmış + 4 açık); retler birebir aynı (132/90/132/17); **muhasebe kapanıyor: 371 ret + 84 = 455**. scalp_fixed 455 → **201** (198 + 3 açık), retler duplicate 130, max_positions 7, zero_size 96, max_short 21 (254 + 201 = 455) |
+| S4 | `size_position`: notional > free_cash olunca margin = free_cash'in TAMAMI; karar 17'nin "~1 pozisyon" notu %1 stop varsayımına dayanıyor; bugün stoplar ~%3 | **tuttu** (koddan) | `core/portfolio.py::size_position`: `leverage = notional/free_cash` → `margin = min(notional/leverage, free_cash) = free_cash`. Ortalama stop: fixed %2.80, **patient %3.21**, vwap_managed %3.01 (karar 17'nin varsaydığı %1 değil). Kısıt tutuşa göre farklı bağlıyor: fixed (16 bar) `duplicate`/`zero_size`, patient (100 bar) `max_positions` (132 ↔ 7) |
+| S5 | patient'ın 33/80'i, fixed'in 36/198'i aynı sembolde ters yönlü açık pozisyonla çakıştı; `Account.find` yalnız aynı YÖNE bakıyor | **tuttu** (patient +1) | tutuş aralığı çakışması (aynı model, aynı sembol, ters yön, aralıklar kesişiyor): **patient 34/80, fixed 36/198**. Daha dar tanımla (giriş anında karşı yönde açık pozisyon var) 19/80 ve 18/198. `core/portfolio.py::Account.find` yalnız `(sembol, yön)`e bakar: karşı yön engellenmez |
+| S6 | eşleşen 56 sinyalde patient −0.18R, fixed −0.11R; ΔR GA [−0.28, +0.15] | **tuttu** | n=56; −0.182 ↔ −0.112; **ΔR −0.070, GA [−0.280, +0.138]** (`scripts/paired_axis.py`). Ek: **ρ = +0.49, gerçekleşen sd(ΔR) = 0.85, MDE ±0.32R** — §6e'nin beklentisinin (ρ 0.8, MDE 0.13R) çok altında; yani bu çift bu örneklemde yalnız ≥0.32R'lik farkı ayırt edebilir |
+
+**Sonuç: 13 bulgunun 13'ü tuttu; hiçbir paket atlanmadı.** İki ek not: (1) V3 post-hoc
+bir bölmedir ve P2'nin birincil tahmini olamaz (sonuç görüldükten sonra seçilmiş bir eşik);
+(2) S6'nın MDE'si ±0.32R'dir — **eşleştirme güç sorununu bu çiftte çözmüyor**, çünkü iki
+modelin R'leri beklenenden çok daha az ilişkili (ρ=0.49; patient'ın 100 barlık tutuşu
+kota ve nakdi başka zamanlarda serbest bırakıyor ve pozisyon kümeleri ayrışıyor: 56 ortak
+↔ 24 yalnız patient ↔ 140 yalnız fixed).
+
+### P1 — Denetim izi (hiçbir modelin davranışı değişmez)
+
+**a) `ScalpModel.take_survey` (karar 48'in açık işi, karar 34'ün dersi).** Her barda KOL ×
+SEBEP sayımı, tur raporuna `round.models[].survey` altında düşer. Anahtar şeması **SABİTTİR**
+(`<kol>:<sebep>`, sıfırlar dâhil; 5 kol × 7 anahtar = 35): `kurulum_yok` (kol o sembolde
+kurulum görmedi), `stop_tabani`, `rr_kapisi`, `rejim` (ev kapılarından geçip
+`regime_filter`da elenen) ve `gecti`; ayrıca kapıdan geçenler için `engel_onde` (hedef =
+kolun yapısal engeli) ↔ `engel_geride_veya_uzak` (hedef = projeksiyon). Değişmezler: her
+kolda ilk beş sebebin toplamı incelenen sembol sayısıdır; son ikisinin toplamı `gecti`dir.
+Sabit şemanın sebebi karar 48'in kendisidir: raporda bulunmayan bir anahtar "sıfır" ile
+"ölçülmedi"yi aynı hücreye yazar.
+
+- **Kapı koşulunun TEK tanımı `_gate_reason`dır** (`_gated` ve sayım ikisi de ondan okur):
+  iki ayrı koşul, sayımın kapının gerçekte ne yaptığından sessizce ayrışması demekti.
+- **Davranış değişmez ve bu bir testtir:**
+  `tests/test_scalp_survey.py::test_the_survey_never_changes_the_signals_or_the_draw` sayım
+  kapalı/açık iki modelin sinyal dizisini VE çekiliş sonrası RNG durumunu karşılaştırır
+  (`_tally` saf hesaplarla, çekilişten ÖNCE yapılır ve `rng`ye dokunmaz).
+- **Yeni override noktası EKLENMEDİ.** `take_survey` bir `Strategy` sözleşme kancasıdır
+  (kural 15 statüsü), `ScalpModel`in ölçülen bir eksene karşılık gelmesi gereken override
+  noktalarından biri değil. `scalp_vol`un kendi `take_survey`i (rejim sayımı) onu gölgeler;
+  o model katmanda koşmuyor ve davranışı değişmedi (`_survey` adı çakışmasın diye yeni
+  sayım `_arm_survey`da tutulur).
+- **Kalan açık iş:** kolun KENDİ İÇ kapıları (funding serisinin varlığı,
+  `FUNDING_FRESH_HOURS`, `FUNDING_SPIKE_FLOOR`, `FUNDING_SPIKE_MULTIPLE`, VWAP) hâlâ sayılmaz.
+  `funding_spike_fade:kurulum_yok` yalnızca "kol kurulum üretmedi" der; ev kapılarında (stop
+  tabanı/1.5R) elenip elenmediğini ise artık ayırt eder. 5. kolun sebebi bu yüzden henüz TAM
+  bilinmiyor — kapatmak kol içi sayım ister ve ayrı bir karardır (arms.py'nin kol
+  imzalarını değiştirir).
+
+**b) `vwap_managed` survey'ine kapı elemeleri.** `Survey.gates` (`stop_tabani` / `rr_kapisi`
+/ `gecti`) adayların ev kapılarındaki akıbetini sayar. `counts`taki `Σ = examined` değişmezi
+**bozulmaz**: sayım ayrı bir alanda durur (`Survey.extensions`ın ayrılma gerekçesiyle aynı —
+`counts` sembolleri, `gates` adayları sayar; tek sözlükte iki ayrı birim olurdu) ve
+`Σ gates = counts[kurulum]`dur. Sayım **tüm adaylar** üzerindedir (ilk geçenden sonrakiler de
+sayılır), seçim ise eskisi gibi güç sırasındaki ilk geçen adaydır; **eleme logları eski
+davranışla aynı** (yalnızca seçilene kadar). Kapının tek tanımı `VwapManaged._gate_reason`
+(saf, loglamaz) olup `_passes_gates` onun yerine geçti; `scripts/measure_vwap_signal.py` ve
+CLAUDE.md'deki o ada yapılan göndermeler güncellendi. "Barda tek sinyal" yüzünden kaybolan
+geçen adayların sayısı `gecti − (1 eğer gecti > 0)` ile okunur — P3c'nin ölçümü için ayrı
+anahtar gerekmedi.
+
+**c) `scripts/paired_axis.py`.** Salt okunur eşleştirilmiş eksen aracı; **yeni R tanımı
+yoktur**: R `merge_fills` + `r_multiple`ten, aralık `bootstrap_mean_ci`dan gelir (çiftleri
+birlikte yeniden örneklemek farkların ortalamasını yeniden örneklemekle özdeştir; §6e'nin
+"hesap `core/metrics.py`ye girer" şartı bu yüzden yeni bir yordam gerektirmedi). Eşleşme
+kimliği `(symbol, direction, opened_at)`. Kesişimin dışı `yalnız A/B`, `bekleyen` (bir
+tarafta kapalı, ötekinde açık — "yalnız"a katmak örnek seçimini kaydırırdı) ve `ölçülemeyen`
+olarak ayrı sayılır. §6e "Üç şart" 1 gereği gerçekleşen `ρ`, `sd(ΔR)` ve ondan hesaplanan MDE
+sonucun yanına yazılır. Testi: `tests/test_paired_axis.py`.
+
+**d) Bu karar.** Yukarıdaki P0 tablosu ve aşağıdaki karar 17 düzeltme notu.
+
+### Neye DOKUNULMADI
+
+`vwap_managed`, `scalp_patient`, `scalp_fixed`, `vwap_clone`'un sinyal/kapı/çıkış
+davranışı ve config değerleri; `ledgers*/`, `docs/data/`; `core/`. Backtest koşulmadı,
+hiçbir getiri/R sayısı bir model kararına dayanak yapılmadı (P0'daki sayılar DOĞRULAMADIR,
+yeni bir hipotezin dayanağı değildir).
+
+---
+
+## 17-DÜZELTME (2026-10-05): "nakit, eşzamanlı pozisyon sayısını ~1'e indiriyor" notunun premise'i eskidi
+
+Karar 17'nin "Bilinen sınır" bölümü şunu yazar: `notional = risk / stop%` = `100 / 0.01` =
+**$10.000**, yani başlangıç sermayesinin tamamı; bir pozisyon açıldığında serbest nakit
+tükenir, scalp modelleri pratikte `max_positions` kotasına ulaşmaz ve aynı anda ~1 pozisyon
+taşır. Notun sonucu ("ölçümü bozmuyor, iki model aynı kısıtı görüyor") bugün de savunulabilir
+ama **dayandığı sayı artık yanlıştır**:
+
+| | karar 17'nin varsayımı | canlıda ölçülen (2026-09-20 → 10-05) |
+|---|---|---|
+| stop mesafesi | %1 (`min_stop_pct` tabanı) | fixed **%2.80**, patient **%3.21**, vwap_managed **%3.01** |
+| notional (risk $100) | $10.000 = tüm sermaye | ≈ **$3.1–3.6k** → nakitten **~3 pozisyon** sığar |
+| bağlayan kısıt | nakit (`zero_size`) | **tutuşa göre değişir:** fixed (16 bar) `duplicate_position` 130, `zero_size` 96, `max_positions` 7; patient (100 bar) `max_positions` **132**, `duplicate_position` 132, `zero_size` 90 |
+
+Yani "~1 eşzamanlı pozisyon" artık geçerli değil; kısıt, modelin tutuş süresine göre farklı
+bir yerde bağlıyor ve bu, `scalp_fixed ↔ scalp_patient` eksenine ÖLÇÜLMEYEN bir değişken
+sokuyor: iki modelin pozisyon kümeleri ayrışıyor (56 ortak, 24 yalnız patient, 140 yalnız
+fixed — `scripts/paired_axis.py`). Bu bir **ölçüm kısıtı bulgusudur, kural değişikliği
+DEĞİLDİR**: kural 11 değişmedi, hiçbir sayı düzeltilmedi, hiçbir model davranışı oynamadı.
+Karar 17'nin gövdesi düzenlenmedi (karar 42: eski kararlar düzenlenmez).
+
+İlişkili mekanizma (kod okumasından, S4): `core/portfolio.py::size_position` notional
+serbest nakdi aşınca `margin = free_cash`in tamamıdır — yani nakdi aşan ilk pozisyon kasayı
+sıfırlar ve sonraki sinyaller `zero_size` ile reddedilir. Bu kuralın değiştirilip
+değiştirilmeyeceği **P3b'nin konusudur** ve defter kuralını tarihli olarak böleceği için
+ayrı bir karar taslağı ve onay ister (karar 25/42); bu notun kapsamı değil.

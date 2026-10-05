@@ -17,7 +17,7 @@ frekans düğmesi olmadığı buradan gelir. Payda ise doğrudan `atr_multiple`d
 
 **Neden kendi z hesabını yazmıyor.** `core.indicators` (anchored_vwap, average_true_range,
 bars_until) doğrudan çağrılır ve bant/dönüş karşılaştırmaları `signal.py::_evaluate`in,
-kapılar ise `vwap_managed.py::_passes_gates`in birebir aynısıdır. `--verify` bunu rastgele
+kapılar ise `vwap_managed.py::_gate_reason`in birebir aynısıdır. `--verify` bunu rastgele
 barlarda `vwap_signal.scan()` ile karşılaştırıp KANITLAR: iki yol aynı adayları vermezse
 script hata koduyla biter. Bir ölçüm aracının kendi doğruluğu iddia edilmez, gösterilir.
 
@@ -188,7 +188,7 @@ def geometry_of(
     min_stop_pct: float,
     min_reward_risk: float,
 ) -> Geometry:
-    """MODELİN kapıları (`vwap_managed.py::_passes_gates`), aynı sırayla.
+    """MODELİN kapıları (`vwap_managed.py::_gate_reason`), aynı sırayla.
 
     Sıra önemlidir: stop tabanı önce bakılır, R kapısı sonra. Tersine çevirmek "hangi kapı
     eledi" sorusunun cevabını değiştirirdi ve modelin log'larıyla ayrışırdı.
@@ -423,7 +423,7 @@ def verify(
     """Hızlı yolun `vwap_signal.scan()` ile AYNI adayları verdiğini KANITLAR.
 
     Kanıtlanan şey aday kümesidir: kapılar `scan`de yoktur, onlar modelin tarafındadır ve
-    `geometry_of` zaten `_passes_gates`in aynısıdır (aynı sıra, aynı eşikler).
+    `geometry_of` zaten `_gate_reason`in aynısıdır (aynı sıra, aynı eşikler).
     """
     stamps = sorted({p.as_of for p in points})
     if not stamps:

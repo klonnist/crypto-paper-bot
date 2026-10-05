@@ -53,7 +53,7 @@ from __future__ import annotations
 
 import logging
 import math
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Collection, Mapping, Sequence
 
 from core.indicators import anchored_vwap
@@ -121,6 +121,15 @@ SETUP = "kurulum"                # aday
 # — bu yüzden eleme sayımıyla aynı sözlükte tutulmazlar (bkz. `Survey.counts`/`report`).
 EXTENSION_BUCKETS: tuple[float, ...] = (1.0, 1.5, 2.0, 2.5)
 
+# Kurulum (SETUP) olan adayların EV KAPILARINDAKİ akıbeti — `Survey.gates`. Sebepler AYRIKTIR
+# ve toplamları `counts[SETUP]`tur (kapıdan geçen aday da sayılır, barda tek sinyal kuralı
+# yüzünden yalnızca birinin sinyale dönüşmesi bu sayıyı ETKİLEMEZ). Kapıların kendisi modelde
+# (`strategies/vwap_managed.py::_gate_reason`) durur; bu modül yalnızca anahtarları tanımlar.
+GATE_STOP_FLOOR = "stop_tabani"
+GATE_REWARD_RISK = "rr_kapisi"
+GATE_PASSED = "gecti"
+GATE_KEYS: tuple[str, ...] = (GATE_STOP_FLOOR, GATE_REWARD_RISK, GATE_PASSED)
+
 
 @dataclass(frozen=True, kw_only=True)
 class Survey:
@@ -137,6 +146,11 @@ class Survey:
     extensions: Mapping[str, int]      # z_ge_* -> sembol; kümülatif, ÜST ÜSTE BİNER
     furthest_symbol: str | None
     max_extension: float   # görülen en büyük |z_prev|; nan = hiç ölçülemedi
+    # Adayların ev kapılarındaki akıbeti (GATE_KEYS); Σ = counts[SETUP]. `scan` doldurmaz
+    # (kapılar modelin kuralıdır, bu modülün değil): model `dataclasses.replace` ile ekler.
+    # Boş = kapı sayımı yapılmadı. `counts`tan AYRI durur, çünkü `Σ counts == examined`
+    # değişmezi sembolleri sayar, bu ise adayları — aynı sözlükte iki ayrı birim olurdu.
+    gates: Mapping[str, int] = field(default_factory=dict)
 
     @property
     def candidates(self) -> int:
@@ -150,7 +164,7 @@ class Survey:
         ve üst üste biner. Aynı alanda saklamak o değişmezi sessizce yok ederdi; ayrı
         raporlamak ise okuyanı iki sözlüğü elle birleştirmeye zorlardı.
         """
-        return {**self.counts, **self.extensions}
+        return {**self.counts, **self.extensions, **self.gates}
 
     def describe(self) -> str:
         reasons = " ".join(
