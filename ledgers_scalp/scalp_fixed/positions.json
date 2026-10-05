@@ -1,9 +1,31 @@
 {
   "cash": 1527.2695738136495,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-05T04:00:00+00:00",
+  "last_processed_bar": "2026-10-05T04:15:00+00:00",
   "model": "scalp_fixed",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-10-05T04:15:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.142% < 0.200%; engel Bollinger(20) orta bandı 121.093; stop 1.80% (122.675), hedef 116.15 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 122.675,
+      "symbol": "SOL-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 116.15
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -18,7 +40,7 @@
       "initial_stop_price": 787.1071428571429,
       "leverage": 5.0,
       "liq_price": 641.5030912499999,
-      "low_water": 790.2,
+      "low_water": 789.6,
       "margin": 0.22785532522487134,
       "notes": "boyut leverage_cap=5 nedeniyle 0.0002 oranında kırpıldı (gereken kaldıraç 27178.14); boyut komisyon+marj nakde sığsın diye 0.9973 oranında kırpıldı",
       "opened_at": "2026-10-05T01:00:00+00:00",
@@ -84,7 +106,7 @@
       "initial_stop_price": 1.1992071428571427,
       "leverage": 1.0,
       "liq_price": 0.006241118999999795,
-      "low_water": 1.2249,
+      "low_water": 1.2217,
       "margin": 1936.5146692297321,
       "notes": "",
       "opened_at": "2026-10-05T02:15:00+00:00",
@@ -117,7 +139,7 @@
       "initial_stop_price": 0.25475000000000003,
       "leverage": 1.0,
       "liq_price": 0.0013536764999999562,
-      "low_water": 0.2668,
+      "low_water": 0.2652,
       "margin": 1286.6548033954937,
       "notes": "",
       "opened_at": "2026-10-05T03:45:00+00:00",
