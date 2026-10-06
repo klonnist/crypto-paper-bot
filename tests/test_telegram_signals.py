@@ -33,7 +33,7 @@ BAR = timedelta(minutes=15)
 # --------------------------------------------------------------------------- #
 def _signal(
     *,
-    model: str = "scalp_patient",
+    model: str = "vwap_managed",
     symbol: str = "BTC-USDT-SWAP",
     direction: str = "long",
     bar: datetime = AS_OF,
@@ -138,7 +138,7 @@ def test_new_signal_on_the_last_bar_is_notified(tmp_path: Path, telegram: _FakeR
 
     assert code == 0
     (message,) = _messages(telegram)
-    assert "scalp_patient" in message and "rsi2_reversal" in message
+    assert "vwap_managed" in message and "rsi2_reversal" in message
     assert "BTC-USDT-SWAP" in message and "LONG" in message
     assert "2026-09-14 07:45" in message          # sinyalin üretildiği bar
     assert "64123.5" in message                   # o barın kapanışı
@@ -170,22 +170,31 @@ def test_a_round_without_signals_sends_nothing(tmp_path: Path, telegram: _FakeRe
 # Filtre 0: yalnızca NOTIFY_MODELS'teki modeller (kullanıcı tercihi)
 # --------------------------------------------------------------------------- #
 def test_only_notify_models_are_sent(tmp_path: Path, telegram: _FakeRequests) -> None:
-    """Diğer scalp modelleri (scalp_fixed, scalp_bandit, vwap_clone, vwap_managed) deftere
-    yazılır ve ölçüme girer, ama yalnızca NOTIFY_MODELS'teki model Telegram'a düşer."""
+    """Yalnızca `vwap_managed` ve `vwap_reentry` Telegram'a düşer (kullanıcı tercihi); diğer
+    scalp modelleri (scalp_fixed, scalp_patient, vwap_clone) deftere yazılır ve ölçüme girer."""
     signals = [
         _signal(model="scalp_fixed", symbol="ETH-USDT-SWAP"),
-        _signal(model="vwap_managed", symbol="SOL-USDT-SWAP"),
-        _signal(model="scalp_patient", symbol="BTC-USDT-SWAP"),
+        _signal(model="scalp_patient", symbol="SOL-USDT-SWAP"),
+        _signal(model="vwap_clone", symbol="XRP-USDT-SWAP"),
+        _signal(model="vwap_managed", symbol="BTC-USDT-SWAP"),
+        _signal(model="vwap_reentry", symbol="ADA-USDT-SWAP"),
     ]
     _run(tmp_path, _payload(signals))
 
-    (message,) = _messages(telegram)
-    assert "BTC-USDT-SWAP" in message
-    assert "ETH-USDT-SWAP" not in message and "SOL-USDT-SWAP" not in message
+    text = " ".join(_messages(telegram))
+    assert "BTC-USDT-SWAP" in text and "ADA-USDT-SWAP" in text
+    for other in ("ETH-USDT-SWAP", "SOL-USDT-SWAP", "XRP-USDT-SWAP"):
+        assert other not in text
+
+
+def test_the_notify_set_is_exactly_the_two_vwap_models() -> None:
+    from scripts import telegram_signals
+
+    assert telegram_signals.NOTIFY_MODELS == frozenset({"vwap_managed", "vwap_reentry"})
 
 
 def test_no_notify_model_signals_means_no_message(tmp_path: Path, telegram: _FakeRequests) -> None:
-    code, _ = _run(tmp_path, _payload([_signal(model="scalp_fixed")]))
+    code, _ = _run(tmp_path, _payload([_signal(model="scalp_patient")]))
 
     assert code == 0
     assert telegram.calls == []
@@ -223,7 +232,7 @@ def test_unreadable_as_of_sends_nothing(tmp_path: Path, telegram: _FakeRequests)
 # Filtre 2: aynı (model, sembol, yön) için 4 bar susturma
 # --------------------------------------------------------------------------- #
 def test_same_setup_within_four_bars_is_suppressed(tmp_path: Path, telegram: _FakeRequests) -> None:
-    state = {"scalp_patient|BTC-USDT-SWAP|long": (AS_OF - 2 * BAR).isoformat()}
+    state = {"vwap_managed|BTC-USDT-SWAP|long": (AS_OF - 2 * BAR).isoformat()}
     code, _ = _run(tmp_path, _payload([_signal()]), state=state)
 
     assert code == 0
@@ -231,7 +240,7 @@ def test_same_setup_within_four_bars_is_suppressed(tmp_path: Path, telegram: _Fa
 
 
 def test_same_setup_after_four_bars_is_notified_again(tmp_path: Path, telegram: _FakeRequests) -> None:
-    state = {"scalp_patient|BTC-USDT-SWAP|long": (AS_OF - 4 * BAR).isoformat()}
+    state = {"vwap_managed|BTC-USDT-SWAP|long": (AS_OF - 4 * BAR).isoformat()}
     _run(tmp_path, _payload([_signal()]), state=state)
 
     assert len(telegram.calls) == 1
@@ -246,7 +255,7 @@ def test_suppression_is_scoped_to_model_symbol_and_direction(
     test_only_notify_models_are_sent) — susturma penceresinin kapsamını burada
     ayrıca sınamaya gerek yok, o modelin sinyali zaten filtrede elenir.
     """
-    state = {"scalp_patient|BTC-USDT-SWAP|long": (AS_OF - BAR).isoformat()}
+    state = {"vwap_managed|BTC-USDT-SWAP|long": (AS_OF - BAR).isoformat()}
     signals = [
         _signal(),                                    # susturulur
         _signal(direction="short"),                   # ters yön
@@ -263,7 +272,7 @@ def test_notified_signals_are_written_to_the_state_file(tmp_path: Path, telegram
     _, state_path = _run(tmp_path, _payload([_signal()]))
 
     sent = json.loads(state_path.read_text(encoding="utf-8"))["sent"]
-    assert sent["scalp_patient|BTC-USDT-SWAP|long"] == AS_OF.isoformat()
+    assert sent["vwap_managed|BTC-USDT-SWAP|long"] == AS_OF.isoformat()
 
 
 def test_state_is_not_written_when_nothing_was_sent(tmp_path: Path, telegram: _FakeRequests) -> None:
@@ -490,6 +499,6 @@ def test_only_the_signals_whose_message_was_sent_are_recorded(
 
     assert code == 0
     sent = json.loads(state_path.read_text(encoding="utf-8"))["sent"]
-    assert "scalp_patient|SYM0-USDT-SWAP|long" in sent
-    assert "scalp_patient|SYM2-USDT-SWAP|long" in sent
-    assert "scalp_patient|SYM1-USDT-SWAP|long" not in sent
+    assert "vwap_managed|SYM0-USDT-SWAP|long" in sent
+    assert "vwap_managed|SYM2-USDT-SWAP|long" in sent
+    assert "vwap_managed|SYM1-USDT-SWAP|long" not in sent

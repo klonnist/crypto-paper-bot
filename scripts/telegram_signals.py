@@ -70,9 +70,10 @@ MAX_REPORT_AGE_MINUTES = 30.0
 DEDUPE_BARS = 4
 # Bu sayıdan fazla sinyal varsa tek toplu mesaj.
 MAX_SINGLE_MESSAGES = 5
-# Yalnızca bu modellerin sinyalleri bildirilir (kullanıcı tercihi — diğer scalp
-# modelleri de deftere yazılır ve ölçüme girer, sadece Telegram'a düşmezler).
-NOTIFY_MODELS = frozenset({"scalp_patient"})
+# Yalnızca bu modellerin sinyalleri bildirilir (kullanıcı tercihi, 2026-10-06: vwap_managed ve
+# vwap_reentry — diğer scalp modelleri de deftere yazılır ve ölçüme girer, sadece Telegram'a
+# düşmezler).
+NOTIFY_MODELS = frozenset({"vwap_managed", "vwap_reentry"})
 # Durum dosyasında tutulan kaydın azami yaşı (bar): susturma penceresinin katı kadar
 # geçmiş yeter, fazlası dosyayı sonsuza kadar büyütürdü.
 STATE_RETENTION_BARS = 8 * DEDUPE_BARS
