@@ -4234,3 +4234,117 @@ serbest nakdi aşınca `margin = free_cash`in tamamıdır — yani nakdi aşan i
 sıfırlar ve sonraki sinyaller `zero_size` ile reddedilir. Bu kuralın değiştirilip
 değiştirilmeyeceği **P3b'nin konusudur** ve defter kuralını tarihli olarak böleceği için
 ayrı bir karar taslağı ve onay ister (karar 25/42); bu notun kapsamı değil.
+
+---
+
+## 53. Sıklık ölçümü (P2): `vwap_reentry` ölçülebilir, `scalp_thesis` sınırda ve eksen istatistiği ölçülemez
+
+**Kapsam.** Karar 52'nin P2 paketi. Yalnızca kurulum ve kapı SAYILARI ölçüldü; hiçbir getiri/R
+sayısına bakılmadı (§7) ve hiçbir model kurulmadı. Ölçülen iki soru: (a) `vwap_managed`'in
+"dönüş barının kapanışı bandın İÇİNDE olmalı" varyantı (`vwap_reentry`, model 19 adayı) kapılardan
+kaç sinyal geçirir? (b) scalp kollarında "yapısal engel girişin ÖNÜNDE olmak zorunda, yoksa
+kurulum yok" kuralı (`scalp_thesis`, model 20 adayı) kol bazında kaç kurulum geçirir? Karar 33'ün
+ölçülebilirlik ölçütü: bir varyant n=30 pozisyona makul sürede (≤ 60 gün) ulaşamıyorsa KURULMAZ
+ve bu bir bulgu olarak kaydedilir.
+
+### Pencere ve neden bu pencere
+
+`2026-07-21T23:45Z → 2026-09-19T23:45Z` (**8.57 hafta, 5341 / 5761 bar, 13 sembol**). Canlı
+`2026-09-20 → 10-05` aralığı bilinçli olarak DIŞARIDA: bu aralık önerilerin hipotez kaynağıdır
+ve ön-kayıtlı bir testin penceresine giremez (§6, §7.3). Sıklık ölçümü serbesttir ama pencereyi
+baştan temiz seçmek, aynı pencerenin sonradan test penceresi olarak kullanılabilmesini
+bozmaz. Araçlar `--end 2026-09-19 --days 60` ile koşuldu.
+
+### Araçların doğruluğu GÖSTERİLDİ (iddia edilmedi)
+
+- **Canlı defterle birebir:** aynı araç fonksiyonları canlı pencerede (`2026-09-20T12:15Z →
+  10-05T19:15Z`) koşturuldu. `vwap_managed`: ölçüm 35 oynanan sinyal, canlı `emitted` 35,
+  **(bar, sembol) çiftlerinin 35/35'i eşleşti**; `scalp_patient`: ölçüm 455 sinyal barı, canlı
+  455, **455/455 eşleşti** (iki yönde de fark yok).
+- `scripts/measure_vwap_signal.py --verify 200`: hızlı yol gerçek `vwap_signal.scan()` ile
+  **birebir aynı adayları** verdi; `--reentry` alt kümesi de gerçek `scan()` çıktısına
+  `|z_now| < band_mult` süzgeci uygulanarak kanıtlandı.
+- `scripts/measure_scalp_arms.py --verify 100`: son 400 bar ile tam geçmişin **aynı sayımı**
+  verdiği 100 rastgele barda gösterildi. Araç kendi kol/kapı mantığını YAZMAZ: her barda gerçek
+  `ScalpPatient.generate_signals` koşar ve sayım modelin `take_survey()`inden (karar 52) okunur.
+- **Sınırlama (funding):** `market.funding = {}`; `funding_spike_fade` bu ölçümde kurulum görmez.
+  Canlıda da tüm ömrü boyunca görmedi (karar 48) ve geçmiş pencerede funding derinliği yoktur
+  (karar 50), yani bu bir tutarlılıktır; ama 5. kolun sebebine dair bu ölçüm bilgi VERMEZ.
+- **Veri uyarısı (araç kullanımı):** `core/data.py` önbelleği yalnızca ileri doğru
+  genişler; bir önceki koşu `history_bars`'ı küçük tuttuysa daha derin pencere sessizce kısalır
+  (ilk denemede 6.56 hafta çıktı). Önbellek silinip yeniden çekildi; yukarıdaki pencere TAM
+  8.57 haftadır.
+
+### (a) `vwap_reentry` — ölçülebilir
+
+`band_mult = 2.0` SABİT, `atr_multiple = 2.5` (canlı config), 1.5R çıtası, %1 taban. Aday kümesi
+baz kümenin ALT KÜMESİDİR:
+
+| küme | aday | stop tabanı eledi | 1.5R eledi | GEÇEN | oynanan (barda tek) | sinyal/hf | baz payı | 30 → hafta (tavan) |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| baz (`vwap_managed`) | 1909 | 806 | 911 | 192 | 127 | 14.82 | — | 2.0 |
+| **varyant** | **1408** | 604 | 723 | **81** | **69** | **8.05** | 0.54 | **3.7** |
+
+(Aynı tablonun diğer stop ölçekleri `scripts/measure_vwap_signal.py --reentry` çıktısındadır;
+2.5 dışındakilere bakılmadı çünkü eksen `atr_multiple` değil.)
+
+- **`30 → hafta` bir TAVANDIR:** her sinyalin pozisyona dönüştüğünü varsayar. Canlıda
+  `vwap_managed` 35 sinyalden **26 pozisyon** açtı (25 kapalı + 1 açık; 9'u `duplicate_position`,
+  karar 52 > V5) → gerçekleşme **0.74**. O orandan 30 pozisyon ≈ **35 gün**; 60 günlük bir
+  pencere ≈ 69 sinyal ≈ **51 pozisyon**. **≤ 60 gün ölçütü KARŞILANIYOR** (tavanda 26, orana
+  göre 35 gün).
+- **Karar:** `vwap_reentry` (model 19) KURULABİLİR. Sıklık, ön-kayıtlı bir testin örneklem
+  kapısını (n ≥ 30) 60 günlük pencerede rahat geçirir. Bu, hipotezin DOĞRU olduğu anlamına
+  gelmez — karar 52 > V3 post-hoc bir bölmeydi (p=0.029) ve §6c'de ön-kayıtla (paydayı
+  büyüterek) sınanır; sıklık yalnızca sınanabilirliğin koşuludur.
+- **Karıştırıcı notu:** varyant baz sinyallerin %54'ünü tutuyor, yani iki modelin pozisyon
+  kümeleri örtüşür ama eşit değildir; eksen istatistiği yine eşleşen pozisyonlardır
+  (`scripts/paired_axis.py`) ve eşleşme beklenenden düşük olabilir (karar 52 > S6'da ρ = 0.49).
+
+### (b) `scalp_thesis` — sınırda, ve eksen istatistiği ölçülemez
+
+Kol bazında (birim: sembol-bar; 8.57 hafta):
+
+| kol | kurulum | stop tabanı | 1.5R | GEÇEN | **`engel_onde`** | geride/uzak | önde % |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| `vwap_pullback` | 8391 | 1227 | 7075 | 89 | **39** | 50 | %43.8 |
+| `opening_range_breakout` | 1632 | 212 | 886 | 534 | **0** | 534 | %0 |
+| `rsi2_reversal` | 16134 | 4442 | 8490 | 3202 | **0** | 3202 | %0 |
+| `momentum_burst` | 4450 | 560 | 3890 | **0** | 0 | 0 | — |
+| `funding_spike_fade` | 0 | 0 | 0 | 0 | 0 | 0 | — |
+
+Model düzeyi (barda tek sinyal, birim: BAR): **baz 2080 sinyal barı (242.7/hf)**, `engel_onde`
+adayı **38 bar (4.4/hf), baza oranı 0.018**. Aday barlarının **%100'ü `vwap_pullback`**.
+
+Üç bulgu:
+
+1. **Karar 34 ve karar 52 > S2 canlı DIŞI pencerede de tutuyor.** `rsi2_reversal` kapıdan geçen
+   3202 kurulumun **hiçbirinde** engeli girişin önünde bulmadı (canlıda 71/71 geride); `momentum_burst`
+   4450 kurulumdan 0'ı geçirdi (kapı aritmetiği). Yani "engel önde olsun" kuralı patient'in
+   işlem akışının %98'ini ve baskın kolunu (canlı `scalp_patient`te 80 pozisyonun 71'i, %89) TAMAMEN keser.
+2. **Aday, çok kollu bir model değil, tek kollu bir modeldir.** 38 sinyalin hepsi
+   `vwap_pullback`. `scalp_patient ↔ scalp_thesis` farkı "tek bir kuralın katkısı" olarak
+   tanımlanır ama sonuç olarak "iki farklı kol karışımı"nın farkıdır — `strategies/scalp/model.py`'nin
+   kuralının ("fark tek bir noktaya indirgenmezse ortalama R farkı bir eksenin ölçüsü
+   olmaktan çıkar") ruhuna ters düşer: kural noktası tektir ama etkisi kol kümesinin
+   çökmesidir ve ölçülen ΔR kuralın değil kol karışımının ölçüsüdür.
+3. **Kendi n=30'u tavanda 47 gün, eşleştirilmiş eksen n'si çok düşük.** Tavan: 4.43 sinyal/hf →
+   30 pozisyon **6.8 hafta = 47.4 gün**; gerçekleşme ≥ 0.79 ise ≤ 60 gün (canlıdaki 0.185 oranı
+   bu akış için GEÇERLİ DEĞİL — o oran 242 sinyal/hf'lik bir selin tek-pozisyonluk kasaya
+   çarpmasından geliyor; seyrek akış için oranı ÖLÇMEK mümkün değil, yalnızca varsayılabilir).
+   Daha önemlisi eksen istatistiği **eşleşen pozisyonlardır** (§6e): aday barlarında patient
+   ortalama 1.5 kolun içinden çekiyor (19 barda 1, 19 barda 2 kol) ve beklenen ortak sinyal
+   ≈ **28 / 38**; patient'ın sinyalleri pozisyona %18.5 oranında dönüştüğü için **eşleşen
+   pozisyon ≈ 5** — n=30'un çok altında. Yani aday kendi başına ölçülebilir olabilir ama
+   `scalp_patient`e karşı eşleştirilmiş eksen ölçülemez.
+
+**Karar:** `scalp_thesis` bu turda **KURULMADI** ve kurulup kurulmayacağı **kullanıcı kararına
+bağlıdır**: karar 33'ün yazılı ölçütü (kendi n=30'u ≤ 60 gün) tavanda KARŞILANIYOR (47 gün) ama
+gerçekleşme oranına bağlı ve ölçülemiyor; ölçütün AMACI olan "eksen okunabilir mi" sorusu ise
+HAYIR (eşleşen n ≈ 5, aday = tek kol). İki okuma birbiriyle çelişiyor ve hangisinin kazanacağını
+tahmin etmek yerine soruyorum. Seçenekler ve her birinin bedeli ilgili rapordadır.
+
+### Neye DOKUNULMADI
+
+Hiçbir model, config değeri, defter ya da `core/`; `docs/data/`. Araçlar (`scripts/`) salt
+okunurdur. Backtest koşulmadı.
