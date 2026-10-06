@@ -502,3 +502,171 @@ def test_only_the_signals_whose_message_was_sent_are_recorded(
     assert "vwap_managed|SYM0-USDT-SWAP|long" in sent
     assert "vwap_managed|SYM2-USDT-SWAP|long" in sent
     assert "vwap_managed|SYM1-USDT-SWAP|long" not in sent
+
+
+# --------------------------------------------------------------------------- #
+# Katman ayrımı: scalp BİREBİR aynı, h1 (1 saatlik gözlem katmanı, karar 59) ayrı ayar
+# --------------------------------------------------------------------------- #
+H1_BAR = timedelta(hours=1)
+H1_AS_OF = datetime(2026, 10, 6, 19, 0, tzinfo=timezone.utc)
+
+
+def _h1_signal(**overrides: Any) -> dict[str, Any]:
+    base: dict[str, Any] = {
+        "bar": H1_AS_OF.isoformat(),
+        "fills_at": (H1_AS_OF + H1_BAR).isoformat(),
+        "arm": "vwap_revert",
+    }
+    base.update(overrides)
+    arm = base.pop("arm")
+    bar = base.pop("bar")
+    fills_at = base.pop("fills_at")
+    return _signal(
+        bar=datetime.fromisoformat(bar), arm=arm, fills_at=fills_at, **base,
+    )
+
+
+def _h1_payload(signals: Sequence[dict[str, Any]] = ()) -> dict[str, Any]:
+    return _payload(
+        signals,
+        layer="h1",
+        as_of=H1_AS_OF.isoformat(),
+        settings={"timeframe": "1H"},
+    )
+
+
+def _run_h1(
+    tmp_path: Path, payload: dict[str, Any], *, args: Sequence[str] = ()
+) -> tuple[int, Path]:
+    metrics = tmp_path / "metrics_h1.json"
+    metrics.write_text(json.dumps(payload), encoding="utf-8")
+    state_path = tmp_path / "state" / "telegram_h1.json"
+    code = telegram_signals.main(
+        ["--layer", "h1", "--metrics", str(metrics), "--state", str(state_path), *args]
+    )
+    return code, state_path
+
+
+def test_layer_defaults_pin_the_files_models_and_the_scalp_behaviour() -> None:
+    """Katman başına AYRI kaynak, durum ve model kümesi; scalp'in değerleri değişmedi."""
+    settings = telegram_signals.LAYER_SETTINGS
+
+    assert settings["scalp"].metrics == Path("docs/data/metrics_scalp.json")
+    assert settings["scalp"].state == Path("state/telegram_scalp.json")
+    assert settings["scalp"].models == frozenset({"vwap_managed", "vwap_reentry"})
+    assert settings["scalp"].merge_models is False
+    assert settings["h1"].metrics == Path("docs/data/metrics_h1.json")
+    assert settings["h1"].state == Path("state/telegram_h1.json")
+    assert settings["h1"].models == frozenset({"vwap_managed", "vwap_reentry"})
+    assert settings["h1"].state != settings["scalp"].state
+    assert telegram_signals.DEFAULT_LAYER == "scalp"
+
+
+def test_h1_messages_carry_the_1h_label_the_model_name_and_the_hour_warning(
+    tmp_path: Path, telegram: _FakeRequests
+) -> None:
+    _run_h1(tmp_path, _h1_payload([_h1_signal(model="vwap_reentry", arm="vwap_revert_reentry")]))
+
+    (message,) = _messages(telegram)
+    assert "⏱ 1H" in message
+    assert "vwap_reentry" in message and "vwap_revert_reentry" in message
+    assert "bir sonraki bar açılışından" in message          # zorunlu uyarı aynen
+    assert "bir saate kadar" in message                      # 1H'ye özgü ek
+    assert "SCALP" not in message
+
+
+def test_scalp_messages_keep_their_label_and_have_no_1h_text(
+    tmp_path: Path, telegram: _FakeRequests
+) -> None:
+    _run(tmp_path, _payload([_signal(model="vwap_managed")]))
+
+    (message,) = _messages(telegram)
+    assert "SCALP SİNYALİ" in message
+    assert "1H" not in message and "bir saate kadar" not in message
+
+
+def test_h1_notifies_only_the_two_vwap_models(tmp_path: Path, telegram: _FakeRequests) -> None:
+    signals = [
+        _h1_signal(model="scalp_fixed", symbol="ETH-USDT-SWAP"),
+        _h1_signal(model="vwap_managed", symbol="BTC-USDT-SWAP"),
+        _h1_signal(model="vwap_reentry", symbol="SOL-USDT-SWAP"),
+    ]
+    _run_h1(tmp_path, _h1_payload(signals))
+
+    text = " ".join(_messages(telegram))
+    assert "BTC-USDT-SWAP" in text and "SOL-USDT-SWAP" in text
+    assert "ETH-USDT-SWAP" not in text
+
+
+def test_h1_merges_two_models_on_the_same_bar_and_symbol_into_one_message(
+    tmp_path: Path, telegram: _FakeRequests
+) -> None:
+    signals = [
+        _h1_signal(model="vwap_managed", arm="vwap_revert"),
+        _h1_signal(model="vwap_reentry", arm="vwap_revert_reentry"),
+    ]
+    code, state_path = _run_h1(tmp_path, _h1_payload(signals))
+
+    (message,) = _messages(telegram)                      # İKİ sinyal, TEK mesaj
+    lines = [line for line in message.splitlines() if line.startswith("•")]
+    assert code == 0 and len(lines) == 2
+    assert "vwap_managed" in lines[0] and "vwap_reentry" in lines[1]
+    # iki sinyal de bildirildi sayılır: susturma durumu İKİ anahtarı da taşır
+    sent = json.loads(state_path.read_text(encoding="utf-8"))["sent"]
+    assert set(sent) == {
+        "vwap_managed|BTC-USDT-SWAP|long", "vwap_reentry|BTC-USDT-SWAP|long",
+    }
+
+
+def test_h1_does_not_merge_different_symbols(tmp_path: Path, telegram: _FakeRequests) -> None:
+    signals = [
+        _h1_signal(model="vwap_managed", symbol="BTC-USDT-SWAP"),
+        _h1_signal(model="vwap_reentry", symbol="ETH-USDT-SWAP"),
+    ]
+    _run_h1(tmp_path, _h1_payload(signals))
+
+    assert len(_messages(telegram)) == 2
+
+
+def test_scalp_never_merges_models_on_the_same_symbol(
+    tmp_path: Path, telegram: _FakeRequests
+) -> None:
+    """Scalp davranışı birebir aynı kalır: birleştirme yalnızca h1'e özgüdür."""
+    signals = [_signal(model="vwap_managed"), _signal(model="vwap_reentry")]
+    _run(tmp_path, _payload(signals))
+
+    assert len(_messages(telegram)) == 2
+
+
+def test_a_report_of_another_layer_is_never_sent_under_this_layer(
+    tmp_path: Path, telegram: _FakeRequests
+) -> None:
+    """H1 raporunu `--layer scalp` ile okumak (ya da tersi) bildirim üretmez."""
+    metrics = tmp_path / "metrics_h1.json"
+    metrics.write_text(json.dumps(_h1_payload([_h1_signal()])), encoding="utf-8")
+
+    code = telegram_signals.main(
+        ["--layer", "scalp", "--metrics", str(metrics), "--state", str(tmp_path / "s.json")]
+    )
+
+    assert code == 0 and telegram.calls == []
+
+
+def test_unknown_layer_is_a_quiet_zero(tmp_path: Path, telegram: _FakeRequests) -> None:
+    assert telegram_signals.main(["--layer", "nope"]) == 0
+    assert telegram.calls == []
+
+
+def test_h1_dry_run_prints_the_message_and_makes_no_network_call(
+    tmp_path: Path, telegram: _FakeRequests, capsys: pytest.CaptureFixture[str]
+) -> None:
+    signals = [
+        _h1_signal(model="vwap_managed", arm="vwap_revert"),
+        _h1_signal(model="vwap_reentry", arm="vwap_revert_reentry"),
+    ]
+    code, state_path = _run_h1(tmp_path, _h1_payload(signals), args=["--dry-run"])
+
+    out = capsys.readouterr().out
+    assert code == 0 and telegram.calls == []
+    assert "⏱ 1H" in out and "vwap_managed" in out and "vwap_reentry" in out
+    assert not state_path.exists()          # yollanmamış mesaj "bildirildi" sayılmaz

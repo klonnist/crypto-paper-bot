@@ -8,8 +8,8 @@
 <link rel="icon" href="data:,">
 <title>Pozisyonlar & işlemler — Paper Trading</title>
 <!--
-  YOĞUN GÖRÜNÜM: açık pozisyonların ve kapanmış işlemlerin tamamı, İKİ KATMAN
-  (4 saatlik `base` ve 15 dakikalık `scalp`) tek sayfada, model filtresiyle.
+  YOĞUN GÖRÜNÜM: açık pozisyonların ve kapanmış işlemlerin tamamı, ÜÇ KATMAN
+  (4 saatlik `base`, 15 dakikalık `scalp` ve 1 saatlik `h1` gözlem katmanı) tek sayfada, model filtresiyle.
 
   Neden iki katman aynı sayfada ama aynı İSTATİSTİKTE değil: bu sayfa bir sıralama
   tablosu değil, bir DEFTER GÖRÜNÜMÜDÜR — "şu anda ne açık, bugüne kadar ne kapandı"
@@ -81,7 +81,7 @@
 <div class="wrap wide-page">
 
   <header class="top">
-    <h1>Pozisyonlar &amp; işlemler <span>— iki katman, tüm modeller</span></h1>
+    <h1>Pozisyonlar &amp; işlemler <span>— üç katman, tüm modeller</span></h1>
     <p class="sub" id="stamp">yükleniyor…</p>
     <div class="chips" id="chips"></div>
     <nav class="nav">
@@ -116,9 +116,10 @@
 
   <footer>
     Veri kaynağı: <a href="data/metrics.json">data/metrics.json</a> (4 saatlik katman) ve
-    <a href="data/metrics_scalp.json">data/metrics_scalp.json</a> (15 dakikalık katman) —
+    <a href="data/metrics_scalp.json">data/metrics_scalp.json</a> (15 dakikalık katman) ve
+    <a href="data/metrics_h1.json">data/metrics_h1.json</a> (1 saatlik gözlem katmanı) —
     her turda <code>main.py</code> üretir, koşu workflow'u defterlerle birlikte commit eder.
-    Denetim izinin kendisi <code>ledgers/</code> ve <code>ledgers_scalp/</code> altındaki
+    Denetim izinin kendisi <code>ledgers/</code>, <code>ledgers_scalp/</code> ve <code>ledgers_h1/</code> altındaki
     <code>trades.csv</code> dosyalarıdır; bu sayfa onların son penceresini çizer.
     Tüm zamanlar UTC. <span id="foot-extra"></span>
   </footer>
@@ -138,6 +139,7 @@
 const LAYERS = [
   { key: "base",  file: "data/metrics.json",       label: "4 saat",  note: "ana yarışma" },
   { key: "scalp", file: "data/metrics_scalp.json", label: "15 dk",   note: "scalp katmanı" },
+  { key: "h1",    file: "data/metrics_h1.json",    label: "1 sa (H1)", note: "H1 gözlem katmanı — ön-kayıtsız" },
 ];
 
 const TRADE_PAGE_SIZE = 50;
