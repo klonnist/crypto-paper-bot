@@ -37,8 +37,6 @@ import logging
 import subprocess
 import sys
 from collections import Counter
-from dataclasses import dataclass
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
 
@@ -48,86 +46,22 @@ if str(REPO_ROOT) not in sys.path:
 
 from core.config import load_config  # noqa: E402
 from core.layers import resolve_layer  # noqa: E402
-from core.metrics import merge_fills  # noqa: E402
+from core.metrics import (  # noqa: E402
+    Interval,
+    cash_stats,
+    leverage_stats,
+    opposite_stats,
+    position_intervals,
+)
 
 logger = logging.getLogger("measure_engine_rules")
-
-_FOREVER = datetime.max.replace(tzinfo=timezone.utc)
-_LEVERAGED_EPS = 1e-4
-_CASH_TIGHT = 0.02          # nakit özsermayenin %2'sinin altındaysa "tükenmiş" sayılır
-
-
-@dataclass(frozen=True, kw_only=True)
-class Interval:
-    symbol: str
-    direction: str
-    opened: datetime
-    closed: datetime
-
-
-def _stamp(value: Any) -> datetime:
-    parsed = datetime.fromisoformat(str(value))
-    return parsed.replace(tzinfo=timezone.utc) if parsed.tzinfo is None else parsed
 
 
 def intervals_of(
     trades: Sequence[Mapping[str, Any]], state: Mapping[str, Any] | None
 ) -> list[Interval]:
-    """Kapanmış (dolumlar birleşik) + AÇIK pozisyonların tutuş aralıkları."""
-    result = [
-        Interval(
-            symbol=str(row["symbol"]), direction=str(row["direction"]),
-            opened=_stamp(row["opened_at"]), closed=_stamp(row["closed_at"]),
-        )
-        for row in merge_fills(trades)
-        if row.get("opened_at") and row.get("closed_at")
-    ]
-    for position in (state or {}).get("positions") or ():
-        if position.get("opened_at"):
-            result.append(
-                Interval(
-                    symbol=str(position["symbol"]), direction=str(position["direction"]),
-                    opened=_stamp(position["opened_at"]), closed=_FOREVER,
-                )
-            )
-    return result
-
-
-def opposite_stats(intervals: Sequence[Interval]) -> dict[str, int]:
-    """Ters yönlü çakışma: GİRİŞTE ve ARALIK olarak. Birim: pozisyon."""
-    at_entry = overlap = 0
-    for index, item in enumerate(intervals):
-        others = [
-            other for j, other in enumerate(intervals)
-            if j != index and other.symbol == item.symbol and other.direction != item.direction
-        ]
-        if any(other.opened <= item.opened < other.closed for other in others):
-            at_entry += 1
-        if any(other.opened < item.closed and item.opened < other.closed for other in others):
-            overlap += 1
-    return {"positions": len(intervals), "opposite_at_entry": at_entry, "opposite_overlap": overlap}
-
-
-def leverage_stats(trades: Sequence[Mapping[str, Any]]) -> dict[str, int]:
-    """`leverage > 1` ile AÇILAN (kapanmış) pozisyonlar: notional nakdi aşmıştı."""
-    rows = merge_fills(trades)
-    leveraged = sum(1 for row in rows if _float(row.get("leverage")) > 1.0 + _LEVERAGED_EPS)
-    return {"closed": len(rows), "leveraged": leveraged}
-
-
-def cash_stats(equity_rows: Sequence[Mapping[str, Any]]) -> dict[str, float]:
-    bars = len(equity_rows)
-    tight = negative = 0
-    worst = 0.0
-    for row in equity_rows:
-        cash, equity = _float(row.get("cash")), _float(row.get("equity"))
-        if equity > 0 and cash < _CASH_TIGHT * equity:
-            tight += 1
-        if cash < 0:
-            negative += 1
-        if equity > 0:
-            worst = min(worst, cash / equity)
-    return {"bars": bars, "cash_tight": tight, "cash_negative": negative, "min_cash_ratio": worst}
+    """Kapanmış + AÇIK pozisyonların tutuş aralıkları (tanım `core/metrics.py::position_intervals`)."""
+    return position_intervals(trades, (state or {}).get("positions") or ())
 
 
 def zero_size_by_open_positions(
