@@ -1,0 +1,609 @@
+{
+  "acceptance": {
+    "bootstrap_samples": 2000,
+    "control_min_trades": 30,
+    "control_model": "random_ctrl",
+    "edge_ci_alpha": 0.05,
+    "edge_margin_r": 0.15,
+    "min_trades": 30,
+    "models": [
+      {
+        "avg_r": null,
+        "avg_stop_distance_pct": null,
+        "band": true,
+        "band_high": null,
+        "band_low": null,
+        "benchmark_return": null,
+        "ci_alpha": 0.05,
+        "control_avg_r": null,
+        "control_min_trades": 30,
+        "control_trades": 0,
+        "edge": false,
+        "edge_diff_ci_high": null,
+        "edge_diff_ci_low": null,
+        "edge_margin_r": 0.15,
+        "measured_trades": 0,
+        "min_trades": 30,
+        "model": "vwap_managed",
+        "passed": false,
+        "sample": false,
+        "total_return": 0.0
+      },
+      {
+        "avg_r": null,
+        "avg_stop_distance_pct": null,
+        "band": true,
+        "band_high": null,
+        "band_low": null,
+        "benchmark_return": null,
+        "ci_alpha": 0.05,
+        "control_avg_r": null,
+        "control_min_trades": 30,
+        "control_trades": 0,
+        "edge": false,
+        "edge_diff_ci_high": null,
+        "edge_diff_ci_low": null,
+        "edge_margin_r": 0.15,
+        "measured_trades": 0,
+        "min_trades": 30,
+        "model": "vwap_reentry",
+        "passed": false,
+        "sample": false,
+        "total_return": 0.0
+      }
+    ],
+    "stop_band_ratio": 2.5
+  },
+  "activity": {
+    "closed": 0,
+    "closed_avg_r": null,
+    "closed_pnl": 0.0,
+    "closed_wins": 0,
+    "hours": 24,
+    "opened": 0,
+    "since": "2026-10-05T20:00:00+00:00",
+    "still_open": 0,
+    "trades": []
+  },
+  "as_of": "2026-10-06T20:00:00+00:00",
+  "benchmarks": [],
+  "breakdowns": {
+    "arm": {
+      "vwap_managed": {},
+      "vwap_reentry": {}
+    },
+    "exit_rule": {
+      "vwap_managed": {},
+      "vwap_reentry": {}
+    },
+    "loss_streak": {
+      "vwap_managed": {},
+      "vwap_reentry": {}
+    },
+    "session": {
+      "vwap_managed": {},
+      "vwap_reentry": {}
+    },
+    "symbol": {
+      "vwap_managed": {},
+      "vwap_reentry": {}
+    }
+  },
+  "build_failures": {},
+  "concentration": {
+    "vwap_managed": {
+      "gross_exposure": 0.0,
+      "net_exposure": 0.0,
+      "top_symbol_share": 0.0
+    },
+    "vwap_reentry": {
+      "gross_exposure": 0.0,
+      "net_exposure": 0.0,
+      "top_symbol_share": 0.0
+    }
+  },
+  "correlation": {
+    "matrix": [
+      [
+        null,
+        null
+      ],
+      [
+        null,
+        null
+      ]
+    ],
+    "min_overlap": 3,
+    "models": [
+      "vwap_managed",
+      "vwap_reentry"
+    ],
+    "overlap": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        0
+      ]
+    ]
+  },
+  "dry_run": false,
+  "equity": {
+    "vwap_managed": [
+      [
+        "2026-10-06T20:00:00+00:00",
+        10000.0
+      ]
+    ],
+    "vwap_reentry": [
+      [
+        "2026-10-06T20:00:00+00:00",
+        10000.0
+      ]
+    ]
+  },
+  "generated_at": "2026-10-06T21:17:02.022812+00:00",
+  "layer": "h1",
+  "model_trades": {
+    "limit": 100,
+    "models": {
+      "vwap_managed": {
+        "total": 0,
+        "trades": []
+      },
+      "vwap_reentry": {
+        "total": 0,
+        "trades": []
+      }
+    }
+  },
+  "models": [
+    {
+      "account": {
+        "bars": 1,
+        "days": null,
+        "final_equity": 10000.0,
+        "initial_capital": 10000.0,
+        "max_drawdown": 0.0,
+        "sharpe": null,
+        "total_return": 0.0
+      },
+      "exposure": {
+        "bars": 1,
+        "cash_negative_bars": 0,
+        "cash_tight_bars": 0,
+        "closed_positions": 0,
+        "leveraged_positions": 0,
+        "min_cash_ratio": 0.0,
+        "opposite_at_entry": 0,
+        "opposite_overlap": 0,
+        "positions": 0
+      },
+      "friction": {
+        "cost_drag_pct_per_day": null,
+        "days": null,
+        "trades_per_day": null,
+        "turnover_per_day": null
+      },
+      "is_benchmark": false,
+      "is_replica": false,
+      "long": {
+        "avg_loss_pct": null,
+        "avg_loss_r": null,
+        "avg_r": null,
+        "avg_r_ci_high": null,
+        "avg_r_ci_low": null,
+        "avg_stop_distance_pct": null,
+        "avg_win_pct": null,
+        "avg_win_r": null,
+        "cost_pct": null,
+        "cost_per_r": null,
+        "direction": "long",
+        "fees": 0,
+        "funding": 0,
+        "liquidations": 0,
+        "market_measured": 0,
+        "market_r": null,
+        "market_tailwind_pct": null,
+        "max_drawdown_pnl": null,
+        "max_drawdown_r": null,
+        "median_r": null,
+        "notional": 0,
+        "payoff": null,
+        "pnl": 0,
+        "profit_factor": null,
+        "r_sharpe": null,
+        "slippage_cost": 0,
+        "total_r": null,
+        "trades": 0,
+        "unmeasured": 0,
+        "win_rate": null
+      },
+      "model": "vwap_managed",
+      "name": "vwap_managed",
+      "short": {
+        "avg_loss_pct": null,
+        "avg_loss_r": null,
+        "avg_r": null,
+        "avg_r_ci_high": null,
+        "avg_r_ci_low": null,
+        "avg_stop_distance_pct": null,
+        "avg_win_pct": null,
+        "avg_win_r": null,
+        "cost_pct": null,
+        "cost_per_r": null,
+        "direction": "short",
+        "fees": 0,
+        "funding": 0,
+        "liquidations": 0,
+        "market_measured": 0,
+        "market_r": null,
+        "market_tailwind_pct": null,
+        "max_drawdown_pnl": null,
+        "max_drawdown_r": null,
+        "median_r": null,
+        "notional": 0,
+        "payoff": null,
+        "pnl": 0,
+        "profit_factor": null,
+        "r_sharpe": null,
+        "slippage_cost": 0,
+        "total_r": null,
+        "trades": 0,
+        "unmeasured": 0,
+        "win_rate": null
+      },
+      "total": {
+        "avg_loss_pct": null,
+        "avg_loss_r": null,
+        "avg_r": null,
+        "avg_r_ci_high": null,
+        "avg_r_ci_low": null,
+        "avg_stop_distance_pct": null,
+        "avg_win_pct": null,
+        "avg_win_r": null,
+        "cost_pct": null,
+        "cost_per_r": null,
+        "direction": "total",
+        "fees": 0,
+        "funding": 0,
+        "liquidations": 0,
+        "market_measured": 0,
+        "market_r": null,
+        "market_tailwind_pct": null,
+        "max_drawdown_pnl": null,
+        "max_drawdown_r": null,
+        "median_r": null,
+        "notional": 0,
+        "payoff": null,
+        "pnl": 0,
+        "profit_factor": null,
+        "r_sharpe": null,
+        "slippage_cost": 0,
+        "total_r": null,
+        "trades": 0,
+        "unmeasured": 0,
+        "win_rate": null
+      }
+    },
+    {
+      "account": {
+        "bars": 1,
+        "days": null,
+        "final_equity": 10000.0,
+        "initial_capital": 10000.0,
+        "max_drawdown": 0.0,
+        "sharpe": null,
+        "total_return": 0.0
+      },
+      "exposure": {
+        "bars": 1,
+        "cash_negative_bars": 0,
+        "cash_tight_bars": 0,
+        "closed_positions": 0,
+        "leveraged_positions": 0,
+        "min_cash_ratio": 0.0,
+        "opposite_at_entry": 0,
+        "opposite_overlap": 0,
+        "positions": 0
+      },
+      "friction": {
+        "cost_drag_pct_per_day": null,
+        "days": null,
+        "trades_per_day": null,
+        "turnover_per_day": null
+      },
+      "is_benchmark": false,
+      "is_replica": false,
+      "long": {
+        "avg_loss_pct": null,
+        "avg_loss_r": null,
+        "avg_r": null,
+        "avg_r_ci_high": null,
+        "avg_r_ci_low": null,
+        "avg_stop_distance_pct": null,
+        "avg_win_pct": null,
+        "avg_win_r": null,
+        "cost_pct": null,
+        "cost_per_r": null,
+        "direction": "long",
+        "fees": 0,
+        "funding": 0,
+        "liquidations": 0,
+        "market_measured": 0,
+        "market_r": null,
+        "market_tailwind_pct": null,
+        "max_drawdown_pnl": null,
+        "max_drawdown_r": null,
+        "median_r": null,
+        "notional": 0,
+        "payoff": null,
+        "pnl": 0,
+        "profit_factor": null,
+        "r_sharpe": null,
+        "slippage_cost": 0,
+        "total_r": null,
+        "trades": 0,
+        "unmeasured": 0,
+        "win_rate": null
+      },
+      "model": "vwap_reentry",
+      "name": "vwap_reentry",
+      "short": {
+        "avg_loss_pct": null,
+        "avg_loss_r": null,
+        "avg_r": null,
+        "avg_r_ci_high": null,
+        "avg_r_ci_low": null,
+        "avg_stop_distance_pct": null,
+        "avg_win_pct": null,
+        "avg_win_r": null,
+        "cost_pct": null,
+        "cost_per_r": null,
+        "direction": "short",
+        "fees": 0,
+        "funding": 0,
+        "liquidations": 0,
+        "market_measured": 0,
+        "market_r": null,
+        "market_tailwind_pct": null,
+        "max_drawdown_pnl": null,
+        "max_drawdown_r": null,
+        "median_r": null,
+        "notional": 0,
+        "payoff": null,
+        "pnl": 0,
+        "profit_factor": null,
+        "r_sharpe": null,
+        "slippage_cost": 0,
+        "total_r": null,
+        "trades": 0,
+        "unmeasured": 0,
+        "win_rate": null
+      },
+      "total": {
+        "avg_loss_pct": null,
+        "avg_loss_r": null,
+        "avg_r": null,
+        "avg_r_ci_high": null,
+        "avg_r_ci_low": null,
+        "avg_stop_distance_pct": null,
+        "avg_win_pct": null,
+        "avg_win_r": null,
+        "cost_pct": null,
+        "cost_per_r": null,
+        "direction": "total",
+        "fees": 0,
+        "funding": 0,
+        "liquidations": 0,
+        "market_measured": 0,
+        "market_r": null,
+        "market_tailwind_pct": null,
+        "max_drawdown_pnl": null,
+        "max_drawdown_r": null,
+        "median_r": null,
+        "notional": 0,
+        "payoff": null,
+        "pnl": 0,
+        "profit_factor": null,
+        "r_sharpe": null,
+        "slippage_cost": 0,
+        "total_r": null,
+        "trades": 0,
+        "unmeasured": 0,
+        "win_rate": null
+      }
+    }
+  ],
+  "open_positions": [],
+  "pooled": {
+    "directions": {
+      "long": {
+        "avg_loss_pct": null,
+        "avg_loss_r": null,
+        "avg_r": null,
+        "avg_r_ci_high": null,
+        "avg_r_ci_low": null,
+        "avg_stop_distance_pct": null,
+        "avg_win_pct": null,
+        "avg_win_r": null,
+        "cost_pct": null,
+        "cost_per_r": null,
+        "direction": "long",
+        "fees": 0,
+        "funding": 0,
+        "liquidations": 0,
+        "market_measured": 0,
+        "market_r": null,
+        "market_tailwind_pct": null,
+        "max_drawdown_pnl": null,
+        "max_drawdown_r": null,
+        "median_r": null,
+        "notional": 0,
+        "payoff": null,
+        "pnl": 0,
+        "profit_factor": null,
+        "r_sharpe": null,
+        "slippage_cost": 0,
+        "total_r": null,
+        "trades": 0,
+        "unmeasured": 0,
+        "win_rate": null
+      },
+      "short": {
+        "avg_loss_pct": null,
+        "avg_loss_r": null,
+        "avg_r": null,
+        "avg_r_ci_high": null,
+        "avg_r_ci_low": null,
+        "avg_stop_distance_pct": null,
+        "avg_win_pct": null,
+        "avg_win_r": null,
+        "cost_pct": null,
+        "cost_per_r": null,
+        "direction": "short",
+        "fees": 0,
+        "funding": 0,
+        "liquidations": 0,
+        "market_measured": 0,
+        "market_r": null,
+        "market_tailwind_pct": null,
+        "max_drawdown_pnl": null,
+        "max_drawdown_r": null,
+        "median_r": null,
+        "notional": 0,
+        "payoff": null,
+        "pnl": 0,
+        "profit_factor": null,
+        "r_sharpe": null,
+        "slippage_cost": 0,
+        "total_r": null,
+        "trades": 0,
+        "unmeasured": 0,
+        "win_rate": null
+      },
+      "total": {
+        "avg_loss_pct": null,
+        "avg_loss_r": null,
+        "avg_r": null,
+        "avg_r_ci_high": null,
+        "avg_r_ci_low": null,
+        "avg_stop_distance_pct": null,
+        "avg_win_pct": null,
+        "avg_win_r": null,
+        "cost_pct": null,
+        "cost_per_r": null,
+        "direction": "total",
+        "fees": 0,
+        "funding": 0,
+        "liquidations": 0,
+        "market_measured": 0,
+        "market_r": null,
+        "market_tailwind_pct": null,
+        "max_drawdown_pnl": null,
+        "max_drawdown_r": null,
+        "median_r": null,
+        "notional": 0,
+        "payoff": null,
+        "pnl": 0,
+        "profit_factor": null,
+        "r_sharpe": null,
+        "slippage_cost": 0,
+        "total_r": null,
+        "trades": 0,
+        "unmeasured": 0,
+        "win_rate": null
+      }
+    },
+    "models": [
+      "vwap_managed",
+      "vwap_reentry"
+    ]
+  },
+  "recent_trades": [],
+  "replicas": [],
+  "round": {
+    "as_of": "2026-10-06T20:00:00+00:00",
+    "models": [
+      {
+        "ambiguous_stop_exits": 0,
+        "bars_processed": 1,
+        "closed": 0,
+        "emitted": [],
+        "exits": 0,
+        "filled": 0,
+        "missing_bars": 0,
+        "model": "vwap_managed",
+        "rejections": {},
+        "rejections_by_open": {},
+        "signals": 0,
+        "skipped": "",
+        "skipped_signals": 0,
+        "stop_exits": 0,
+        "survey": {
+          "bant_ici": 13,
+          "donus_yok": 0,
+          "gecti": 0,
+          "kurulum": 0,
+          "rr_kapisi": 0,
+          "stop_tabani": 0,
+          "vwap_gecildi": 0,
+          "vwap_yok": 0,
+          "z_ge_1_0": 7,
+          "z_ge_1_5": 2,
+          "z_ge_2_0": 0,
+          "z_ge_2_5": 0
+        },
+        "unchecked_position_bars": 0
+      },
+      {
+        "ambiguous_stop_exits": 0,
+        "bars_processed": 1,
+        "closed": 0,
+        "emitted": [],
+        "exits": 0,
+        "filled": 0,
+        "missing_bars": 0,
+        "model": "vwap_reentry",
+        "rejections": {},
+        "rejections_by_open": {},
+        "signals": 0,
+        "skipped": "",
+        "skipped_signals": 0,
+        "stop_exits": 0,
+        "survey": {
+          "bant_ici": 13,
+          "donus_bant_disi": 0,
+          "donus_yok": 0,
+          "gecti": 0,
+          "kurulum": 0,
+          "rr_kapisi": 0,
+          "stop_tabani": 0,
+          "vwap_gecildi": 0,
+          "vwap_yok": 0,
+          "z_ge_1_0": 7,
+          "z_ge_1_5": 2,
+          "z_ge_2_0": 0,
+          "z_ge_2_5": 0
+        },
+        "unchecked_position_bars": 0
+      }
+    ]
+  },
+  "settings": {
+    "fee_rate": 0.00055,
+    "initial_capital": 10000,
+    "leverage_cap": 5,
+    "maintenance_margin": 0.005,
+    "max_positions": 5,
+    "max_short_positions": 3,
+    "max_stop_atr_multiple": 3.0,
+    "risk_per_trade": 0.01,
+    "slippage_base": 0.0005,
+    "slippage_short_stop": 0.0015,
+    "timeframe": "1H"
+  },
+  "universe_size": 13
+}
