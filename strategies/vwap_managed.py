@@ -79,6 +79,11 @@ logger = logging.getLogger(__name__)
 class VwapManaged(Strategy):
     name = "vwap_managed"
     allowed_directions: list[Direction] = ["long", "short"]
+    # Model 19 (`vwap_reentry`, karar 54) bu iki alanı ezer ve BAŞKA hiçbir şeyi: sinyalin
+    # giriş onayı (`reentry`) ve defterdeki kol etiketi. Kapılar, stop, hedef, çıkış yönetimi,
+    # zaman stop'u ve seçim kuralı bu sınıftan MİRAS ALINIR, kopyalanmaz.
+    _reentry: bool = False
+    _arm_name: str = vwap_signal.ARM_NAME
 
     def __init__(self, *, config: Mapping[str, Any] | None = None) -> None:
         settings = dict(config) if config is not None else load_config()
@@ -117,11 +122,12 @@ class VwapManaged(Strategy):
             atr_period=self._atr_period,
             band_mult=self._band_mult,
             min_vwap_bars=self._min_vwap_bars,
+            reentry=self._reentry,
         )
         logger.info(
             "%s %s %s bandı=%.2fσ -> %s",
             self.name,
-            vwap_signal.ARM_NAME,
+            self._arm_name,
             market.as_of.isoformat(),
             self._band_mult,
             survey.describe(),
@@ -235,7 +241,7 @@ class VwapManaged(Strategy):
                 f"%{stop_pct * 100:.2f} ({stop:.6g}), hedef {target:.6g} "
                 f"({reward_risk:.2f}R), {self._time_stop.describe()}; "
                 f"{self._exit.describe()}",
-                arm=vwap_signal.ARM_NAME,
+                arm=self._arm_name,
                 rr=reward_risk,
             ),
         )

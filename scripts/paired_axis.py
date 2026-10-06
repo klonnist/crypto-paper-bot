@@ -34,6 +34,17 @@ kesişimdir. Kesişimin DIŞINDA kalanlar ayrıca sayılır ve üç sınıfa ayr
 iki yanlı, güç 0.80 — §6e'nin tablosundakiyle aynı formül). Beklentiyi tutmuş gibi
 raporlamak gücü olduğundan iyi göstermek olurdu.
 
+**`--sets`: giriş FİLTRESİ olan ikizler için (karar 54).** Bir ikiz yalnızca bir giriş şartı
+ekliyorsa (`vwap_reentry`), eşleşen pozisyonlar AYNI sinyalin aynı stop/hedef/çıkışla iki
+kopyasıdır ve `ΔR`ları yapısal olarak ≈ 0'dır: etki eşleşenlerde değil KÜME FARKINDA yaşar.
+`--sets` bu yüzden iki şeyi ayrı raporlar: (1) **geçerlilik kapısı** — eşleşenlerde ort. ΔR ≈ 0
+olmalıdır (değilse ikiz yalnızca filtrede ayrışmıyordur); (2) **etki** — `B` (baz) defterinde
+ikizin de aldığı pozisyonlar ("korunan") ile ikizin ALMADIĞI pozisyonlar ("elenen") arasındaki
+ortalama R farkı, ikizin şartının neyi ayıkladığını ölçer. İki küme ayrık pozisyonlardır ve
+aralık `core/metrics.py::bootstrap_diff_ci` ile kurulur (kabul çıtasının E kapısıyla aynı
+yordam; yeni bir tanım yok). İkizde olup bazda olmayan ("yedek") pozisyonlar ayrıca sayılır ve
+yorumlanmaz.
+
 **C-1 yerine geçmez.** Bu araç "çıkış/giriş kuralı bir fark yaratıyor mu" sorusunu cevaplar;
 "bu model para kazanıyor mu" ayrı bir sorudur ve kabul çıtasındadır (§6e, "Üç şart" 3).
 
@@ -61,6 +72,7 @@ from core.config import get_setting, load_config  # noqa: E402
 from core.layers import DEFAULT_LAYER, resolve_layer  # noqa: E402
 from core.ledger import Ledger, LedgerError  # noqa: E402
 from core.metrics import (  # noqa: E402
+    bootstrap_diff_ci,
     bootstrap_mean_ci,
     hash_name,
     merge_fills,
@@ -198,6 +210,124 @@ def paired_axis(
     )
 
 
+@dataclass(frozen=True, kw_only=True)
+class SetSplit:
+    """İkizin giriş filtresinin ayıkladığı kümeler (karar 54). Tanımsız sayı `nan`dır."""
+
+    twin: str
+    base: str
+    matched: int
+    matched_mean_delta: float        # geçerlilik kapısı: ≈ 0 olmalı
+    kept: int
+    removed: int
+    replacement: int                 # ikizde olup bazda olmayan pozisyonlar (yorumlanmaz)
+    mean_kept: float                 # BAZ defterindeki R'ler
+    mean_removed: float
+    diff: float                      # ort(korunan) − ort(elenen)
+    ci_low: float
+    ci_high: float
+    mde: float
+    alpha: float
+    iterations: int
+
+
+def set_split(
+    *,
+    twin: str,
+    trades_twin: Sequence[Mapping[str, Any]],
+    state_twin: Mapping[str, Any] | None,
+    base: str,
+    trades_base: Sequence[Mapping[str, Any]],
+    state_base: Mapping[str, Any] | None,
+    alpha: float,
+    iterations: int,
+    seed: int,
+) -> SetSplit:
+    """BAZ defterindeki pozisyonları ikizin ALDIĞI (korunan) ve ALMADIĞI (elenen) diye ayırır.
+
+    Her iki küme de BAZ defterinin R'sidir (aynı hesap, aynı yol): ikizin kendi defteri bu
+    karşılaştırmaya girmez, yalnızca kimlik eşleşmesi için okunur. Elenen küme, ikizin
+    defterinde KAPALI ya da AÇIK karşılığı olmayan baz pozisyonlarıdır; ikizde hâlâ AÇIK olan
+    bir baz pozisyonu henüz sınıflanamaz ve ikisine de girmez.
+    """
+    closed_twin = closed_by_id(trades_twin)
+    closed_base = closed_by_id(trades_base)
+    open_twin = open_ids(state_twin)
+    open_base = open_ids(state_base)
+
+    kept_r: list[float] = []
+    removed_r: list[float] = []
+    deltas: list[float] = []
+    for identity, row in closed_base.items():
+        r_base = r_multiple(row)
+        if r_base is None:
+            continue
+        if identity in closed_twin:
+            kept_r.append(r_base)
+            r_twin = r_multiple(closed_twin[identity])
+            if r_twin is not None:
+                deltas.append(r_twin - r_base)
+        elif identity not in open_twin:
+            removed_r.append(r_base)
+    replacement = sum(
+        1 for identity in closed_twin if identity not in closed_base and identity not in open_base
+    )
+
+    ci_low, ci_high = bootstrap_diff_ci(
+        kept_r,
+        removed_r,
+        alpha=alpha,
+        iterations=iterations,
+        seed=int(seed) ^ hash_name(f"set_split:{twin}:{base}"),
+    )
+    return SetSplit(
+        twin=twin,
+        base=base,
+        matched=len(deltas),
+        matched_mean_delta=_mean(deltas),
+        kept=len(kept_r),
+        removed=len(removed_r),
+        replacement=replacement,
+        mean_kept=_mean(kept_r),
+        mean_removed=_mean(removed_r),
+        diff=_mean(kept_r) - _mean(removed_r) if kept_r and removed_r else _NAN,
+        ci_low=ci_low,
+        ci_high=ci_high,
+        mde=_mde_two_sample(kept_r, removed_r),
+        alpha=alpha,
+        iterations=iterations,
+    )
+
+
+def format_split(result: SetSplit) -> str:
+    rows = [
+        ("geçerlilik: eşleşen pozisyon", str(result.matched)),
+        ("geçerlilik: eşleşenlerde ort. ΔR (≈ 0 olmalı)", _fmt(result.matched_mean_delta)),
+        (f"korunan ({result.twin} de aldı), n", str(result.kept)),
+        (f"elenen ({result.twin} ALMADI), n", str(result.removed)),
+        (f"yedek ({result.twin}'de olup {result.base}'te olmayan), n", str(result.replacement)),
+        (f"ort. R korunan ({result.base} defteri)", _fmt(result.mean_kept)),
+        (f"ort. R elenen ({result.base} defteri)", _fmt(result.mean_removed)),
+        (
+            "fark (korunan − elenen)",
+            f"{_fmt(result.diff)}   [%{(1 - result.alpha) * 100:g} bootstrap: "
+            f"{_fmt(result.ci_low)} … {_fmt(result.ci_high)}, {result.iterations} örnek]",
+        ),
+        ("MDE (gerçekleşen sd'lerden)", f"±{_fmt(result.mde, signed=False)}   (iki yanlı α=0.05, güç 0.80)"),
+    ]
+    width = max(len(label) for label, _ in rows) + 2
+    return "\n".join(
+        [
+            f"KÜME FARKI: {result.twin} (ikiz) ↔ {result.base} (baz)",
+            "",
+            *(f"  {label.ljust(width)}{value}" for label, value in rows),
+            "",
+            "  Okuma: kapı geçilmediyse (|ort. ΔR| ≈ 0 değil) ikiz yalnızca filtrede ayrışmıyor, fark",
+            "  yorumlanmaz. Aralık 0'ı içeriyorsa korunan ile elenen bu örneklemde AYIRT EDİLEMİYOR.",
+        ]
+    )
+
+
 def format_report(result: PairedResult) -> str:
     a, b = result.model_a, result.model_b
     rows = [
@@ -253,6 +383,17 @@ def _mde(sd: float, n: int) -> float:
     return z * sd / math.sqrt(n)
 
 
+def _mde_two_sample(left: Sequence[float], right: Sequence[float]) -> float:
+    """İki BAĞIMSIZ örneklemin ortalama farkı için MDE: `z · √(sd₁²/n₁ + sd₂²/n₂)`."""
+    if len(left) < 2 or len(right) < 2:
+        return _NAN
+    normal = statistics.NormalDist()
+    z = normal.inv_cdf(1.0 - _ALPHA_FOR_MDE / 2.0) + normal.inv_cdf(_POWER)
+    return z * math.sqrt(
+        statistics.variance(left) / len(left) + statistics.variance(right) / len(right)
+    )
+
+
 def _fmt(value: float, *, signed: bool = True) -> str:
     if math.isnan(value):
         return "—"
@@ -268,6 +409,10 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser.add_argument("--layer", default="scalp", help="defter kökünü belirleyen katman (varsayılan scalp)")
     parser.add_argument("--ledger-root", default=None, help="defter kökünü ez (testler/yedek klon için)")
     parser.add_argument("--json", action="store_true", help="metin yerine JSON yazdır")
+    parser.add_argument(
+        "--sets", action="store_true",
+        help="giriş filtresi olan ikiz için KÜME FARKI (--a ikiz, --b baz); eşleşen ΔR'nin yerine geçmez",
+    )
     return parser.parse_args(argv)
 
 
@@ -298,10 +443,26 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(f"defter okunamadı: {exc}", file=sys.stderr)
         return 2
 
+    split = None
+    if args.sets:
+        split = set_split(
+            twin=args.a, trades_twin=ledger.read_trades(args.a), state_twin=ledger.load_state(args.a),
+            base=args.b, trades_base=ledger.read_trades(args.b), state_base=ledger.load_state(args.b),
+            alpha=float(get_setting(layer.config, "acceptance.edge_ci_alpha")),
+            iterations=int(get_setting(layer.config, "acceptance.bootstrap_samples")),
+            seed=int(get_setting(layer.config, "random_seed")),
+        )
+
     if args.json:
-        print(json.dumps(_json_safe(asdict(result)), indent=2, ensure_ascii=False))
+        payload = _json_safe(asdict(result))
+        if split is not None:
+            payload["set_split"] = _json_safe(asdict(split))
+        print(json.dumps(payload, indent=2, ensure_ascii=False))
     else:
         print(format_report(result))
+        if split is not None:
+            print()
+            print(format_split(split))
     return 0
 
 

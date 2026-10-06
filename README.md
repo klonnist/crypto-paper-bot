@@ -444,6 +444,7 @@ eklemek bir commit'tir. Backtest onları `--models` ile hâlâ çağırabilir.
 | 11 | `scalp_bandit` | emekli | adaptasyon ekseni İKİ bağımsız pencerede de sıfır fark verdi (karar 33) |
 | 15 | `scalp_managed` | emekli | çıkış yönetimi ekseni İKİ bağımsız pencerede de sıfır fark verdi (karar 33) |
 | 17 | `scalp_vol` | aday, canlıda koşmaz | ön-kayıtlı birincil tahmin P1 DÜŞTÜ (karar 36) |
+| 19 | `vwap_reentry` | aday, canlıda koşmaz | `vwap_managed`in ikizi, tek farkı giriş onayı (dönüş bandın İÇİNE kapanmalı); ön-kayıt `docs/backtest.md > 6g`, ölçülebilirlik karar 53 |
 
 **Emekli ≠ silinmiş.** Ölçüt performans değil ÖLÇÜLEBİLİRLİKTİR: ne kadar iyi olduğunu asla
 öğrenemeyeceğimiz bir satır, tabloda bir bilgi değil bir gürültü kaynağıdır.

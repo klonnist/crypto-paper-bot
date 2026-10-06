@@ -66,6 +66,9 @@ logger = logging.getLogger(__name__)
 # (`vwap_revert_src`): tek bir ad, iki farklı kural kümesini aynı kolmuş gibi gösterir ve
 # kol kırılımını (core/metrics.py::arm_of) anlamsız kılardı.
 ARM_NAME = "vwap_revert"
+# Model 19'un (`vwap_reentry`, karar 54) etiketi: aynı kol adı iki farklı giriş şartını tek
+# bir kırılım satırı altında toplardı (karar 23'ün etiket gerekçesinin aynısı).
+REENTRY_ARM_NAME = "vwap_revert_reentry"
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -106,6 +109,10 @@ INSIDE_BAND = "bant_ici"         # önceki bar bandın İÇİNDE kapandı (sapma
 STILL_EXTENDING = "donus_yok"    # bant dışı ama dönüş başlamamış (uzaklaşma sürüyor)
 CROSSED = "vwap_gecildi"         # bant dışı, ama bu bar VWAP'i çoktan geçmiş
 SETUP = "kurulum"                # aday
+# YALNIZCA `reentry=True` (model 19, karar 54): dönüş başlamış ama bu barın kapanışı hâlâ bandın
+# DIŞINDA. Baz taramada (model 14) bu sebep HİÇ üretilmez ve `counts` anahtarı da yazılmaz:
+# model 14'ün tur raporu bu eklemeden bit düzeyinde aynı kalır.
+OUTSIDE_AFTER_RETURN = "donus_bant_disi"
 
 # |z_prev| HİSTOGRAMI (kümülatif): "kaç sembol en az bu kadar uzaktaydı".
 #
@@ -169,7 +176,7 @@ class Survey:
     def describe(self) -> str:
         reasons = " ".join(
             f"{reason}={self.counts[reason]}"
-            for reason in (SETUP, INSIDE_BAND, STILL_EXTENDING, CROSSED, NO_VWAP)
+            for reason in (SETUP, INSIDE_BAND, STILL_EXTENDING, CROSSED, NO_VWAP, OUTSIDE_AFTER_RETURN)
             if self.counts.get(reason)
         )
         buckets = " ".join(
@@ -211,6 +218,7 @@ def propose(
     min_vwap_bars: int,
     symbols: Collection[str] | None = None,
     model: str | None = None,
+    reentry: bool = False,
 ) -> list[VwapCandidate]:
     """O BARIN sapma-dönüş adayları; GÜÇ SIRASINA göre (eşitlikte sembol adına göre).
 
@@ -232,6 +240,7 @@ def propose(
         band_mult=band_mult,
         min_vwap_bars=min_vwap_bars,
         symbols=symbols,
+        reentry=reentry,
     )
     logger.info(
         "%s%s %s bandı=%.2fσ -> %s",
@@ -251,6 +260,7 @@ def scan(
     band_mult: float,
     min_vwap_bars: int,
     symbols: Collection[str] | None = None,
+    reentry: bool = False,
 ) -> tuple[list[VwapCandidate], Survey]:
     """`propose`un sessiz hâli: adaylar VE eleme sayımı.
 
@@ -263,6 +273,8 @@ def scan(
     counts: dict[str, int] = {
         SETUP: 0, INSIDE_BAND: 0, STILL_EXTENDING: 0, CROSSED: 0, NO_VWAP: 0
     }
+    if reentry:
+        counts[OUTSIDE_AFTER_RETURN] = 0
     extensions: dict[str, int] = {key: 0 for key in _bucket_keys()}
     examined = 0
     furthest_symbol: str | None = None
@@ -273,7 +285,7 @@ def scan(
             continue
         examined += 1
         candidate, reason, extension = _evaluate(
-            view, band_mult=band_mult, min_vwap_bars=min_vwap_bars
+            view, band_mult=band_mult, min_vwap_bars=min_vwap_bars, reentry=reentry
         )
         counts[reason] += 1
         if candidate is not None:
@@ -297,7 +309,7 @@ def scan(
 
 
 def _evaluate(
-    view: SymbolView, *, band_mult: float, min_vwap_bars: int
+    view: SymbolView, *, band_mult: float, min_vwap_bars: int, reentry: bool = False
 ) -> tuple[VwapCandidate | None, str, float | None]:
     """Tek sembolün değerlendirmesi: aday, ELEME SEBEBİ ve ölçülen |z_prev|.
 
@@ -331,6 +343,13 @@ def _evaluate(
         # "aday değil" sayısına indirgemek kolun neyi kaçırdığını gizlerdi.
         crossed = z_now >= 0.0 if z_prev < 0.0 else z_now <= 0.0
         return None, CROSSED if crossed else STILL_EXTENDING, extension
+
+    if reentry and abs(z_now) >= band_mult:
+        # Model 19'un TEK farkı: dönüş barının kapanışı bandın İÇİNE girmiş olmalı. Şart
+        # yalnızca ELER (alt küme); baz karar yönü değişmez ve baz karar vermemişken
+        # karar verilmez. `scripts/measure_vwap_signal.py::arm_verdict(reentry=True)` bunun
+        # kopyasıdır ve `--verify` ikisini gerçek `scan()` çıktısıyla karşılaştırır.
+        return None, OUTSIDE_AFTER_RETURN, extension
 
     return (
         VwapCandidate(
