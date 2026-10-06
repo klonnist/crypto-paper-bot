@@ -17,7 +17,7 @@ frekans düğmesi olmadığı buradan gelir. Payda ise doğrudan `atr_multiple`d
 
 **Neden kendi z hesabını yazmıyor.** `core.indicators` (anchored_vwap, average_true_range,
 bars_until) doğrudan çağrılır ve bant/dönüş karşılaştırmaları `signal.py::_evaluate`in,
-kapılar ise `vwap_managed.py::_passes_gates`in birebir aynısıdır. `--verify` bunu rastgele
+kapılar ise `vwap_managed.py::_gate_reason`in birebir aynısıdır. `--verify` bunu rastgele
 barlarda `vwap_signal.scan()` ile karşılaştırıp KANITLAR: iki yol aynı adayları vermezse
 script hata koduyla biter. Bir ölçüm aracının kendi doğruluğu iddia edilmez, gösterilir.
 
@@ -29,10 +29,19 @@ Rollere dikkat (CLAUDE.md kural 1/2/3/7): deftere YAZMAZ, bakiye/pozisyon/komisy
 hesaplamaz, `config.yaml`ı değiştirmez ve hiçbir modelin davranışına dokunmaz. Model 13'ün
 `strategies/vwap/clone_signal.py`si import BİLE EDİLMEZ — ölçülen eksen model 14'ündür.
 
+**`--reentry` (karar 53): "dönüş bandın İÇİNE kapanmış olmalı" varyantının frekansı.** Modelin
+kuralına bir şart eklenirse (`|z_now| < band_mult`) kaç aday geriye kalır ve kapılardan kaç
+tanesi geçer? Varyant adayları baz adayların ALT KÜMESİDİR (şart yalnızca eler, hiçbir şey
+eklemez); `--verify` bunu gerçek `scan()` çıktısına süzgeç uygulayarak KANITLAR. Tablo
+getiri/R'ye BAKMAZ: yalnızca kurulum ve kapı sayıları. `--end` pencereyi geçmişte bitirir
+(ör. canlı pencerenin öncesi): sıklık ölçümü serbesttir ama ön-kayıtlı bir testin penceresi
+hipotezin KAYNAĞINI içeremez (docs/backtest.md > 6, §7.3).
+
 Kullanım (depo kökünden):
     python scripts/measure_vwap_signal.py --days 60 --verify 200
     python scripts/measure_vwap_signal.py --days 60 --csv /tmp/z.csv
     python scripts/measure_vwap_signal.py --days 60 --bands 1.0,1.5,2.0   # eski eksen
+    python scripts/measure_vwap_signal.py --days 60 --end 2026-09-19 --reentry --verify 200
 """
 
 from __future__ import annotations
@@ -65,6 +74,7 @@ logger = logging.getLogger("measure_vwap_signal")
 INSIDE_BAND = "bant_ici"
 STILL_EXTENDING = "donus_yok"
 CROSSED = "vwap_gecildi"
+OUTSIDE_AFTER_RETURN = "donus_bant_disi"   # YALNIZCA `--reentry`: dönüş var ama hâlâ bant dışında
 STOP_FLOOR = "stop_tabani"
 RR_GATE = "rr_kapisi"
 PASSED = "gecti"
@@ -158,23 +168,37 @@ def measure(
     return points
 
 
-def arm_verdict(point: BarPoint, *, band_mult: float) -> tuple[Direction | None, str]:
-    """KOLUN kararı (`signal.py::_evaluate`): yön ve — yoksa — eleme sebebi."""
+def arm_verdict(
+    point: BarPoint, *, band_mult: float, reentry: bool = False
+) -> tuple[Direction | None, str]:
+    """KOLUN kararı (`signal.py::_evaluate`): yön ve — yoksa — eleme sebebi.
+
+    `reentry=True` varyant şartını ekler: dönüş barının kapanışı bandın İÇİNDE olmalı
+    (`|z_now| < band_mult`). Şart yalnızca ELER; baz kararın verdiği bir yönü hiçbir zaman
+    değiştirmez ve baz karar vermemişken karar vermez (alt küme).
+    """
     if -band_mult < point.z_prev < band_mult:
         return None, INSIDE_BAND
+    direction: Direction | None = None
     if point.z_prev <= -band_mult and point.z_prev < point.z_now < 0.0:
-        return "long", PASSED
-    if point.z_prev >= band_mult and 0.0 < point.z_now < point.z_prev:
-        return "short", PASSED
+        direction = "long"
+    elif point.z_prev >= band_mult and 0.0 < point.z_now < point.z_prev:
+        direction = "short"
+    if direction is not None:
+        if reentry and abs(point.z_now) >= band_mult:
+            return None, OUTSIDE_AFTER_RETURN
+        return direction, PASSED
     crossed = point.z_now >= 0.0 if point.z_prev < 0.0 else point.z_now <= 0.0
     return None, CROSSED if crossed else STILL_EXTENDING
 
 
-def candidates_of(points: Sequence[BarPoint], *, band_mult: float) -> list[Candidate]:
+def candidates_of(
+    points: Sequence[BarPoint], *, band_mult: float, reentry: bool = False
+) -> list[Candidate]:
     """Bant + dönüş şartını geçen kurulumlar. `atr_multiple`dan BAĞIMSIZDIR."""
     found: list[Candidate] = []
     for point in points:
-        direction, _ = arm_verdict(point, band_mult=band_mult)
+        direction, _ = arm_verdict(point, band_mult=band_mult, reentry=reentry)
         if direction is not None:
             found.append(Candidate(point=point, direction=direction))
     return found
@@ -188,7 +212,7 @@ def geometry_of(
     min_stop_pct: float,
     min_reward_risk: float,
 ) -> Geometry:
-    """MODELİN kapıları (`vwap_managed.py::_passes_gates`), aynı sırayla.
+    """MODELİN kapıları (`vwap_managed.py::_gate_reason`), aynı sırayla.
 
     Sıra önemlidir: stop tabanı önce bakılır, R kapısı sonra. Tersine çevirmek "hangi kapı
     eledi" sorusunun cevabını değiştirirdi ve modelin log'larıyla ayrışırdı.
@@ -367,6 +391,65 @@ def scale_table(points: Sequence[BarPoint], *, min_reward_risk: float) -> str:
     return "\n".join(lines)
 
 
+def reentry_table(
+    points: Sequence[BarPoint],
+    scales: Sequence[float],
+    *,
+    band_mult: float,
+    target_reward_risk: float,
+    min_stop_pct: float,
+    min_reward_risk: float,
+    weeks: float,
+) -> str:
+    """TABLO 4 — `--reentry`: baz kural ↔ "dönüş bandın İÇİNE kapanmalı" varyantı.
+
+    Her stop ölçeğinde iki satır: baz aday kümesi ve onun ALT KÜMESİ olan varyant. `pay`
+    varyantın baz OYNANAN sinyallere oranıdır (barda tek sinyal kuralı iki kümede ayrı
+    uygulanır, yani oynanan sinyal sayısı adaylarla orantılı azalmak zorunda değildir).
+    `30→hafta` sinyal TAVANIDIR: gerçekleşen pozisyon sayısı reddedilen sinyaller
+    (`duplicate_position`, kota, nakit) kadar daha azdır ve bu oran bu araçta DEĞİL
+    defterde ölçülür (karar 52, V5).
+    """
+    lines = [
+        f"TABLO 4 — VARYANT (--reentry): |z_now| < band_mult={band_mult:g}; baz kümenin alt kümesi",
+        f"{'atr_x':>6} {'küme':>8} {'aday':>7} {'stop_tab':>9} {'rr_kapisi':>10} {'GEÇEN':>7} "
+        f"{'oynanan':>8} {'sinyal/hf':>10} {'pay':>6} {'30→hafta':>9}",
+    ]
+    for scale in scales:
+        base_played = 0
+        for label, reentry in (("baz", False), ("varyant", True)):
+            candidates = candidates_of(points, band_mult=band_mult, reentry=reentry)
+            counts = {STOP_FLOOR: 0, RR_GATE: 0, PASSED: 0}
+            for candidate in candidates:
+                counts[
+                    geometry_of(
+                        candidate,
+                        atr_multiple=scale,
+                        target_reward_risk=target_reward_risk,
+                        min_stop_pct=min_stop_pct,
+                        min_reward_risk=min_reward_risk,
+                    ).verdict
+                ] += 1
+            played = played_signals(
+                candidates,
+                atr_multiple=scale,
+                target_reward_risk=target_reward_risk,
+                min_stop_pct=min_stop_pct,
+                min_reward_risk=min_reward_risk,
+            )
+            if not reentry:
+                base_played = len(played)
+            weekly = len(played) / weeks if weeks else float("nan")
+            to_thirty = 30.0 / weekly if weekly > 0 else float("inf")
+            share = f"{len(played) / base_played:>6.2f}" if reentry and base_played else f"{'':>6}"
+            lines.append(
+                f"{scale:>6.1f} {label:>8} {len(candidates):>7} {counts[STOP_FLOOR]:>9} "
+                f"{counts[RR_GATE]:>10} {counts[PASSED]:>7} {len(played):>8} {_fmt(weekly, 10)} "
+                f"{share} " + (f"{to_thirty:>9.1f}" if np.isfinite(to_thirty) else f"{'∞':>9}")
+            )
+    return "\n".join(lines)
+
+
 def band_table(
     points: Sequence[BarPoint],
     bands: Sequence[float],
@@ -423,7 +506,7 @@ def verify(
     """Hızlı yolun `vwap_signal.scan()` ile AYNI adayları verdiğini KANITLAR.
 
     Kanıtlanan şey aday kümesidir: kapılar `scan`de yoktur, onlar modelin tarafındadır ve
-    `geometry_of` zaten `_passes_gates`in aynısıdır (aynı sıra, aynı eşikler).
+    `geometry_of` zaten `_gate_reason`in aynısıdır (aynı sıra, aynı eşikler).
     """
     stamps = sorted({p.as_of for p in points})
     if not stamps:
@@ -433,6 +516,9 @@ def verify(
     fast: dict[pd.Timestamp, set[str]] = {}
     for candidate in candidates_of(points, band_mult=band_mult):
         fast.setdefault(candidate.point.as_of, set()).add(candidate.point.symbol)
+    fast_reentry: dict[pd.Timestamp, set[str]] = {}
+    for candidate in candidates_of(points, band_mult=band_mult, reentry=True):
+        fast_reentry.setdefault(candidate.point.as_of, set()).add(candidate.point.symbol)
 
     for as_of in chosen:
         market = MarketData(
@@ -450,7 +536,19 @@ def verify(
             raise SystemExit(
                 f"DOĞRULAMA BAŞARISIZ {as_of}: scan={sorted(expected)} ölçüm={sorted(actual)}"
             )
-    logger.info("doğrulama geçti: %d barda scan() ile birebir aynı adaylar", len(chosen))
+        # Varyant, GERÇEK `scan()` çıktısına `|z_now| < band_mult` süzgeci uygulanmış hâlidir:
+        # aday kümesi yeniden türetilmez, baz kümenin alt kümesi olduğu kanıtlanır.
+        expected_reentry = {item.symbol for item in found if abs(item.z_now) < band_mult}
+        actual_reentry = fast_reentry.get(as_of, set())
+        if expected_reentry != actual_reentry:
+            raise SystemExit(
+                f"DOĞRULAMA BAŞARISIZ (varyant) {as_of}: scan∩bant_içi={sorted(expected_reentry)} "
+                f"ölçüm={sorted(actual_reentry)}"
+            )
+    logger.info(
+        "doğrulama geçti: %d barda scan() ile birebir aynı adaylar (baz ve --reentry alt kümesi)",
+        len(chosen),
+    )
 
 
 def load_frames(config: dict, symbols: Sequence[str]) -> dict[str, pd.DataFrame]:
@@ -474,6 +572,14 @@ def main(argv: Sequence[str] | None = None) -> int:
         help="süpürülecek vwap.managed.atr_multiple değerleri (virgülle)",
     )
     parser.add_argument("--bands", default="", help="ek olarak band_mult süpürmesi (virgülle)")
+    parser.add_argument(
+        "--end", default=None,
+        help="pencerenin SON günü (UTC, YYYY-MM-DD, dâhil); varsayılan: en yeni bar",
+    )
+    parser.add_argument(
+        "--reentry", action="store_true",
+        help="TABLO 4: \"dönüş bandın İÇİNE kapanmalı\" varyantının frekansı (karar 53)",
+    )
     parser.add_argument("--verify", type=int, default=0, help="kaç barda scan() ile kıyaslansın")
     parser.add_argument("--csv", type=Path, default=None, help="ham z noktalarını buraya yaz")
     parser.add_argument("--log-level", default="INFO")
@@ -489,7 +595,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     bars_per_day = int(pd.Timedelta("1D") / pd.Timedelta(config["timeframe"]))
     # Isınma: ATR(14) ve gün çapası için iki tam gün fazladan bar çekilir.
     config["data"] = dict(config["data"])
-    config["data"]["history_bars"] = args.days * bars_per_day + bars_per_day * 2
+    end = None if args.end is None else pd.Timestamp(args.end, tz="UTC") + pd.Timedelta(days=1)
+    # `--end` geçmişteyse çekim bugünden geriye gider: pencerenin başlangıcına kadar olan bar
+    # sayısı hesaplanır (aksi hâlde istenen pencere hiç çekilmezdi).
+    lookback_days = args.days
+    if end is not None:
+        lookback_days = int((pd.Timestamp.now(tz="UTC") - (end - pd.Timedelta(days=args.days))).days) + 1
+    config["data"]["history_bars"] = lookback_days * bars_per_day + bars_per_day * 2
 
     symbols = list(layer.symbols or [])
     if not symbols:
@@ -507,6 +619,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     frames = load_frames(config, symbols)
     if not frames:
         raise SystemExit("hiç sembol çekilemedi")
+    if end is not None:
+        frames = {symbol: frame[frame.index < end] for symbol, frame in frames.items()}
+        frames = {symbol: frame for symbol, frame in frames.items() if not frame.empty}
 
     newest = max(frame.index[-1] for frame in frames.values())
     start = newest - pd.Timedelta(days=args.days)
@@ -552,6 +667,15 @@ def main(argv: Sequence[str] | None = None) -> int:
     print()
     print(scale_table(points, min_reward_risk=min_reward_risk))
     print()
+    if args.reentry:
+        print(
+            reentry_table(
+                points, scales,
+                band_mult=band_mult, target_reward_risk=target_reward_risk,
+                min_stop_pct=min_stop_pct, min_reward_risk=min_reward_risk, weeks=weeks,
+            )
+        )
+        print()
     if args.bands:
         print(
             band_table(

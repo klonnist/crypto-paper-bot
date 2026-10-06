@@ -48,7 +48,9 @@ def test_scalp_layer_overrides_only_the_conditions() -> None:
     scalp = resolve_layer(config, "scalp")
 
     assert scalp.timeframe == "15m"
-    assert scalp.models == ["scalp_fixed", "scalp_patient", "vwap_clone", "vwap_managed"]
+    assert scalp.models == [
+        "scalp_fixed", "scalp_patient", "vwap_clone", "vwap_managed", "vwap_reentry",
+    ]
     assert scalp.ledger_root.name == "ledgers_scalp"
     assert scalp.metrics_path.name == "metrics_scalp.json"
     assert scalp.breakdowns == ("arm", "symbol", "exit_rule", "session", "loss_streak")

@@ -241,6 +241,13 @@ class ModelReport:
     # bir tekrar (referansın zaten taşıdığı pozisyon) gerçek bir boyutlandırma arızasından
     # ayırt edilemez. Serbest metin gerekçe yalnızca logda; burada sayılabilir kod durur.
     rejections: Mapping[str, int] = field(default_factory=dict)
+    # Aynı retlerin, ret ANINDA modelin kaç AÇIK pozisyonu olduğuna göre dökümü:
+    # sebep kodu -> {açık pozisyon sayısı (metin) -> adet}. Karar 55 (P3b): `zero_size` retinin
+    # nakitten mi (kota dolu değilken, yani 5'ten az açık pozisyonla) yoksa kotadan mı geldiği
+    # sayıdan okunamıyordu — kota doluyken ret `max_positions` koduyla gelir, yani 5 açıkken
+    # `zero_size` görülmemesi ayrıca bir bulgudur. `rejections` ile aynı statüde bir DENETİM
+    # İZİDİR (kural 15): hiçbir dolumu, boyutu ya da sırayı değiştirmez.
+    rejections_by_open: Mapping[str, Mapping[str, int]] = field(default_factory=dict)
     # Turda kuyruğa GİREN sinyallerin dökümü (bkz. EmittedSignal). `signals` sayısıyla
     # aynı kümedir: band elemesinden (kural 14) geçmiş, bekleyen emre dönüşmüş sinyaller.
     emitted: tuple[EmittedSignal, ...] = ()
@@ -304,6 +311,7 @@ class _ModelRun:
     # okumak demekti; turda kapanan işlemler zaten `trades` üzerinden eklenir.
     history_rows: list[dict[str, str]] | None = None
     rejections: dict[str, int] = field(default_factory=dict)
+    rejections_by_open: dict[str, dict[str, int]] = field(default_factory=dict)
     emitted: list[EmittedSignal] = field(default_factory=list)
     # Bar bazında toplanır: `signals_per_bar` açıkken bir tur birden çok bar işler ve her
     # barın kendi taraması vardır. Son barınkini saklamak, telafi edilen barlarda kolun
@@ -315,8 +323,12 @@ class _ModelRun:
     ambiguous_stop_exits: int = 0
     skipped: str = ""
 
-    def reject(self, code: str) -> None:
+    def reject(self, code: str, *, open_positions: int | None = None) -> None:
         self.rejections[code] = self.rejections.get(code, 0) + 1
+        if open_positions is not None:
+            bucket = self.rejections_by_open.setdefault(code, {})
+            key = str(open_positions)
+            bucket[key] = bucket.get(key, 0) + 1
 
     def note_unchecked(self, symbol: str) -> None:
         """Barı olmadığı için bu barda kontrol edilemeyen bir açık pozisyon."""
@@ -411,6 +423,10 @@ class Engine:
                     missing_bars=run.missing_bars,
                     unchecked_position_bars=run.unchecked_position_bars,
                     rejections=dict(sorted(run.rejections.items())),
+                    rejections_by_open={
+                        code: dict(sorted(buckets.items(), key=lambda item: int(item[0])))
+                        for code, buckets in sorted(run.rejections_by_open.items())
+                    },
                     emitted=tuple(run.emitted),
                     survey=dict(sorted(run.survey.items())),
                     stop_exits=run.stop_exits,
@@ -722,7 +738,7 @@ class Engine:
             )
             if result.position is None:
                 code = result.reason_code or "unknown"
-                run.reject(code)
+                run.reject(code, open_positions=len(self._portfolio.positions(model)))
                 # Boyutlandırma arızası (sıfır boyut, yetersiz nakit) bakılması gereken tek
                 # gruptur; beklenen bir tekrar değildir. Seviye farkı, logu okuyanın ikisini
                 # gözle ayırmasını sağlar — sayılabilir hâli tur raporundaki `rejections`.

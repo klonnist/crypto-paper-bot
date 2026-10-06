@@ -35,6 +35,7 @@ from strategies.squeeze import Squeeze
 from strategies.trend import Trend
 from strategies.vwap_clone import VwapClone
 from strategies.vwap_managed import VwapManaged
+from strategies.vwap_reentry import VwapReentry
 
 StrategyFactory = Callable[[], Strategy]
 
@@ -72,6 +73,10 @@ REGISTRY: Mapping[str, StrategyFactory] = {
     ScalpVol.name: ScalpVol,
     VwapClone.name: VwapClone,
     VwapManaged.name: VwapManaged,
+    # vwap_reentry — vwap_managed'in ikizi, tek farkı giriş onayı (dönüş bandın İÇİNE kapanmalı).
+    # Katmanın `models` listesinde YOKTUR: ön-kayıt (docs/backtest.md > 6g) ve taze bir OOS
+    # penceresi olmadan koşmaz. Backtest onu `--models` ile çağırır.
+    VwapReentry.name: VwapReentry,
 }
 
 

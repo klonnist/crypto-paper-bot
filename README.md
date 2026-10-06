@@ -120,8 +120,9 @@ açık pozisyonlarda sıfır kayıt. Bu yüzden aşağıdaki eksenlerin hepsi be
 Kol tanımları SİLİNMEDİ: `momentum_burst`un ölü olma sebebi ölçüldü ve yazıldı (karar
 34 — `hedef/stop ≥ 1.5` kapısı, `stop = 5×ATR` iken yapısal engelin 7.5×ATR ötede
 olmasını istiyor, `burst` ise tipik olarak 1–2.25×ATR), `funding_spike_fade`in sebebi
-ise **BİLİNMİYOR** — `ScalpModel` `take_survey` uygulamadığı için hangi kapıda elendiği
-hiçbir yere yazılmıyor. Onu öğrenmek açık bir iştir.
+ise **BİLİNMİYOR** — `ScalpModel` artık `take_survey` uygular (karar 52): hangi kapıda
+(stop tabanı / 1.5R / rejim) elendiği tur raporuna düşer, ama kolun KENDİ İÇ kapıları
+(funding serisi, tazelik, taban, çarpan) hâlâ sayılmaz. Onu öğrenmek açık bir iştir.
 
 Modeller birbirinden **tek bir eksende** ayrışır ve her eksen bir soruyu ölçer
 (bkz. [Ölçüm eksenleri](#ölçüm-eksenleri)): `scalp_bandit` kol tahsisini öğrenir,
@@ -155,6 +156,7 @@ Bir eksen kapandığında satır silinmez — kapanışın kendisi bir ölçüm 
 | Adaptasyonun katkısı | `scalp_bandit` (11) ↔ `scalp_fixed` (12) | kol seçimi | **üç kol** | KAPALI — iki kez "fark yok" (karar 33) |
 | Çıkış yönetiminin katkısı | `scalp_fixed` (12) ↔ `scalp_managed` (15) | üç aşamalı çıkış | **üç kol** | KAPALI — iki kez "fark yok" (karar 33) |
 | Volatilite rejiminin katkısı | `scalp_patient` (16) ↔ `scalp_vol` (17) | kesitsel ATR% medyan kapısı | **üç kol** | KAPALI — ön-kayıtlı P1 düştü (karar 36) |
+| Hedef politikasının (yapısal engel) katkısı | `scalp_patient` (16) ↔ `scalp_thesis` (20) | hedef politikası | tek kol (`vwap_pullback`) | KAPALI — KURULMADI, ölçülemez bulundu (karar 56) |
 
 ⚠ **Kapsam kolonu neden var.** Beş kollu modellerin dördünde de 4. ve 5. kol hiç
 tetiklemedi (karar 48), yani bu eksenlerin hiçbiri "beş kollu bir modelde" ölçülmedi —
@@ -405,6 +407,7 @@ defter yazan modeller), **katalog** (`strategies/registry.py`'de kayıtlı ama l
 | 16 | `scalp_patient` | long + short | `scalp_fixed`in ikizi, tek farkı zaman stop'u sınırı (16 ↔ 100 bar) |
 | 13 | `vwap_clone` | long + short | **dış sistem kopyası** (kural 15b), yarışmacı değil |
 | 14 | `vwap_managed` | long + short | VWAP sapma-dönüş sinyali, ev kurallarıyla (risk boyutlandırma, %1 taban, 1.5R) |
+| 19 | `vwap_reentry` | long + short | `vwap_managed`in ikizi, tek farkı giriş onayı (dönüş bandın İÇİNE kapanmalı); kâğıt katmanına KULLANICI KARARIYLA alındı (karar 58, backtest sonucundan bağımsız; canlıya alma eşiğini geçmek DEĞİL); ön-kayıt `docs/backtest.md > 6g`, ölçülebilirlik karar 53 |
 
 ### Kadro — `ema` (tanımlı, tetikleyicisi YOK)
 

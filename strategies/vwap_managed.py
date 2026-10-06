@@ -54,6 +54,7 @@ yazmaz (kural 1). Sinyali `strategies/vwap/signal.py`'dedir ve model 13 ile PAYL
 
 from __future__ import annotations
 
+import dataclasses
 import logging
 from typing import Any, Mapping
 
@@ -78,6 +79,11 @@ logger = logging.getLogger(__name__)
 class VwapManaged(Strategy):
     name = "vwap_managed"
     allowed_directions: list[Direction] = ["long", "short"]
+    # Model 19 (`vwap_reentry`, karar 54) bu iki alanı ezer ve BAŞKA hiçbir şeyi: sinyalin
+    # giriş onayı (`reentry`) ve defterdeki kol etiketi. Kapılar, stop, hedef, çıkış yönetimi,
+    # zaman stop'u ve seçim kuralı bu sınıftan MİRAS ALINIR, kopyalanmaz.
+    _reentry: bool = False
+    _arm_name: str = vwap_signal.ARM_NAME
 
     def __init__(self, *, config: Mapping[str, Any] | None = None) -> None:
         settings = dict(config) if config is not None else load_config()
@@ -116,26 +122,41 @@ class VwapManaged(Strategy):
             atr_period=self._atr_period,
             band_mult=self._band_mult,
             min_vwap_bars=self._min_vwap_bars,
+            reentry=self._reentry,
         )
-        self._survey = survey
         logger.info(
             "%s %s %s bandı=%.2fσ -> %s",
             self.name,
-            vwap_signal.ARM_NAME,
+            self._arm_name,
             market.as_of.isoformat(),
             self._band_mult,
             survey.describe(),
         )
+        # Kapı sayımı TÜM adaylar üzerindedir (ilk geçenden sonrakiler de sayılır), seçim ise
+        # eskisi gibi güç sırasındaki İLK geçen adaydır: sayım saf `_gate_reason`dan okur ve
+        # seçimi/sıraları etkilemez. Eleme logları yalnızca seçilene kadar yazılır (eski
+        # davranış): seçimden sonraki adayların kapı sonucu sayılır, loglanmaz.
+        gates = {key: 0 for key in vwap_signal.GATE_KEYS}
+        chosen: tuple[vwap_signal.VwapCandidate, float, float] | None = None
         for candidate in candidates:
             stop = vwap_signal.stop_price(candidate, atr_multiple=self._atr_multiple)
             projected = vwap_signal.projected_target(
                 candidate, stop=stop, reward_risk=self._target_reward_risk
             )
             target = vwap_signal.nearest_target(candidate, projected=projected)
-            if not self._passes_gates(candidate, stop=stop, target=target):
+            reason = self._gate_reason(candidate, stop=stop, target=target)
+            gates[reason or vwap_signal.GATE_PASSED] += 1
+            if chosen is not None:
                 continue
-            return [self._signal(candidate, stop=stop, target=target)]
-        return []
+            if reason is None:
+                chosen = (candidate, stop, target)
+            else:
+                self._log_rejection(candidate, reason, stop=stop, target=target)
+        self._survey = dataclasses.replace(survey, gates=gates)
+        if chosen is None:
+            return []
+        candidate, stop, target = chosen
+        return [self._signal(candidate, stop=stop, target=target)]
 
     def manage_positions(
         self, market: MarketData, positions: list[Position]
@@ -164,26 +185,43 @@ class VwapManaged(Strategy):
         """
         return None if self._survey is None else self._survey.report()
 
-    def _passes_gates(
+    def _gate_reason(
         self, candidate: vwap_signal.VwapCandidate, *, stop: float, target: float
-    ) -> bool:
-        """Stop tabanı ve hedef/stop kapısı. Her eleme GEREKÇESİYLE loglanır (kural 14)."""
-        stop_pct = vwap_signal.stop_distance_pct(candidate, stop=stop)
-        if stop_pct < self._min_stop_pct:
+    ) -> str | None:
+        """Ev kapılarının TEK tanımı: kurulumu eleyen kapı (`stop_tabani`/`rr_kapisi`) ya da None.
+
+        Hem seçim (`generate_signals`) hem sayım (`Survey.gates`) buradan okur; ikisinin ayrı
+        koşulları, sayımın kapının gerçekte ne yaptığından sessizce ayrışması demekti.
+        Saftır — loglamaz (bkz. `_log_rejection`).
+        """
+        if vwap_signal.stop_distance_pct(candidate, stop=stop) < self._min_stop_pct:
+            return vwap_signal.GATE_STOP_FLOOR
+        reward_risk = vwap_signal.reward_risk_of(candidate, stop=stop, target=target)
+        if reward_risk < self._min_reward_risk:
+            return vwap_signal.GATE_REWARD_RISK
+        return None
+
+    def _log_rejection(
+        self,
+        candidate: vwap_signal.VwapCandidate,
+        reason: str,
+        *,
+        stop: float,
+        target: float,
+    ) -> None:
+        if reason == vwap_signal.GATE_STOP_FLOOR:
+            stop_pct = vwap_signal.stop_distance_pct(candidate, stop=stop)
             logger.info(
                 "%s %s: kurulum atlandı, stop mesafesi %%%.3f < taban %%%.3f "
                 "(tur maliyeti bu mesafede 0.25R'yi aşar)",
                 self.name, candidate.symbol, stop_pct * 100, self._min_stop_pct * 100,
             )
-            return False
+            return
         reward_risk = vwap_signal.reward_risk_of(candidate, stop=stop, target=target)
-        if reward_risk < self._min_reward_risk:
-            logger.info(
-                "%s %s: kurulum atlandı, hedef/stop %.2f < çıta %.2f (VWAP %.6g çok yakın)",
-                self.name, candidate.symbol, reward_risk, self._min_reward_risk, candidate.vwap,
-            )
-            return False
-        return True
+        logger.info(
+            "%s %s: kurulum atlandı, hedef/stop %.2f < çıta %.2f (VWAP %.6g çok yakın)",
+            self.name, candidate.symbol, reward_risk, self._min_reward_risk, candidate.vwap,
+        )
 
     def _signal(
         self, candidate: vwap_signal.VwapCandidate, *, stop: float, target: float
@@ -203,7 +241,7 @@ class VwapManaged(Strategy):
                 f"%{stop_pct * 100:.2f} ({stop:.6g}), hedef {target:.6g} "
                 f"({reward_risk:.2f}R), {self._time_stop.describe()}; "
                 f"{self._exit.describe()}",
-                arm=vwap_signal.ARM_NAME,
+                arm=self._arm_name,
                 rr=reward_risk,
             ),
         )

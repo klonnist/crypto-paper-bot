@@ -78,12 +78,38 @@ from strategies.base import (
     TakeProfit,
 )
 from strategies.exit_management import ExitManagement
-from strategies.scalp.arms import ARM_NAMES, ArmParams, ArmSetup, propose_all
+from strategies.scalp.arms import (
+    ARM_NAMES,
+    ArmParams,
+    ArmSetup,
+    propose_all,
+    symbol_views,
+)
 from strategies.time_stop import CONFIG_KEY as TIME_STOP_KEY, TimeStop
 
 logger = logging.getLogger(__name__)
 
 SIGNALS_PER_ROUND = 1
+
+# Tarama sayımının (take_survey) SABİT anahtar şeması: her kol için aşağıdaki sebepler ve
+# kapıdan geçenlerin iki alt sayacı, her çağrıda SIFIRLARLA birlikte döner. Sabit şema
+# bilinçlidir: bir kolun anahtarının raporda bulunmaması "sıfır" ile "ölçülmedi"yi aynı
+# hücreye yazardı (karar 48'in ölü kollarda yaşadığı şey tam buydu).
+SURVEY_REASONS: tuple[str, ...] = ("kurulum_yok", "stop_tabani", "rr_kapisi", "rejim", "gecti")
+SURVEY_TARGETS: tuple[str, ...] = ("engel_onde", "engel_geride_veya_uzak")
+_TARGET_REL_TOL = 1e-9
+
+
+def survey_key(arm: str, reason: str) -> str:
+    return f"{arm}:{reason}"
+
+
+def survey_keys() -> tuple[str, ...]:
+    return tuple(
+        survey_key(arm, reason)
+        for arm in ARM_NAMES
+        for reason in (*SURVEY_REASONS, *SURVEY_TARGETS)
+    )
 
 
 class ScalpModel(Strategy):
@@ -117,6 +143,10 @@ class ScalpModel(Strategy):
         # değişken demekti (bkz. o modülün docstring'i).
         self._time_stop = TimeStop.from_config(settings, key=self.time_stop_key)
         self._seed = int(get_setting(settings, "random_seed"))
+        # Son taramanın kol × sebep sayımı (kural 15, bkz. `take_survey`). Ölçüme girmez ve
+        # sinyalleri/çekilişi etkilemez. `_survey` adı kasten KULLANILMADI: `ScalpVol` kendi
+        # rejim sayımını o adla tutar ve iki sayım birbirini ezmemelidir.
+        self._arm_survey: dict[str, int] | None = None
 
     # ------------------------------------------------------------------ #
     # Açılış
@@ -126,12 +156,18 @@ class ScalpModel(Strategy):
         market: MarketData,
         peer_signals: Mapping[str, tuple[Signal, ...]] | None = None,
     ) -> list[Signal]:
+        self._arm_survey = None
         proposals = propose_all(market, self._params)
-        available = {
-            arm: kept
-            for arm, setups in proposals.items()
-            if (kept := self.regime_filter(self._gated(arm, setups), market))
-        }
+        available: dict[str, list[ArmSetup]] = {}
+        kept_by_arm: dict[str, list[ArmSetup]] = {}
+        for arm, setups in proposals.items():
+            kept = self.regime_filter(self._gated(arm, setups), market)
+            kept_by_arm[arm] = kept
+            if kept:
+                available[arm] = kept
+        # Sayım çekilişten ÖNCE ve saf hesaplarla yapılır: `rng`ye dokunmaz, yani survey
+        # sinyal dizisini ve çekiliş akışını değiştiremez (tests/test_scalp_survey.py).
+        self._arm_survey = self._tally(market, proposals, kept_by_arm)
         if not available:
             return []
 
@@ -156,7 +192,8 @@ class ScalpModel(Strategy):
         """
         kept: list[ArmSetup] = []
         for setup in setups:
-            if setup.stop_distance_pct < self._min_stop_pct:
+            reason = self._gate_reason(setup)
+            if reason == "stop_tabani":
                 logger.info(
                     "%s %s/%s: kurulum atlandı, stop mesafesi %%%.3f < taban %%%.3f "
                     "(tur maliyeti bu mesafede 0.25R'yi aşar)",
@@ -164,7 +201,7 @@ class ScalpModel(Strategy):
                     setup.stop_distance_pct * 100, self._min_stop_pct * 100,
                 )
                 continue
-            if setup.reward_risk < self._min_reward_risk:
+            if reason == "rr_kapisi":
                 logger.info(
                     "%s %s/%s: kurulum atlandı, hedef/stop %.2f < çıta %.2f",
                     self.name, arm, setup.symbol, setup.reward_risk, self._min_reward_risk,
@@ -172,6 +209,75 @@ class ScalpModel(Strategy):
                 continue
             kept.append(setup)
         return kept
+
+    def _gate_reason(self, setup: ArmSetup) -> str | None:
+        """Ev kapılarının TEK tanımı: kurulumu eleyen kapı (`stop_tabani`/`rr_kapisi`) ya da None.
+
+        Hem `_gated` (eleyen) hem `_tally` (sayan) buradan okur: iki ayrı koşul, sayımın
+        kapının gerçekte ne yaptığından sessizce ayrışması demekti. Saftır — loglamaz.
+        """
+        if setup.stop_distance_pct < self._min_stop_pct:
+            return "stop_tabani"
+        if setup.reward_risk < self._min_reward_risk:
+            return "rr_kapisi"
+        return None
+
+    # ------------------------------------------------------------------ #
+    # Tarama sayımı (kural 15): bir DENETİM İZİ, ölçüm değil
+    # ------------------------------------------------------------------ #
+    def take_survey(self) -> Mapping[str, int] | None:
+        """Son taramanın KOL × SEBEP sayımı; sinyalleri ve çekilişi hiçbir biçimde etkilemez.
+
+        Her kol için (sabit anahtar şeması, sıfırlar dâhil; `survey_keys()`):
+        `kurulum_yok` (kol o sembolde kurulum görmedi), `stop_tabani`, `rr_kapisi`, `rejim`
+        (ev kapılarından geçip `regime_filter`da elenen) ve `gecti`; toplamları incelenen
+        sembol sayısıdır. Kapıdan geçenler ayrıca ikiye bölünür: `engel_onde` (hedef kolun
+        yapısal engeli) ve `engel_geride_veya_uzak` (hedef projeksiyon — engel ya girişin
+        gerisinde ya da projeksiyondan uzakta). İkisinin toplamı `gecti`dir.
+
+        Gerekçe karar 34/48'dir: `momentum_burst` ve `funding_spike_fade` ömür boyu tek
+        sinyal üretmedi ve sebebi yalnızca log'da/elle ölçümle bulunabildi.
+        """
+        return None if self._arm_survey is None else dict(self._arm_survey)
+
+    def _tally(
+        self,
+        market: MarketData,
+        proposals: Mapping[str, Sequence[ArmSetup]],
+        kept_by_arm: Mapping[str, Sequence[ArmSetup]],
+    ) -> dict[str, int]:
+        counts = {key: 0 for key in survey_keys()}
+        examined = len(symbol_views(market, atr_period=self._params.atr_period))
+        for arm in ARM_NAMES:
+            setups = proposals.get(arm, ())
+            kept = kept_by_arm.get(arm, ())
+            gated = 0
+            for setup in setups:
+                reason = self._gate_reason(setup)
+                if reason is None:
+                    gated += 1
+                else:
+                    counts[survey_key(arm, reason)] += 1
+            counts[survey_key(arm, "kurulum_yok")] = max(examined - len(setups), 0)
+            counts[survey_key(arm, "rejim")] = gated - len(kept)
+            counts[survey_key(arm, "gecti")] = len(kept)
+            for setup in kept:
+                counts[survey_key(arm, self._target_kind(setup))] += 1
+        return counts
+
+    def _target_kind(self, setup: ArmSetup) -> str:
+        """Hedef kolun yapısal engeli mi (`engel_onde`), projeksiyon mu (`engel_geride_veya_uzak`).
+
+        `arms._maybe_setup` hedefi `min(projeksiyon, engel)` (engel yalnızca girişin
+        ÖNÜNDEYSE) olarak kurar; hedef projeksiyona eşitse engel ya yoldaydı değil ya da
+        projeksiyondan uzaktaydı. Eşitlik göreli toleranslıdır: stop mesafesi `|giriş − stop|`
+        olarak yeniden türetilirken son basamakta oynayabilir.
+        """
+        sign = 1.0 if setup.direction == "long" else -1.0
+        projected = setup.entry_price + sign * setup.stop_distance * self._params.target_reward_risk
+        if abs(setup.target_price - projected) <= _TARGET_REL_TOL * abs(projected):
+            return "engel_geride_veya_uzak"
+        return "engel_onde"
 
     def _signal(self, setup: ArmSetup, *, posterior: float) -> Signal:
         """Kurulumu sinyale çevirir; `reason` kuyruğuna kol ve posterior etiketlenir.

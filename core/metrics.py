@@ -206,6 +206,43 @@ class FrictionStats:
 
 
 @dataclass(frozen=True, kw_only=True)
+class ExposureStats:
+    """Motor kurallarının DEFTERDEKİ İZİ: ters yönlü çakışma ve teminat baskısı (karar 55).
+
+    **Bu bir ÖLÇÜMDÜR, bir kural DEĞİL** (seans, kayıp serisi ve friksiyon hızıyla aynı statü,
+    karar 42 katman 2): hiçbir sinyal bu sayılara göre elenmez, hiçbir boyut onlara göre
+    değişmez, `core/portfolio.py` bunları OKUMAZ. Defterin saf bir fonksiyonudur, yani tanım
+    düzeldiğinde tüm geçmiş yeniden hesaplanır ve defter bölünmez.
+
+    Neden var (karar 52/55, `docs/taslak-p3-motor-kurallari.md`): `Account.find` yalnızca
+    `(sembol, yön)`e bakar — aynı sembolde karşı yönde açık pozisyonla yeni pozisyon açılabilir —
+    ve `size_position` notional serbest nakdi aşınca marjı nakdin TAMAMI yapar. İkisi de bir
+    modelin ölçümünü okunamaz kılabilir ama ne sıklıkta olduğu hiçbir yerde yazmıyordu.
+
+    - `positions`: kapanmış + AÇIK pozisyon (kapanmış defter tek başına açık çakışmaları
+      kaçırırdı — karar 33-DÜZELTME'nin dersi).
+    - `opposite_at_entry`: AÇILIŞ anında aynı sembolde karşı yönde açık pozisyon vardı.
+      `opposite_overlap`: tutuş aralığı herhangi bir anda karşı yönlü bir pozisyonla kesişti.
+    - `leveraged_positions` / `closed_positions`: `leverage > 1` ile açılanlar (notional
+      nakdi aşmıştı, marj nakdin tamamı). Yalnızca kapanmış pozisyonlar (açıkların kaldıracı
+      defterde yok).
+    - `cash_tight_bars`: nakdin özsermayenin %2'sinin altında kaldığı özsermaye satırı;
+      `cash_negative_bars`, `min_cash_ratio`: komisyon marjdan SONRA ödendiği için hafif eksiye
+      düşen nakit (en kötü nakit/özsermaye).
+    """
+
+    positions: int
+    opposite_at_entry: int
+    opposite_overlap: int
+    closed_positions: int
+    leveraged_positions: int
+    bars: int
+    cash_tight_bars: int
+    cash_negative_bars: int
+    min_cash_ratio: float
+
+
+@dataclass(frozen=True, kw_only=True)
 class ModelMetrics:
     model: str
     long: DirectionStats
@@ -213,6 +250,9 @@ class ModelMetrics:
     total: DirectionStats
     account: AccountStats
     friction: FrictionStats
+    # Motor kurallarının defterdeki izi (karar 55). Varsayılan None: `model_metrics` her zaman
+    # doldurur, ama metrik nesnesini elle kuran okuma yardımcıları bu alanı bilmek zorunda kalmaz.
+    exposure: ExposureStats | None = None
     is_benchmark: bool = False  # kural 15: yarışmacı değil, referans çıpası
     is_replica: bool = False    # yarışmacı değil, dış sistem kopyası
 
@@ -789,6 +829,123 @@ def friction_stats(
     )
 
 
+# --------------------------------------------------------------------------- #
+# Motor kurallarının defterdeki izi (karar 55): ÖLÇÜM, kural değil
+# --------------------------------------------------------------------------- #
+_FOREVER = pd.Timestamp("2262-04-11 00:00:00", tz="UTC")
+_LEVERAGED_EPS = 1e-4
+_CASH_TIGHT_FRACTION = 0.02          # nakit özsermayenin %2'sinin altındaysa "tükenmiş"
+
+
+@dataclass(frozen=True, kw_only=True)
+class Interval:
+    """Bir pozisyonun tutuş aralığı. Açık pozisyonun kapanışı `_FOREVER`dır."""
+
+    symbol: str
+    direction: str
+    opened: pd.Timestamp
+    closed: pd.Timestamp
+
+
+def position_intervals(
+    trades: Iterable[Mapping[str, Any]],
+    open_positions: Iterable[Mapping[str, Any]] = (),
+) -> list[Interval]:
+    """Kapanmış (dolumlar `merge_fills` ile birleşik) + AÇIK pozisyonların tutuş aralıkları.
+
+    Birim POZİSYONDUR (kural 21; ikinci bir tanım yok). Damgası okunamayan satır atlanır:
+    bilinmeyen bir aralığı "her şeyle çakışıyor" saymak sayıyı uydururdu.
+    """
+    result: list[Interval] = []
+    for row in merge_fills(trades):
+        opened, closed = _utc_stamp(row.get("opened_at")), _utc_stamp(row.get("closed_at"))
+        if opened is None or closed is None:
+            continue
+        result.append(
+            Interval(
+                symbol=str(row.get("symbol", "")), direction=str(row.get("direction", "")),
+                opened=opened, closed=closed,
+            )
+        )
+    for position in open_positions:
+        opened = _utc_stamp(position.get("opened_at"))
+        if opened is None:
+            continue
+        result.append(
+            Interval(
+                symbol=str(position.get("symbol", "")), direction=str(position.get("direction", "")),
+                opened=opened, closed=_FOREVER,
+            )
+        )
+    return result
+
+
+def opposite_stats(intervals: Sequence[Interval]) -> dict[str, int]:
+    """Ters yönlü çakışma: GİRİŞTE ve ARALIK olarak. Birim: pozisyon.
+
+    Kapanış anı ile açılış anı eşitse çakışma YOK: dolum bir sonraki barın açılışındadır.
+    """
+    at_entry = overlap = 0
+    for index, item in enumerate(intervals):
+        others = [
+            other for j, other in enumerate(intervals)
+            if j != index and other.symbol == item.symbol and other.direction != item.direction
+        ]
+        if any(other.opened <= item.opened < other.closed for other in others):
+            at_entry += 1
+        if any(other.opened < item.closed and item.opened < other.closed for other in others):
+            overlap += 1
+    return {"positions": len(intervals), "opposite_at_entry": at_entry, "opposite_overlap": overlap}
+
+
+def leverage_stats(trades: Iterable[Mapping[str, Any]]) -> dict[str, int]:
+    """`leverage > 1` ile AÇILAN (kapanmış) pozisyonlar: notional nakdi aşmıştı."""
+    rows = merge_fills(trades)
+    leveraged = sum(
+        1 for row in rows if (_to_float(row.get("leverage")) or 0.0) > 1.0 + _LEVERAGED_EPS
+    )
+    return {"closed": len(rows), "leveraged": leveraged}
+
+
+def cash_stats(equity_rows: Sequence[Mapping[str, Any]]) -> dict[str, float]:
+    """Nakit baskısı: tükenmiş bar, negatif bar ve en kötü nakit/özsermaye oranı."""
+    tight = negative = 0
+    worst = 0.0
+    for row in equity_rows:
+        cash, equity = _to_float(row.get("cash")) or 0.0, _to_float(row.get("equity")) or 0.0
+        if equity > 0 and cash < _CASH_TIGHT_FRACTION * equity:
+            tight += 1
+        if cash < 0:
+            negative += 1
+        if equity > 0:
+            worst = min(worst, cash / equity)
+    return {
+        "bars": len(equity_rows), "cash_tight": tight, "cash_negative": negative,
+        "min_cash_ratio": worst,
+    }
+
+
+def exposure_stats(
+    trades: Sequence[Mapping[str, Any]],
+    equity_rows: Sequence[Mapping[str, Any]],
+    open_positions: Sequence[Mapping[str, Any]] = (),
+) -> ExposureStats:
+    opposite = opposite_stats(position_intervals(trades, open_positions))
+    leverage = leverage_stats(trades)
+    cash = cash_stats(equity_rows)
+    return ExposureStats(
+        positions=opposite["positions"],
+        opposite_at_entry=opposite["opposite_at_entry"],
+        opposite_overlap=opposite["opposite_overlap"],
+        closed_positions=leverage["closed"],
+        leveraged_positions=leverage["leveraged"],
+        bars=int(cash["bars"]),
+        cash_tight_bars=int(cash["cash_tight"]),
+        cash_negative_bars=int(cash["cash_negative"]),
+        min_cash_ratio=float(cash["min_cash_ratio"]),
+    )
+
+
 def periods_per_year(config: Mapping[str, Any]) -> float:
     duration = bar_duration(str(get_setting(dict(config), "timeframe")))
     return pd.Timedelta(days=_DAYS_PER_YEAR) / duration
@@ -804,6 +961,7 @@ def model_metrics(
     equity_rows: Sequence[Mapping[str, Any]],
     initial_capital: float,
     periods_per_year: float,
+    open_positions: Sequence[Mapping[str, Any]] = (),
     is_benchmark: bool = False,
     is_replica: bool = False,
     ci_alpha: float = _NAN,
@@ -836,6 +994,7 @@ def model_metrics(
         friction=friction_stats(
             total, initial_capital=initial_capital, days=account.days
         ),
+        exposure=exposure_stats(trades, equity_rows, open_positions),
         **flags,
     )
 
@@ -876,6 +1035,7 @@ def compare(
             equity_rows=active_ledger.read_equity(model),
             initial_capital=initial_capital,
             periods_per_year=per_year,
+            open_positions=_open_positions(active_ledger, model),
             is_benchmark=model in benchmark_names,
             is_replica=model in replica_names,
             ci_alpha=ci_alpha,
@@ -885,6 +1045,12 @@ def compare(
         )
         for model in models
     ]
+
+
+def _open_positions(ledger: Ledger, model: str) -> list[Mapping[str, Any]]:
+    """Modelin AÇIK pozisyonları (`positions.json`); durum dosyası yoksa boş."""
+    state = ledger.load_state(model)
+    return list((state or {}).get("positions") or ())
 
 
 # --------------------------------------------------------------------------- #
