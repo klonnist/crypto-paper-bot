@@ -1,9 +1,31 @@
 {
-  "cash": 1347.6314166746931,
+  "cash": 4133.838448478078,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-06T01:45:00+00:00",
+  "last_processed_bar": "2026-10-06T02:00:00+00:00",
   "model": "scalp_patient",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-10-06T02:00:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "Açılış aralığı kırılımı: ilk 4 bar [85715.1, 85933.2], kapanış 85425.1 altta (5. bar); hacim 72083.8 ≥ 1.5× SMA20(36054.3); engel ölçülü hareket 85497 (aralık genişliği 218.1); stop 1.01% (86290.6), hedef 83694 (2.00R), zaman stop'u 100 bar | arm=opening_range_breakout | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 86290.63571428572,
+      "symbol": "BTC-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 83694.02857142859
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -84,7 +106,7 @@
       "initial_stop_price": 796.8071428571428,
       "leverage": 5.0,
       "liq_price": 940.233648,
-      "low_water": 781.6,
+      "low_water": 779.8,
       "margin": 0.5027666222191267,
       "notes": "boyut leverage_cap=5 nedeniyle 0.0004 oranında kırpıldı (gereken kaldıraç 12796.06); boyut komisyon+marj nakde sığsın diye 0.9973 oranında kırpıldı",
       "opened_at": "2026-10-05T10:00:00+00:00",
@@ -99,72 +121,6 @@
         {
           "fraction": 1.0,
           "price": 767.9857142857144
-        }
-      ],
-      "trail_giveback_pct": null,
-      "trailing_atr": null
-    },
-    {
-      "breakeven_at_r": null,
-      "direction": "long",
-      "entry_fee": 0.000316489763042197,
-      "entry_price": 0.7548772499999999,
-      "entry_slippage": 0.0002875741793123378,
-      "final_target_price": 0.7967,
-      "funding": -2.822000296393073e-05,
-      "high_water": 0.7548772499999999,
-      "initial_qty": 0.762290733763661,
-      "initial_stop_price": 0.7337000000000001,
-      "leverage": 5.0,
-      "liq_price": 0.6076761862499999,
-      "low_water": 0.7354,
-      "margin": 0.1150871865607989,
-      "notes": "boyut leverage_cap=5 nedeniyle 0.0002 oranında kırpıldı (gereken kaldıraç 25368.39); boyut komisyon+marj nakde sığsın diye 0.9973 oranında kırpıldı",
-      "opened_at": "2026-10-05T21:00:00+00:00",
-      "partial_done": false,
-      "partial_tp": null,
-      "qty": 0.762290733763661,
-      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.158% < 0.200%; engel Bollinger(20) orta bandı 0.749295; stop 2.78% (0.7337), hedef 0.7967 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
-      "stop_price": 0.7337000000000001,
-      "stop_rule": "",
-      "symbol": "ETHFI-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 0.7967
-        }
-      ],
-      "trail_giveback_pct": null,
-      "trailing_atr": null
-    },
-    {
-      "breakeven_at_r": null,
-      "direction": "long",
-      "entry_fee": 1.578769382487172,
-      "entry_price": 0.009736865999999999,
-      "entry_slippage": 1.4345276293552442,
-      "final_target_price": 0.010274857142857145,
-      "funding": -0.14245042139428019,
-      "high_water": 0.009737,
-      "initial_qty": 294806.3356669706,
-      "initial_stop_price": 0.009460571428571426,
-      "leverage": 1.0,
-      "liq_price": 4.8684329999999776e-05,
-      "low_water": 0.009471,
-      "margin": 2870.4897863403125,
-      "notes": "",
-      "opened_at": "2026-10-05T22:45:00+00:00",
-      "partial_done": false,
-      "partial_tp": null,
-      "qty": 294806.3356669706,
-      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.128% < 0.200%; engel Bollinger(20) orta bandı 0.0097099; stop 2.79% (0.00946057), hedef 0.0102749 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
-      "stop_price": 0.009460571428571426,
-      "stop_rule": "",
-      "symbol": "PENGU-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 0.010274857142857145
         }
       ],
       "trail_giveback_pct": null,
