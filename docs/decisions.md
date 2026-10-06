@@ -4418,3 +4418,127 @@ bir commit olarak yazılır.
 
 `vwap_managed`, `scalp_patient`, `scalp_fixed`, `vwap_clone`'un davranışı ve config değerleri;
 `ledgers*/`, `docs/data/`; `core/` (bu paket hiçbir `core/` dosyasına dokunmadı). Backtest koşulmadı.
+
+---
+
+## 55. Motor kuralları (P3): YALNIZCA ölçüm kolonu eklendi — P3a/P3b kuralı değişmedi, P3c'ye dokunulmadı
+
+**Bağlam.** `docs/taslak-p3-motor-kurallari.md` üç motor kuralı önerisini ÖLÇÜLMÜŞ sayılarıyla ve
+seçenekleriyle yazmış, onaya bırakmıştı. Kullanıcı kararı (2026-10-06): **P3a ve P3b için yalnızca
+ölçüm kolonu eklenir, motor kuralı değiştirilmez; P3c'ye dokunulmaz.** Bu karar taslağın önerisiyle
+(A3, B3, C0) birebir örtüşür ve taslak bu karara taşınmıştır (taslakta gönderme durur).
+
+### Ne eklendi (hepsi ÖLÇÜM / DENETİM İZİ; hiçbir dolum, boyut, sinyal ya da sıra değişmedi)
+
+| Madde | Karar | Eklenen | Statü |
+|---|---|---|---|
+| **P3a** ters yönlü pozisyon | **A3** (ölçüm) | `ModelMetrics.exposure` (`core/metrics.py::ExposureStats`): `positions`, `opposite_at_entry` (açılışta karşı yönde açık pozisyon vardı), `opposite_overlap` (tutuş aralığı kesişti) | Katman 2 (karar 42): defterin SAF fonksiyonu, geriye dönük hesaplanır, defter bölünmez |
+| **P3b** teminat kuralı | **B3** (ölçüm) | aynı `ExposureStats`: `closed_positions`, `leveraged_positions` (`leverage > 1`: notional nakdi aşıp marjı nakdin TAMAMI yaptı), `bars`, `cash_tight_bars` (nakit < özsermayenin %2'si), `cash_negative_bars`, `min_cash_ratio`; ve tur raporunda `ModelReport.rejections_by_open` (ret koduna göre, ret ANINDA modelin kaç AÇIK pozisyonu olduğu) | `exposure` defterden hesaplanır; `rejections_by_open` kural 15'in `rejections`ı ile aynı statüde bir denetim izi |
+| **P3c** `vwap_managed` mükerrer sinyal | **C0** (dokunma) | — | Kayıp sayıları taslakta yazılı (55 geçen aday → 35 sinyal barı; 9 `duplicate_position` retinden yalnızca 2'sinde aynı barda başka aday vardı) |
+
+**Tek tanım (kural 7).** Sayımın tanımı `core/metrics.py`dedir (`position_intervals`, `opposite_stats`,
+`leverage_stats`, `cash_stats`); `scripts/measure_engine_rules.py` onları İTHAL eder ve kendi kopyasını
+taşımaz (test: `tests/test_exposure_stats.py::test_the_script_and_the_metrics_module_share_one_definition`).
+Birim `merge_fills` pozisyonudur; açık pozisyonlar `positions.json`dan eklenir (kapanmış defter tek
+başına açık çakışmaları kaçırırdı — karar 33-DÜZELTME'nin dersi). `exposure` alanı `main._payload`
+üzerinden `docs/data/metrics*.json`a otomatik girer; ilk yazımı bir sonraki canlı turdur
+(`ledgers*/` ve `docs/data/` bu değişiklikle ELLE değiştirilmedi).
+
+**Kural değişikliği OLMADIĞI için** (taslak S1): bu karar BH sicilinde (§6c) ne payda ne satırdır —
+performans hipotezi yoktur, ölçüm kolonudur. Defter tarihli olarak BÖLÜNMEZ (karar 25/42 deseni
+gerekmez): hiçbir model farklı bir kuralla koşmaz.
+
+### Bu kolonlar neye cevap VERMEZ
+
+- A1/A2/B1/B2 kurallarından birine geçmek için bir **karar eşiği tanımlamaz**. Taslağın ölçütü
+  ("A1'e geçme kararı ancak A3'ün gösterdiği çakışma bir modelin ölçümünü okunamaz kılıyorsa") aynen
+  duruyor ve sayı bir EŞİK değil bir GÖRÜNÜRLÜKTÜR; eşik koymak sonuç görüldükten sonra kural
+  yazmak olurdu (karar 27/28 dersi). Yeniden değerlendirme yeni bir kullanıcı kararı ister.
+- **Bybit hesap modu SORUSU (taslak S2) AÇIKTIR:** tek yönlü mü hedge modunda mı kabul edildiğini
+  defter yazmıyor ve bu karar bir mod tercihi yapmaz; ters yönlü çakışma olduğu gibi ölçülür.
+- İkinci derece etki (boşalan nakit/kota sonraki sinyalleri açar) bu kolonlarla ÖLÇÜLEMEZ; yalnızca
+  bir kuralın backtest'te iki ayarla koşulması onu gösterir ve bu karar o koşuyu başlatmaz.
+
+### Talimatla çelişki
+
+Yok: karar, taslağın önerisi ve "ölçüm ekle, kural yazma" çizgisi (§7) ile uyumludur. Tek not:
+**kullanıcı "yalnızca ölçüm kolonu ekle" dedi; `rejections_by_open` bir tur raporu alanıdır**
+(`core/engine.py`'ye dokunur) — bu, `ModelReport`a eklenen bir sayaçtır ve kural 15'in
+`rejections`/`emitted`/`survey` ile aynı statüsündedir (testle çivilendi:
+`test_the_audit_field_does_not_change_fills_or_the_ledger`).
+
+### Neye DOKUNULMADI
+
+`core/portfolio.py` (boyutlandırma, `Account.find`, `size_position`), `config.yaml`, hiçbir
+modelin sinyali/kapısı/çıkışı, `ledgers*/`, `docs/data/`. Backtest koşulmadı.
+
+---
+
+## 56. `scalp_thesis` (model 20) KURULMAYACAK — P2 sonucu kayda geçti, `scalp_patient ↔ scalp_thesis` ekseni KAPALI
+
+**Karar (kullanıcı, 2026-10-06):** model 20 kurulmaz. Karar 53 > (b) ve karar 54 > "`scalp_thesis`
+KURULMADI — kullanıcı kararı bekliyor" bölümünün cevabı budur.
+
+**Kayda geçen P2 sonucu (karar 53 > (b), 8.57 haftalık canlı-öncesi pencere):** "engel önde
+olsun" şartıyla yalnızca **`vwap_pullback`** kurulum üretiyor (89 geçenin 39'u; **38 sinyal barı,
+4.4/hf**); `rsi2_reversal` kapıdan geçen 3202 kurulumun **hiçbirinde** engeli girişin önünde
+bulmadı ve `opening_range_breakout` 534'ünün hiçbirinde bulmadı (canlıda `rsi2_reversal` 71/71 geride);
+`momentum_burst` 4450 kurulumdan 0'ı kapıdan geçirdi. Yani **tez, bu geometride 15m'de
+oynanamıyor**: şart, `scalp_patient`in işlem akışının %98'ini ve baskın kolunu keser, geriye kalan
+tek kolu bırakır.
+
+**Eksen kapatıldı:** `scalp_patient` (16) ↔ `scalp_thesis` (20) — *hedef politikasının (yapısal
+engel) katkısı* — **KAPALI, KURULMADI**. Kapanış bir ölçüm sonucu DEĞİL, bir **kapsam sonucudur**:
+eksen ölçülmedi, ölçülemez bulundu (eşleşen pozisyon ≈ 5, aday tek kollu). "Ölçtük ve tutmadı" ile
+"ölçemedik" aynı hücreye yazılmaz (karar 36 > ölçülebilirlik ayrımı); README ve CLAUDE.md eksen
+tablolarında satır bu ifadeyle durur ve SİLİNMEZ.
+
+**Sonuçları (hepsi yapılmayacaklar):**
+
+- `strategies/scalp_thesis.py` yazılmaz, `ScalpModel`e yeni bir override noktası (hedef politikası)
+  eklenmez, `REGISTRY`e girmez. **`docs/backtest.md > 6h` ön-kaydı ve sicil satırı 5 YAZILMAZ**
+  (karar 54 onay gelirse yazılacaklarını söylüyordu; onay GELMEDİ). BH paydası (§6c) m = 2 kalır.
+- Alternatif okumalar (engeli tek bir koldan genelleştirmek, eşiği gevşetmek, eksene yeni bir kol
+  katmak) bu kararın KAPSAMI DIŞINDADIR ve her biri yeni bir ön-kayıt ve yeni bir ölçülebilirlik
+  testiyle gelir (karar 53'ün aracı, `scripts/measure_scalp_arms.py`, hazırdır).
+- Yeniden açma koşulu bir **veri/geometri değişikliğidir** (ör. başka bir zaman dilimi ya da başka
+  bir engel tanımı), mevcut sayıyı yeniden yorumlamak değil.
+
+### Neye DOKUNULMADI
+
+Hiçbir model, config değeri, defter, `core/`, `docs/data/`. Backtest koşulmadı.
+
+---
+
+## 52-DÜZELTME (2026-10-06): V4'ün MFE notu "defterden yeniden üretilemez" YANLIŞTI
+
+**Yanlış olan cümle** (karar 52 > Yöntem, MFE maddesi): MFE "defterde yoktur" ve OKX mumlarından
+hesaplanmıştır; ölçüm "defterden yeniden üretilemez". **Doğrusu:** `ledgers_scalp/vwap_managed/positions.json`
+dosyasının GİT GEÇMİŞİ her açık pozisyon için `high_water` / `low_water` alanlarını (`core/portfolio.py`
+her barda `max(high_water, bar.high)` / `min(low_water, bar.low)` ile günceller) taşır ve MFE bu alanlardan
+**yeniden üretilebilir**. Alanlar `trades.csv`de değil `positions.json`dadır; pozisyon kapanınca dosyadan
+düşer, bu yüzden değer ancak git geçmişindeki son anlık görüntüden okunur.
+
+**Yeniden üretim (bu düzeltmede YAPILDI, iddia edilmedi).** Her kapanmış pozisyon için
+(`symbol, direction, opened_at`) anahtarıyla `positions.json`ın git geçmişindeki (1467 sürüm) SON
+görülen kaydı alındı; MFE = `(high_water − entry)` (long) ya da `(entry − low_water)` (short), birim
+`|entry − initial_stop_price|`:
+
+| ölçü | OKX mumlarıyla (karar 52) | git `high/low_water` ile (bu düzeltme) |
+|---|---|---|
+| zaman stop'u ile kapanan pozisyon | 17 | 17 |
+| bunların ort. MFE'si | **0.707R** | **0.7070R** |
+
+İki kaynak 4 hanede örtüşüyor; yani V4 satırının sonucu (**tuttu**) DEĞİŞMEDİ, yalnızca yönteminin
+iddiası düzeldi. Kapsam sınırları (kayda geçsin): 25 kapanmış pozisyondan **24'ü** eşleşti — eşleşmeyen
+tek pozisyon (`PENGU-USDT-SWAP` long, `2026-09-26T20:30Z`) açıldığı barda stop'a düştüğü için hiçbir
+`positions.json` anlık görüntüsünde YOKTUR; 24 pozisyonun tamamının ort. MFE'si 0.776R'dir (V4'ün
+istediği zaman-stop'u alt kümesi değil, bilgi olarak). Kapanış barının kendi uç değeri anlık görüntüye
+girmeyebilir (kapanış turunda pozisyon dosyadan düşer); zaman stop'u pozisyonlarında bu fark gözlenmedi
+(17/17 eşleşme), diğer çıkış türleri için garanti edilmez.
+
+**Neyin DEĞİŞMEDİĞİ.** Karar 52'nin gövdesi düzenlenmedi (karar 42: eski kararlar düzenlenmez; bu bölüm
+o kuralın "-DÜZELTME" biçimidir — kullanıcı "karar 52'deki notu düzelt" dedi, kural bunun düzeltme bölümüyle
+yapılmasını söylüyor ve **kural kazanır**, çelişki burada yazılıdır). MFE hâlâ ölçümün parçası DEĞİL bir yol
+istatistiğidir; hiçbir model kararına ya da kabul kapısına girmez. Mum tabanlı hesap da geçerliliğini korur
+(farklı bir kaynaktan aynı sonuç, kaynakların birbirini doğruladığı anlamına gelir).

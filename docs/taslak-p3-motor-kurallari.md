@@ -1,4 +1,9 @@
-# TASLAK — P3: motor kuralları (ONAY BEKLİYOR)
+# TASLAK — P3: motor kuralları (ÇÖZÜLDÜ — karar 55)
+
+> **ÇÖZÜM (2026-10-06): bkz. `docs/decisions.md > 55`.** P3a ve P3b için yalnızca ÖLÇÜM kolonu eklendi
+> (A3, B3: `core/metrics.py::ExposureStats` + `ModelReport.rejections_by_open`), motor kuralı
+> DEĞİŞMEDİ; P3c'ye (C0) dokunulmadı. Aşağıdaki metin onay öncesi hâliyle durur ve düzenlenmedi;
+> onay bekleyen sorular (S1–S5) karar 55'te cevaplandı ya da (S2, Bybit hesap modu) açık bırakıldı.
 
 > **Bu belge bir KARAR DEĞİLDİR.** Hiçbir `core/` kodu yazılmadı, hiçbir config değeri
 > değişmedi, hiçbir model davranışı oynamadı. Üç kural değişikliği önerisinin ÖNCE ÖLÇÜLMÜŞ

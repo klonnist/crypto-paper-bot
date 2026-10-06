@@ -156,6 +156,7 @@ Bir eksen kapandığında satır silinmez — kapanışın kendisi bir ölçüm 
 | Adaptasyonun katkısı | `scalp_bandit` (11) ↔ `scalp_fixed` (12) | kol seçimi | **üç kol** | KAPALI — iki kez "fark yok" (karar 33) |
 | Çıkış yönetiminin katkısı | `scalp_fixed` (12) ↔ `scalp_managed` (15) | üç aşamalı çıkış | **üç kol** | KAPALI — iki kez "fark yok" (karar 33) |
 | Volatilite rejiminin katkısı | `scalp_patient` (16) ↔ `scalp_vol` (17) | kesitsel ATR% medyan kapısı | **üç kol** | KAPALI — ön-kayıtlı P1 düştü (karar 36) |
+| Hedef politikasının (yapısal engel) katkısı | `scalp_patient` (16) ↔ `scalp_thesis` (20) | hedef politikası | tek kol (`vwap_pullback`) | KAPALI — KURULMADI, ölçülemez bulundu (karar 56) |
 
 ⚠ **Kapsam kolonu neden var.** Beş kollu modellerin dördünde de 4. ve 5. kol hiç
 tetiklemedi (karar 48), yani bu eksenlerin hiçbiri "beş kollu bir modelde" ölçülmedi —

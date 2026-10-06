@@ -1392,6 +1392,23 @@ kötü çıkarsa "başka bir eşikle olur muydu" diye ikinci bir kesim denenmez 
 post-hoc'tu: ikinci bir post-hoc kesim paydayı büyütür, kanıt üretmez); pencere kaydırılmaz;
 sembol/seans filtresi yok.
 
+**SAPMA NOTU — fonlama maliyeti işlenmeyecek (2026-10-06; koşudan ÖNCE eklendi, hiçbir tahmini,
+pencereyi, eşiği ya da kapıyı DEĞİŞTİRMEZ).** `2026-04-01 → 2026-07-17` penceresi için fonlama
+verisi YOKTUR (karar 50: OKX uç noktası ~3 aylık KAYAN bir pencere tutuyor; ölçülen taban 283
+kayıt) ve ön-kayıtlı komut `funding_periods` girdisini vermez — `data.funding_history_periods`
+(180 ≈ 60 gün, koşu tarihinden geriye) pencereye hiç ulaşmaz. Sonuç: `core/funding.py::rate_at`
+her barda `None` döner ve **fonlama maliyeti pencerenin hiçbir pozisyonuna işlenmez**
+(uydurma yok — §6d'nin 3. sapmasıyla ve §5'in aynı kuralıyla aynı mekanizma). Bu bir §5
+sapmasıdır ve şunu söyler: backtest'in mutlak R düzeyi canlıda ödenen fonlamayı İÇERMEZ,
+dolayısıyla canlı ortalama R'lerle (karar 52, V1) **kıyaslanmaz**. **Neden birincil tahmini
+bozmaz:** iki model aynı kuralı aynı şekilde atlar ve ikizin pozisyonları bazın pozisyonlarının
+aynı çıkışlı kopyalarıdır (V-1); tutuş üst sınırı 17 bar (4.25 saat) olduğundan bir pozisyon en
+fazla bir fonlama damgasına değer ve P1 bir KÜME FARKIDIR. **Sınır (ölçülmedi, iddia
+edilmiyor):** "iki modeli eşit etkiler" bir İLKEDİR, ölçüm değil — korunan ve elenen kümeler
+farklı sembol/yön karışımı taşıyabilir ve fonlama yöne bağlı işaret taşır; bu yüzden etki sıfır
+değil, **P1'in yönünü değiştirmesi beklenmeyen ikinci dereceden bir yanlılık** olarak kayda
+geçti. Pencere, komut ve kapılar yukarıdaki gibi SABİT kalır.
+
 ---
 
 ## 7. Sonucu gördükten sonra YAPILMAYACAKLAR
