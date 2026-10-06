@@ -4542,3 +4542,61 @@ o kuralın "-DÜZELTME" biçimidir — kullanıcı "karar 52'deki notu düzelt" 
 yapılmasını söylüyor ve **kural kazanır**, çelişki burada yazılıdır). MFE hâlâ ölçümün parçası DEĞİL bir yol
 istatistiğidir; hiçbir model kararına ya da kabul kapısına girmez. Mum tabanlı hesap da geçerliliğini korur
 (farklı bir kaynaktan aynı sonuç, kaynakların birbirini doğruladığı anlamına gelir).
+
+---
+
+## 58. `vwap_reentry` (model 19) kâğıt katmanına ALINIYOR — kullanıcı kararı, backtest sonucundan BAĞIMSIZ
+
+**Bu karar backtest sonucu OKUNMADAN yazıldı ve commit edildi** (commit zamanı ve SHA git'tedir; karar
+57 — sonucun kaydı — bu commit'ten SONRA yazılır). §6g'nin koşusu (run `37495045021`) bu kararın
+yazıldığı sırada sürüyordu ve hiçbir sayısı okunmamıştı.
+
+**Karar (kullanıcı, 2026-10-06).** `vwap_reentry`, backtest sonucu ne çıkarsa çıksın (TUTTU / DÜŞTÜ /
+AYIRT EDİLEMEDİ / GEÇERSİZ) scalp katmanının kâğıt `models` listesine alınır. `vwap_managed` yerinde
+kalır; ikisi yan yana koşar. Kullanıcı ileriye dönük kâğıt sonuçlarını kendisi izleyecektir.
+
+**Bu kararın NE OLDUĞU.**
+
+- Bir **kullanıcı kararıdır**, ön-kayıtlı bir kuralın sonucu DEĞİL. Aynı turda önce yazılmış bir
+  kural ("ölçülebilirlik ve n ≥ 30 ise alınır") vardı; kullanıcı onu iptal edip sonuçtan bağımsız
+  bir karara çevirdi. İptal edilen kuralın hiçbir dalı uygulanmadı.
+- Ölçüt **karar 33'tekiyle aynıdır:** performans değil ÖLÇÜLEBİLİRLİK ve ileriye dönük kanıt
+  biriktirme. Hipotezin kaynağı canlı veridir (karar 52 > V3, post-hoc); gerçek test ileriye dönük
+  kâğıt kanıtıdır ve yalnızca kâğıtta birikir. Katmana girişin tarihi, hipotezin kaynağı olan
+  pencerenin (`2026-09-20 → 10-05`) SONRASINDADIR: ikizin defteri boş başlar ve o pencerenin hiçbir
+  pozisyonunu içermez.
+
+**Bu kararın NE OLMADIĞI.**
+
+- **§6g'nin bir kapısını geçtiği anlamına GELMEZ.** §6g'nin birincil tahmini (P1), geçerlilik
+  kapıları (V-1/B-1/B-2) ve BH paydası (sicil satır 4) bu karardan ETKİLENMEZ ve sonuçları aynen
+  kayda geçer; karar 57 onları katmana alma kararından bağımsız okur. Sonuç "DÜŞTÜ" ya da "GEÇERSİZ"
+  de olsa model katmanda kalır — ve bu, o sonucun bir yorumunu ("hipotez tuttu") DESTEKLEMEZ.
+- **Gerçek parayla işlem için hiçbir eşiği geçmek anlamına GELMEZ** (`docs/backtest.md > 4`): C-1
+  (ortalama R > 0), n ≥ 30, edge kapısı vb. canlıya alma eşikleri bu kararla ne sağlanmış sayılır ne
+  gevşetilir. Kâğıt katmanı gerçek para taşımaz.
+- Ön-kaydı değiştirmez: pencere, komut, tahmin ve kapılar §6g'de yazıldığı gibidir ve sonuç
+  görüldükten sonra değiştirilmeyecektir (§7).
+
+**Ölçüm sonuçları.** Katman içi kıyas (`vwap_managed ↔ vwap_reentry`) artık iki defterden de
+okunabilir; ikiz tek değişkenli bir ikizdir (karar 54) ve yan yana koşmak eksenin tanımını bozmaz.
+Kâğıt kanıtının kabul çıtasına girmesi aynı kapılardandır (`acceptance`, n ≥ 30, edge). Çoklu
+karşılaştırma: kâğıt katmanındaki ileriye dönük okuma ayrı bir tahmin değildir; yeni bir ön-kayıt
+olmadan `vwap_reentry` için ikinci bir "birincil" iddia üretilmez (karar 54'ün sicil satırı 4'ü
+tek kayıttır).
+
+**Yan etkiler (ölçülür, kural değil).** Anlık Telegram bildirimi (`scripts/telegram_signals.py`)
+kapsamı ve sitenin model listesi ayrı kontrol edilir ve sonuçları rapora yazılır; bu karar onların
+davranışını değiştirmez.
+
+### Uygulama (kararın SONRAKİ commit'leri)
+
+`config.yaml > layers.scalp.models`e `"vwap_reentry"` eklenir; `tests/test_vwap_reentry.py`teki
+"canlıda DEĞİL" testi "canlıda VAR" olarak çevrilir (karar 33'ün `scalp_patient` deseni);
+CLAUDE.md ve README katman/model tabloları güncellenir. Değişiklik defterleri BÖLMEZ: ikizin
+defteri yeni bir klasördür ve hiçbir mevcut modelin kuralı değişmez.
+
+### Neye DOKUNULMADI
+
+`vwap_managed`, `scalp_patient`, `scalp_fixed`, `vwap_clone`'un davranışı ve config değerleri;
+`ledgers*/`, `docs/data/`, `state/`.
