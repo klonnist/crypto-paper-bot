@@ -1,0 +1,162 @@
+name: run-h1
+
+# 1 saatlik (H1) GÖZLEM katmanının periyodik turu (config.yaml > layers.h1; karar 59).
+# `run.yml` ve `run-scalp.yml`e DOKUNULMAZ: katmanlar ayrı workflow, ayrı tetikleme, ayrı defter
+# (`ledgers_h1/`), ayrı rapor dosyasıdır — ama AYNI çekirdeği koşar (main.py --layer h1).
+#
+# Zamanlama: bar 1H, yani barlar her saat başı KAPANIR. GitHub cron'u bu depoda güvenilir
+# DEĞİLDİR (karar 39-DOĞRULAMA: teslim oranı %23'e kadar düşüyor) ve bu katmanın kendi dış
+# zamanlayıcısı yoktur; bunun yerine tetikleyici, zaten güvenilir olan 15 dakikalık scalp
+# turunun BİTİŞİdir (`workflow_run`). Yani h1 her scalp turundan sonra koşar — saatte ~4 kez —
+# ve bunların yalnızca yeni bir 1H barı kapandıktan SONRAKİ ilki bir şey işler (aşağıdaki
+# `advanced` kapısı, run.yml'deki ile aynı mantık).
+#
+# `workflow_dispatch` elle tetiklemeye açık kalır. Tetikleme kaçarsa SİNYAL KAYBI olmaz:
+# `layers.h1.signals_per_bar` açıktır, motor son işlenmiş bardan `as_of`'a kadarki HER barı
+# sırayla işler ve her barın kendi sinyalini üretir (scalp katmanındaki aynı gerekçe).
+#
+# Katman ön-kayıtsız bir gözlem katmanıdır; bu workflow'un varlığı bir ölçüm kapısını geçmek
+# anlamına gelmez (bkz. docs/decisions.md > 59).
+on:
+  workflow_run:
+    workflows: ["run-scalp"]
+    types: [completed]
+  workflow_dispatch:
+
+# Defter koşular arası taşınan DURUMDUR: iki tur aynı anda koşarsa ikisi de aynı
+# `last_processed_bar`dan başlar ve biri diğerinin commit'ini ezer. Grup diğer katmanlarınkinden
+# AYRIDIR (farklı defter, birbirini beklemeleri gerekmez); cancel-in-progress=false çünkü
+# yarıda kesilen tur defteri yarım bırakır.
+concurrency:
+  group: paper-trading-run-h1
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    # Yalnızca ana dalın scalp koşusunun ardından (bir özellik dalında dispatch edilen
+    # scalp koşusu h1 defterine commit atmamalı) ya da elle.
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      # workflow_run olayında varsayılan checkout ana dalın EN SON commit'idir — yani scalp
+      # koşusunun kendi defter commit'inden sonrası.
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run h1 round
+        run: python main.py --layer h1 --log-level INFO
+
+      # Tur GERÇEKTEN bar işledi mi? Saatte ~4 tetiklemenin üçü yeni 1H barı bulamaz ve hiçbir
+      # şey yazmaz — ama `main.py` her koşuda `generated_at`i tazeler ve rapor yine de
+      # "değişmiş" görünür. O dosyayı commit etmek HEAD'deki `round` denetim izini (`emitted`,
+      # `survey`, `rejections`) BOŞ bir turla ezerdi ve aynı barın sinyal bildirimi tekrarlanırdı
+      # (run.yml'deki aynı kapı). Bu yüzden commit ve bildirim tek bir kapıya bağlanır.
+      - name: Did the round advance?
+        id: round
+        run: |
+          set -euo pipefail
+          BARS="$(python -c 'import json,pathlib; p=json.loads(pathlib.Path("docs/data/metrics_h1.json").read_text()); m=(p.get("round") or {}).get("models") or []; print(max((int(x.get("bars_processed") or 0) for x in m), default=0))')"
+          echo "bars_processed=${BARS}"
+          if [ "${BARS}" -gt 0 ]; then
+            echo "advanced=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "advanced=false" >> "$GITHUB_OUTPUT"
+            echo "yeni kapanmış 1H barı yok: commit ve bildirim atlanıyor"
+          fi
+
+      - name: Commit h1 ledgers and metrics
+        if: steps.round.outputs.advanced == 'true'
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # YALNIZCA h1 katmanının çıktıları: base, scalp ve ema defterlerine bu iş hiçbir
+          # koşulda dokunmaz.
+          git add ledgers_h1 docs/data/metrics_h1.json
+
+          if git diff --cached --quiet; then
+            echo "değişiklik yok, commit atlanıyor"
+            exit 0
+          fi
+
+          AS_OF="$(python -c "import json,pathlib; print(json.loads(pathlib.Path('docs/data/metrics_h1.json').read_text())['as_of'])")"
+          git commit -m "h1: ${AS_OF}"
+
+          # Bu iş scalp turuyla (ve onun bildirim durumu commit'iyle) yarışır. Defter
+          # append-only olduğu için rebase güvenlidir; birkaç kez denenir.
+          for attempt in 1 2 3 4; do
+            if git push; then
+              exit 0
+            fi
+            echo "push başarısız (deneme ${attempt}), rebase edilip tekrar denenecek"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            sleep $((2 ** attempt))
+          done
+          echo "push 4 denemede başarısız oldu"
+          exit 1
+
+      # Anlık sinyal bildirimi (scripts/telegram_signals.py --layer h1): mesaj "⏱ 1H" etiketi
+      # taşır ki 15 dakikalık scalp sinyalleriyle karışmasın. Defter commit'inden SONRA gelir:
+      # bildirim ölçümün parçası değildir, burada ne olursa olsun tur çoktan kaydedilmiştir.
+      # `if: always()` push çakışmasının bildirimi susturmaması, `continue-on-error` ve script'in
+      # koşulsuz 0 dönmesi ise iki ayrı emniyet kemeridir. `advanced` kapısı yeni bir 1H barı
+      # işlenmediyse bildirimi de keser. Hangi sinyalin bildirileceğine (son bar, susturma
+      # penceresi, toplu/birleşik mesaj) script karar verir.
+      - name: Telegram h1 signal alerts
+        if: always() && steps.round.outputs.advanced == 'true'
+        continue-on-error: true
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python scripts/telegram_signals.py --layer h1 --log-level INFO
+
+      # Susturma penceresinin durumu (state/telegram_h1.json) koşular arası TAŞINMAK zorundadır
+      # (runner her koşuda sıfırdan kurulur). Ayrı bir commit: defter commit'ine katmak,
+      # ağ erişimli bildirim adımını turun kaydedilmesinin önüne koymayı gerektirirdi
+      # (run-scalp.yml ile aynı desen). `git add` yalnızca durum dosyasını alır.
+      - name: Commit notification state
+        if: always() && steps.round.outputs.advanced == 'true'
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if [ ! -f state/telegram_h1.json ]; then
+            echo "bildirim durumu dosyası yok, commit atlanıyor"
+            exit 0
+          fi
+
+          git add state/telegram_h1.json
+
+          if git diff --cached --quiet; then
+            echo "bildirim durumu değişmedi, commit atlanıyor"
+            exit 0
+          fi
+
+          git commit -m "h1-telegram: bildirim durumu"
+
+          for attempt in 1 2 3 4; do
+            if git push; then
+              exit 0
+            fi
+            echo "push başarısız (deneme ${attempt}), rebase edilip tekrar denenecek"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            sleep $((2 ** attempt))
+          done
+          echo "push 4 denemede başarısız oldu"
+          exit 1

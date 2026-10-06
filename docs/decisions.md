@@ -4600,3 +4600,83 @@ defteri yeni bir klasördür ve hiçbir mevcut modelin kuralı değişmez.
 
 `vwap_managed`, `scalp_patient`, `scalp_fixed`, `vwap_clone`'un davranışı ve config değerleri;
 `ledgers*/`, `docs/data/`, `state/`.
+
+---
+
+## 59. `h1` — 1 saatlik, ÖN-KAYITSIZ gözlem katmanı: `vwap_managed` ↔ `vwap_reentry`
+
+**Karar (kullanıcı, 2026-10-07).** `vwap_reentry` (model 19) 1 saatlik barlarda AYRI bir katmanda kâğıt
+üzerinde koşar. Ek talimatla `vwap_managed` (model 14) de, **katman İÇİ kıyas için** (CLAUDE.md: kıyas katman
+içinde yapılır) aynı katmana girdi. Bu bir **kullanıcı kararıdır; backtest ve ön-kayıt BİLEREK yapılmadı.**
+
+### Dürüst kayıt: bu katman ÖN-KAYITSIZ bir gözlem katmanıdır
+
+- **Sonuçları bir hipotez testi SAYILMAZ.** Pencere, tahmin, kapı ve eşik önceden yazılmadı; iki modelin farkı
+  (ortalama R, kazanma oranı, eğri) burada da bir hipotez testi değildir ve "tuttu / düştü" diye okunmayacaktır.
+- **`docs/backtest.md > 6c` siciline GİRMEZ** (BH payda m = 2 kalır): sicil ön-kaydı olan hipotezleri sayar; bu katman
+  bir hipotez kaydı değildir.
+- **Gerçek para için hiçbir eşiği geçmiş anlamına GELMEZ** (`docs/backtest.md > 4`): C-1, n ≥ 30 ve edge kapıları
+  ne sağlanmış sayılır ne gevşetilir. Kâğıt katmanı gerçek para taşımaz.
+- **Test edilmek istenirse KENDİ ön-kaydıyla gelir** ve bu katmanın biriken sayıları o ön-kaydın dayanağı
+  yapılamaz (§7: sonuç görüldükten sonra kural yazmak yok).
+- Kaynak (karar 52 > V3, post-hoc p = 0.029) ve scalp'teki karar 54/58 çizgisi değişmedi; bu karar onlara yeni bir
+  kanıt EKLEMEZ.
+
+### Ne kuruldu
+
+`config.yaml > layers.h1`: `timeframe "1H"`, `models ["vwap_managed", "vwap_reentry"]`, scalp'in SABİT 13 sembolü
+(testle eşitliği çivili), `ledger_dir ledgers_h1`, `metrics_file docs/data/metrics_h1.json`,
+`signals_per_bar: true`. Seçilen değerler ve gerekçeleri config yorumlarındadır:
+
+| Anahtar | Değer | Gerekçe (özet) |
+|---|---|---|
+| `data.history_bars` | 720 (30 gün) | gün-çapalı VWAP ≤ 24 bar, ATR(14), `min_vwap_bars` 8 → ~48 bar yeter; 720 bilinçli tampon (şart ≥ 500), önbellek küçük |
+| `data.max_staleness_bars` | 3 (3 saat) | tetikleyici her scalp turunun ardından (~15 dk); 3 saat birkaç kaçan turu tolere eder, gerçekten bayat veriyi reddeder |
+| `max_stop_atr_multiple` | 3.0 | kökün değeri; modelin stop'u sabit 2.5×ATR olduğundan tavan modelin kendi stop'unu elemez (scalp'te 8× gerekmişti: %1 stop tabanı 15m ATR'sinden çok büyüktü) |
+| `retention.equity_compaction_days` | 90 | günde 24 tur × 2 model: 90 günde ~2.2 bin satır/model, scalp'in 30 günlük penceresiyle aynı büyüklük |
+| `retention.model_trade_limit` | 100 | H1 işlem sayısı düşük (~1/gün/model); son 100 işlem ≈ 3 ay |
+| `breakdowns` | scalp'in listesi | `arm` iki modelin kolunu ayırır; `session`/`loss_streak` ÖLÇÜM, kural değil |
+
+**Model kodu ve parametreleri DEĞİŞMEDİ:** `vwap.band_mult`, `vwap.min_vwap_bars`, `vwap.managed.*`,
+`scalp.min_stop_pct`, `scalp.min_reward_risk`, `scalp.time_stop_bars` ve `exit_management.*` kökten aynen devralınır
+(`tests/test_layers.py::test_h1_inherits_every_model_parameter_from_the_root_unchanged`).
+
+**"16 bar" bu katmanda 16 SAATTİR.** `strategies/time_stop.py::TimeStop.from_config` süreyi katmanın `timeframe`inden
+alır (`bar_duration("1H")`); doğrulandı ve testle çivilendi
+(`test_the_time_stop_is_sixteen_hours_on_the_h1_layer`). Aynı sebeple `vwap.min_vwap_bars: 8` bu katmanda UTC gününün
+ilk 8 saatinin sinyalsiz olması demektir (scalp'te 2 saat). İkisi de modelin tanımıdır, bu katmanın ayarı değil; iki
+zaman diliminin sayıları bu yüzden doğrudan kıyaslanmaz.
+
+### Tetikleyici
+
+`.github/workflows/run-h1.yml`: GitHub cron'u bu depoda güvenilir değil (karar 39-DOĞRULAMA), bu yüzden tetikleyici
+`workflow_run: workflows: ["run-scalp"], types: [completed]` + `workflow_dispatch` — yani her ~15 dakikalık scalp
+turundan sonra koşar ve `run.yml`deki `advanced` kapısı gereği yalnızca yeni bir 1H barı işlenirse commit/bildirim
+üretir. Yalnızca ana dalın scalp koşusunun ardından tetiklenir. Ayrı concurrency grubu, `cancel-in-progress: false`;
+commit kapsamı yalnızca `ledgers_h1/` + `docs/data/metrics_h1.json`. `pages.yml` workflow'u da dinler.
+**Defter boş başlar ve yalnızca son barla**; geçmişe dönük doldurma YAPILMADI.
+
+### Telegram
+
+`scripts/telegram_signals.py` katman başına ayarlıdır (`--layer`): h1 için `docs/data/metrics_h1.json`,
+`state/telegram_h1.json`, modeller `{vwap_managed, vwap_reentry}`; mesaj "⏱ 1H" etiketi ve 1H'ye özgü uyarıyı taşır
+ve aynı bar + sembolde iki model sinyal verirse tek mesajda iki satır olur. scalp bildirimleri DEĞİŞMEDİ (testle
+çivili; modeller ve durum dosyası `state/telegram_scalp.json` aynı).
+
+### Site
+
+`docs/index.html`'e ayrı "1 saat (H1) — gözlem katmanı" bölümü (iki model: tablo, kart + eğri, kırılımlar) ve
+`docs/positions.html` katman filtresine `h1` eklendi; hiçbir özet kartında, havuzda ya da sıralamada base/scalp ile
+toplanmaz.
+
+### Talimatla çelişki
+
+Orijinal görev metni Telegram için "yalnızca `scalp_patient`" scalp davranışını varsayıyordu, oysa scalp bildirimi bu
+görevden önce (karar 58'in ardından, kullanıcı tercihiyle) `{vwap_managed, vwap_reentry}` olarak değişmişti ve ek
+talimat "scalp katmanının bildirimleri değişmez" diyor. Çelişkide **GÜNCEL durum** (scalp = iki vwap modeli) korundu ve
+çivilendi.
+
+### Neye DOKUNULMADI
+
+`ledgers/`, `ledgers_scalp/`, `ledgers_ema/`, mevcut `docs/data/metrics*.json`, `state/telegram_scalp.json`; base,
+scalp ve ema katmanlarındaki hiçbir modelin davranışı, defteri ya da ayarı. Backtest koşulmadı.

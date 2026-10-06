@@ -357,6 +357,36 @@
       <div id="scalp-exit-rules"></div>
     </section>
 
+    <section id="sec-h1" hidden>
+      <h2>1 saat (H1) — gözlem katmanı</h2>
+      <p class="note">
+        <b>Bu bölüm ne base'in ne scalp'in yarışıdır; hiçbir özette, havuzda ya da sıralamada onlarla
+        toplanmaz.</b> H1 modelleri 1 saatlik barda, scalp ile aynı sabit evrende ve kendi
+        defterlerinde koşar (<code>data/metrics_h1.json</code>).
+        <b>ÖN-KAYITSIZ bir gözlem katmanıdır</b> (karar 59): backtest ve ön-kayıt bilerek yapılmadı,
+        sonuçları bir hipotez testi sayılmaz, çoklu karşılaştırma siciline girmez ve gerçek para için
+        hiçbir eşiği geçmiş anlamına gelmez.
+      </p>
+      <p class="note">
+        <b>Giriş onayının katkısı</b> — <b>vwap_reentry</b>, <b>vwap_managed</b>'in ikizidir:
+        kapılar, stop, hedef, çıkış yönetimi ve evren aynıdır; tek farkı dönüş barının kapanışının
+        bandın İÇİNE girmesi şartıdır (karar 54). Bu bölümde "bar" 1 saattir, yani
+        <code>time_stop_bars: 16</code> = 16 saat ve <code>min_vwap_bars: 8</code> = UTC gününün
+        ilk 8 saati sinyalsizdir.
+      </p>
+      <p class="note" id="h1-stamp"></p>
+      <div class="card wide" id="h1-models"></div>
+      <div class="rows narrow" id="h1-models-cards"></div>
+      <h3 class="sub">Özsermaye eğrisi</h3>
+      <div class="card" id="h1-curve"></div>
+      <h3 class="sub">Kol kırılımı</h3>
+      <div id="h1-arms"></div>
+      <h3 class="sub">Sembol kırılımı</h3>
+      <div id="h1-symbols"></div>
+      <h3 class="sub">Çıkış kuralı kırılımı</h3>
+      <div id="h1-exit-rules"></div>
+    </section>
+
   </main>
 
   <!-- ======================= SEVİYE 2 — MODEL DETAYI ======================= -->
@@ -503,6 +533,7 @@ function render(d) {
   renderEquity(d);
   renderCorrelation(d);
   loadScalp();
+  loadH1();
 
   window.addEventListener("hashchange", route);
   el("back").addEventListener("click", (ev) => {
@@ -616,6 +647,111 @@ function renderScalp(d) {
   renderBreakdown("scalp-arms", (d.breakdowns || {}).arm, "kol", gate);
   renderBreakdown("scalp-symbols", (d.breakdowns || {}).symbol, "sembol", gate);
   renderBreakdown("scalp-exit-rules", (d.breakdowns || {}).exit_rule, "çıkış kuralı", gate);
+}
+
+/* ------------------------------------------------------------------ *
+ * H1 KATMANI (1 saat, GÖZLEM) — AYRI yük, AYRI bölüm (karar 59)
+ *
+ * scalp ile aynı desen: ayrı dosya (`data/metrics_h1.json`), eksik dosya bir arıza değil
+ * henüz olmayan bir ölçümdür ve bölüm gizli kalır. Hiçbir özet kartına, havuza ya da
+ * sıralamaya KATILMAZ: H1 yalnızca kendi bölümünde ve kendi iki modeliyle görünür.
+ * ------------------------------------------------------------------ */
+function loadH1() {
+  fetchPayload("data/metrics_h1.json")
+    .then((d) => { if (d) renderH1(d); })
+    .catch(() => { /* katman henüz koşmadı: bölüm gizli kalır */ });
+}
+
+const H1_COLORS = ["#3987e5", "#d95926", "#199e70", "#c98500"];
+
+function renderH1(d) {
+  el("sec-h1").hidden = false;
+  const models = d.models || [];
+
+  el("h1-stamp").innerHTML =
+    "Son tur <b>" + esc(shortTs(d.as_of)) + "</b> — bar " + esc((d.settings || {}).timeframe || "1H") +
+    ", " + (d.universe_size ?? DASH) + " sembol, stop tavanı " +
+    fmt((d.settings || {}).max_stop_atr_multiple, 1) + "×ATR. <b>Gözlem katmanı: ön-kayıtsız.</b>";
+
+  el("h1-models").innerHTML = '<table class="grid"><thead><tr>' +
+    SCALP_COLUMNS.map((c) => "<th>" + esc(c) + "</th>").join("") + "</tr></thead><tbody>" +
+    models.map((m) => '<tr class="data">' + scalpRow(m).map(([cls, v]) =>
+      '<td class="' + cls + '">' + v + "</td>").join("") + "</tr>").join("") +
+    "</tbody></table>";
+
+  /* Kart: dar ekranda tablo yerine; özsermaye mini eğrisiyle birlikte. */
+  const equity = d.equity || {};
+  el("h1-models-cards").innerHTML = models.map((m, index) => {
+    const name = m.name || m.model;
+    const total = m.total || {}, account = m.account || {};
+    const fields = [
+      ["işlem", total.trades ?? DASH],
+      ["kazanma", pct(total.win_rate)],
+      ["toplam R", fmtSigned(total.total_r, 1)],
+      ["getiri", pctSigned(account.total_return)],
+      ["cost/R", fmt(total.cost_per_r, 3)],
+      ["stop %", pctRaw(total.avg_stop_distance_pct)],
+    ];
+    return '<article class="row">' +
+      '<div class="row-top"><div><span class="row-sym">' + esc(name) + "</span></div>" +
+      '<div style="text-align:right"><div class="row-val ' + signClass(total.avg_r) + '">' +
+      fmtSigned(total.avg_r) + "R</div><div class=\"row-val-sub\">ort. R</div></div></div>" +
+      '<div class="mcard-spark">' + sparkline(equity[name], H1_COLORS[index % H1_COLORS.length], false) + "</div>" +
+      '<div class="row-grid">' + fields.map(([k, v]) =>
+        "<div><span>" + esc(k) + '</span> <b><span class="nw">' + esc(String(v)) + "</span></b></div>").join("") +
+      "</div></article>";
+  }).join("");
+
+  renderH1Curve(d, models);
+
+  const gate = num((d.acceptance || {}).min_trades);
+  renderBreakdown("h1-arms", (d.breakdowns || {}).arm, "kol", gate);
+  renderBreakdown("h1-symbols", (d.breakdowns || {}).symbol, "sembol", gate);
+  renderBreakdown("h1-exit-rules", (d.breakdowns || {}).exit_rule, "çıkış kuralı", gate);
+}
+
+/* İki modelin özsermaye eğrisi: ortak eksen, başlangıç sermayesi kesikli çizgi.
+   Ayrı bir SVG (base'in etkileşimli grafiği değil): H1'in bölümü o grafiğin durumuna
+   (izolasyon, tooltip) bağlanmasın ve ona karışmasın diye. viewBox sabit, genişlik
+   kapsayıcıya uyar: yatay kaydırma yoktur. */
+function renderH1Curve(d, models) {
+  const host = el("h1-curve");
+  const equity = d.equity || {};
+  const names = models.map((m) => m.name || m.model).filter((n) => (equity[n] || []).length > 0);
+  if (!names.length) {
+    host.innerHTML = '<p class="empty">Henüz özsermaye kaydı yok.</p>';
+    return;
+  }
+  const series = names.map((n) => (equity[n] || [])
+    .map(([ts, v]) => [Date.parse(ts), Number(v)])
+    .filter((p) => Number.isFinite(p[0]) && Number.isFinite(p[1])));
+  const initial = num((d.settings || {}).initial_capital);
+  let tMin = Infinity, tMax = -Infinity, vMin = Infinity, vMax = -Infinity;
+  for (const points of series) for (const [t, v] of points) {
+    tMin = Math.min(tMin, t); tMax = Math.max(tMax, t); vMin = Math.min(vMin, v); vMax = Math.max(vMax, v);
+  }
+  if (initial !== null) { vMin = Math.min(vMin, initial); vMax = Math.max(vMax, initial); }
+  if (tMax === tMin) tMax = tMin + 1;
+  const pad = (vMax - vMin) * 0.08 || Math.max(1, vMax * 0.01);
+  vMin -= pad; vMax += pad;
+  const W = 600, H = 200;
+  const x = (t) => ((t - tMin) / (tMax - tMin)) * W;
+  const y = (v) => H - ((v - vMin) / (vMax - vMin)) * H;
+  const base = initial === null ? "" :
+    '<line x1="0" x2="' + W + '" y1="' + y(initial).toFixed(1) + '" y2="' + y(initial).toFixed(1) +
+    '" stroke="var(--ink-muted)" stroke-width="1" stroke-dasharray="3 3" opacity="0.6" vector-effect="non-scaling-stroke"/>';
+  const lines = series.map((points, i) => '<path d="' + points.map(([t, v], k) =>
+    (k ? "L" : "M") + x(t).toFixed(1) + " " + y(v).toFixed(1)).join(" ") +
+    '" fill="none" stroke="' + H1_COLORS[i % H1_COLORS.length] + '" stroke-width="2" ' +
+    'stroke-linejoin="round" vector-effect="non-scaling-stroke"/>').join("");
+  const legend = names.map((n, i) => '<span class="lg"><i style="border-top-color:' +
+    H1_COLORS[i % H1_COLORS.length] + '"></i>' + esc(n) + "</span>").join(" ");
+  host.innerHTML = '<div class="legend">' + legend + "</div>" +
+    '<svg viewBox="0 0 ' + W + " " + H + '" preserveAspectRatio="none" style="width:100%;height:200px" ' +
+    'role="img" aria-label="H1 özsermaye eğrisi">' + base + lines + "</svg>" +
+    '<p class="note">Aralık ' + esc(shortTs(new Date(tMin).toISOString())) + " → " +
+    esc(shortTs(new Date(tMax).toISOString())) + "; özsermaye " + fmt(vMin + pad, 0) + " … " +
+    fmt(vMax - pad, 0) + " USDT.</p>";
 }
 
 const BREAKDOWN_COLUMNS = ["işlem", "ort. R", "ort. R aralığı", "kazanma", "toplam R", "cost/R"];

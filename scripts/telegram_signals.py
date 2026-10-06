@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-"""Scalp katmanının ANLIK sinyal bildirimi: yeni sinyal üretildiğinde Telegram mesajı.
+"""Scalp ve H1 katmanlarının ANLIK sinyal bildirimi: yeni sinyal üretildiğinde Telegram mesajı.
+
+**Katman başına ayrı ayar** (`LAYER_SETTINGS`, `--layer`): kaynak rapor dosyası, durum dosyası
+(susturma penceresi) ve bildirilecek modeller katmana aittir. `scalp` davranışı bir testle
+çivilidir (`tests/test_telegram_signals.py`); `h1` (1 saatlik gözlem katmanı, karar 59) mesajda
+"⏱ 1H" etiketi taşır ve AYNI barda AYNI sembolde birden çok model sinyal verirse tek mesajda
+model başına bir satırla birleştirilir (15 dakikalık sinyallerle karışmasın ve iki modelin
+aynı kurulumu iki ayrı mesaj olarak gelmesin diye).
 
 `scripts/telegram_report.py` ile KARIŞTIRILMAMALIDIR ve ona hiç dokunmaz: o, 4 saatlik
 katmanın günde bir kez (as_of 20:00) yolladığı PERFORMANS özetidir; bu ise scalp
@@ -45,6 +52,7 @@ import logging
 import math
 import os
 import sys
+from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
@@ -74,6 +82,8 @@ MAX_SINGLE_MESSAGES = 5
 # vwap_reentry — diğer scalp modelleri de deftere yazılır ve ölçüme girer, sadece Telegram'a
 # düşmezler).
 NOTIFY_MODELS = frozenset({"vwap_managed", "vwap_reentry"})
+# H1 (1 saatlik gözlem katmanı, karar 59): iki model yan yana, scalp'tekiyle aynı ikiz çifti.
+H1_NOTIFY_MODELS = frozenset({"vwap_managed", "vwap_reentry"})
 # Durum dosyasında tutulan kaydın azami yaşı (bar): susturma penceresinin katı kadar
 # geçmiş yeter, fazlası dosyayı sonsuza kadar büyütürdü.
 STATE_RETENTION_BARS = 8 * DEDUPE_BARS
@@ -83,6 +93,33 @@ MAX_MESSAGE_CHARS = 3900
 REASON_CHARS = 200
 
 logger = logging.getLogger("telegram_signals")
+
+
+@dataclass(frozen=True)
+class LayerSettings:
+    """Bir katmanın bildirim ayarı: kaynak, durum, bildirilecek modeller ve mesaj biçimi."""
+
+    metrics: Path
+    state: Path
+    models: frozenset[str]
+    title: str                  # mesaj başlığı etiketi (15m ile 1H karışmasın)
+    merge_models: bool = False  # aynı bar + sembol -> tek mesaj, model başına bir satır
+    bar_note: str = ""          # zorunlu uyarı satırına katmana özgü ek
+
+
+LAYER_SETTINGS: dict[str, LayerSettings] = {
+    "scalp": LayerSettings(
+        metrics=METRICS_PATH, state=STATE_PATH, models=NOTIFY_MODELS, title="⚡ SCALP SİNYALİ",
+    ),
+    "h1": LayerSettings(
+        metrics=Path("docs/data/metrics_h1.json"),
+        state=Path("state/telegram_h1.json"),
+        models=H1_NOTIFY_MODELS,
+        title="⏱ 1H SİNYALİ",
+        merge_models=True,
+        bar_note="1H barlarda bu, bildirim ile dolum arasında bir saate kadar fark demektir.",
+    ),
+}
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -99,7 +136,15 @@ def main(argv: Sequence[str] | None = None) -> int:
 
 
 def _run(args: argparse.Namespace) -> int:
-    path = Path(args.metrics)
+    settings = LAYER_SETTINGS.get(args.layer)
+    if settings is None:
+        logger.warning(
+            "tanınmayan katman %r (tanımlı: %s): bildirim yollanmıyor",
+            args.layer, ", ".join(sorted(LAYER_SETTINGS)),
+        )
+        return 0
+    path = Path(args.metrics) if args.metrics else settings.metrics
+    state_path = Path(args.state) if args.state else settings.state
     if not path.is_file():
         logger.warning("%s yok: bildirim yollanmıyor", path)
         return 0
@@ -129,13 +174,13 @@ def _run(args: argparse.Namespace) -> int:
 
     as_of = _stamp(payload.get("as_of"))
     signals = _last_bar_signals(payload, as_of=as_of)
-    signals = [s for s in signals if s.get("model") in NOTIFY_MODELS]
+    signals = [s for s in signals if s.get("model") in settings.models]
     if not signals:
         logger.info("%s barında yeni sinyal yok: bildirim yollanmıyor", payload.get("as_of"))
         return 0
 
     span = _bar_span(signals)
-    state = _load_state(Path(args.state))
+    state = _load_state(state_path)
     fresh = _without_recent(signals, state=state, bar_span=span)
     if not fresh:
         logger.info(
@@ -144,7 +189,7 @@ def _run(args: argparse.Namespace) -> int:
         )
         return 0
 
-    messages = build_messages(fresh)
+    messages = build_messages(fresh, layer=args.layer)
     if args.dry_run:
         # Durum dosyasına YAZILMAZ: yollanmamış bir mesajı "bildirildi" saymak, gerçek
         # koşuda aynı sinyali susturur ve bildirimi sessizce kaybederdi.
@@ -171,7 +216,7 @@ def _run(args: argparse.Namespace) -> int:
         logger.warning("hiçbir mesaj yollanamadı, durum dosyası güncellenmedi")
         return 0
 
-    _save_state(Path(args.state), state=state, notified=notified, as_of=as_of, bar_span=span)
+    _save_state(state_path, state=state, notified=notified, as_of=as_of, bar_span=span)
     return 0
 
 
@@ -362,7 +407,7 @@ def _pruned(
 # Mesaj
 # --------------------------------------------------------------------------- #
 def build_messages(
-    signals: Sequence[Mapping[str, Any]],
+    signals: Sequence[Mapping[str, Any]], *, layer: str = DEFAULT_LAYER
 ) -> list[tuple[str, list[Mapping[str, Any]]]]:
     """Bildirilecek mesajlar: 5'e kadar tek tek, fazlasında TEK toplu mesaj.
 
@@ -373,15 +418,36 @@ def build_messages(
     HTML parse_mode, günlük özetle aynı gerekçeyle (bkz. scripts/telegram_report.py):
     model ve kol adları alt çizgi içerir (`scalp_bandit`, `rsi2_reversal`) ve Markdown'da
     alt çizgi italik açar.
+
+    `layer` başlık etiketini ve birleştirme kuralını seçer (`LAYER_SETTINGS`). Birleştiren
+    katmanda (h1) AYNI bar ve sembol için gelen sinyaller tek mesajda toplanır; "5'ten fazla"
+    sınırı SİNYAL değil MESAJ sayısı üzerinden uygulanır.
     """
+    settings = LAYER_SETTINGS.get(layer, LAYER_SETTINGS[DEFAULT_LAYER])
+    if settings.merge_models:
+        groups = _group_by_bar_and_symbol(signals)
+        if len(groups) > MAX_SINGLE_MESSAGES:
+            return [(_batch_message(signals, settings), list(signals))]
+        return [(_group_message(group, settings), group) for group in groups]
     if len(signals) > MAX_SINGLE_MESSAGES:
-        return [(_batch_message(signals), list(signals))]
-    return [(_single_message(signal), [signal]) for signal in signals]
+        return [(_batch_message(signals, settings), list(signals))]
+    return [(_single_message(signal, settings), [signal]) for signal in signals]
 
 
-def _single_message(signal: Mapping[str, Any]) -> str:
+def _group_by_bar_and_symbol(
+    signals: Sequence[Mapping[str, Any]],
+) -> list[list[Mapping[str, Any]]]:
+    """Aynı (bar, sembol) sinyallerini gruplar; sıra girişin sırasıdır (deterministik)."""
+    groups: dict[tuple[str, str], list[Mapping[str, Any]]] = {}
+    for signal in signals:
+        groups.setdefault((str(signal.get("bar")), str(signal.get("symbol"))), []).append(signal)
+    return list(groups.values())
+
+
+def _single_message(signal: Mapping[str, Any], settings: LayerSettings | None = None) -> str:
+    settings = settings or LAYER_SETTINGS[DEFAULT_LAYER]
     lines = [
-        "<b>⚡ SCALP SİNYALİ</b>",
+        f"<b>{_esc(settings.title)}</b>",
         f"<b>{_esc(signal.get('model'))}</b> / {_esc(_arm(signal))}",
         f"{_esc(signal.get('symbol'))} · <b>{_esc(_direction(signal))}</b>",
         f"bar {_esc(_clock(signal.get('bar')))} UTC · kapanış <code>{_price(signal.get('close'))}</code>",
@@ -393,15 +459,42 @@ def _single_message(signal: Mapping[str, Any]) -> str:
     if reason:
         lines.append(f"<i>{_esc(reason)}</i>")
     lines.append("")
-    lines.append(_warning(signal))
+    lines.append(_warning(signal, settings))
     return _clipped("\n".join(lines))
 
 
-def _batch_message(signals: Sequence[Mapping[str, Any]]) -> str:
+def _group_message(group: Sequence[Mapping[str, Any]], settings: LayerSettings) -> str:
+    """AYNI bar ve sembol için tek mesaj: model başına bir satır (h1).
+
+    `reason` metni girmez: iki modelin gerekçesi ortak kurulumu iki kez anlatırdı;
+    gerekçe dashboard'da durur.
+    """
+    first = group[0]
+    lines = [
+        f"<b>{_esc(settings.title)}</b>",
+        f"{_esc(first.get('symbol'))} · bar {_esc(_clock(first.get('bar')))} UTC",
+    ]
+    for signal in group:
+        lines.append(
+            f"• <b>{_esc(signal.get('model'))}</b> / {_esc(_arm(signal))} — "
+            f"<b>{_esc(_direction(signal))}</b> · kapanış <code>{_price(signal.get('close'))}</code> · "
+            f"stop <code>{_price(signal.get('stop_price'))}</code> · "
+            f"hedef <code>{_price(signal.get('target_price'))}</code> · "
+            f"R:R {_ratio(signal.get('reward_risk'))}"
+        )
+    lines.append("")
+    lines.append(_warning(first, settings))
+    return _clipped("\n".join(lines))
+
+
+def _batch_message(
+    signals: Sequence[Mapping[str, Any]], settings: LayerSettings | None = None
+) -> str:
     """Tek mesajda tüm sinyaller. `reason` metni GİRMEZ: mesaj sınırı 4096 karakterdir
     ve altı sinyalin gerekçesi tek başına onu aşabilirdi; gerekçe dashboard'da durur."""
+    settings = settings or LAYER_SETTINGS[DEFAULT_LAYER]
     lines = [
-        f"<b>⚡ SCALP SİNYALİ — {len(signals)} yeni sinyal</b>",
+        f"<b>{_esc(settings.title)} — {len(signals)} yeni sinyal</b>",
         f"bar {_esc(_clock(signals[0].get('bar')))} UTC",
         "",
     ]
@@ -417,11 +510,11 @@ def _batch_message(signals: Sequence[Mapping[str, Any]]) -> str:
             f"R:R {_ratio(signal.get('reward_risk'))}"
         )
     lines.append("")
-    lines.append(_warning(signals[0]))
+    lines.append(_warning(signals[0], settings))
     return _clipped("\n".join(lines))
 
 
-def _warning(signal: Mapping[str, Any]) -> str:
+def _warning(signal: Mapping[str, Any], settings: LayerSettings | None = None) -> str:
     """ZORUNLU uyarı satırı: bildirim ile dolum arasındaki fiyat farkı.
 
     Bu satır opsiyonel değildir. Sinyal, üretildiği barın KAPANIŞINDA duyurulur; emir ise
@@ -430,9 +523,10 @@ def _warning(signal: Mapping[str, Any]) -> str:
     tekrarlanabileceği izlenimini verirdi.
     """
     fills_at = _clock(signal.get("fills_at"))
+    note = f" {settings.bar_note}" if settings is not None and settings.bar_note else ""
     return (
         f"⚠️ Bot bu emri bir sonraki bar açılışından dolduracak ({_esc(fills_at)} UTC). "
-        "Senin girişin farklı bir fiyattan olacak."
+        f"Senin girişin farklı bir fiyattan olacak.{_esc(note)}"
     )
 
 
@@ -515,10 +609,14 @@ def _report_age_minutes(payload: Mapping[str, Any]) -> float | None:
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Scalp katmanının yeni sinyallerini Telegram'a bildirir."
+        description="Katmanın (scalp, h1) yeni sinyallerini Telegram'a bildirir."
     )
-    parser.add_argument("--metrics", default=str(METRICS_PATH), help="katmanın rapor dosyası")
-    parser.add_argument("--state", default=str(STATE_PATH), help="susturma penceresi durumu")
+    parser.add_argument(
+        "--metrics", default=None, help="katmanın rapor dosyası (varsayılan: katman ayarı)"
+    )
+    parser.add_argument(
+        "--state", default=None, help="susturma penceresi durumu (varsayılan: katman ayarı)"
+    )
     parser.add_argument(
         "--layer", default=DEFAULT_LAYER,
         help=f"raporun ait olması gereken katman (varsayılan {DEFAULT_LAYER})",

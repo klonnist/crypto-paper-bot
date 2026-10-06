@@ -409,6 +409,20 @@ defter yazan modeller), **katalog** (`strategies/registry.py`'de kayıtlı ama l
 | 14 | `vwap_managed` | long + short | VWAP sapma-dönüş sinyali, ev kurallarıyla (risk boyutlandırma, %1 taban, 1.5R) |
 | 19 | `vwap_reentry` | long + short | `vwap_managed`in ikizi, tek farkı giriş onayı (dönüş bandın İÇİNE kapanmalı); kâğıt katmanına KULLANICI KARARIYLA alındı (karar 58, backtest sonucundan bağımsız; canlıya alma eşiğini geçmek DEĞİL); ön-kayıt `docs/backtest.md > 6g`, ölçülebilirlik karar 53 |
 
+### Aktif lig — `h1` (1 saat, GÖZLEM katmanı; `config.yaml > layers.h1`)
+
+**Ön-kayıtsız bir gözlem katmanıdır** (karar 59, kullanıcı kararı): backtest ve ön-kayıt bilerek yapılmadı;
+sonuçları bir hipotez testi sayılmaz, `docs/backtest.md > 6c` siciline girmez ve gerçek para için hiçbir eşiği
+(`docs/backtest.md > 4`) geçmiş anlamına gelmez. Daha sonra test edilmek istenirse kendi ön-kaydıyla gelir.
+Aynı sabit 13 sembol, 1 saatlik barlar, kendi defteri (`ledgers_h1/`), kendi raporu (`docs/data/metrics_h1.json`);
+`run-h1.yml` her scalp turundan sonra koşar ve yalnızca yeni bir 1H barı işlenirse commit/bildirim üretir.
+Model parametreleri kökten aynen devralınır — ama bar cinsindendir: `time_stop_bars: 16` bu katmanda **16 saat**.
+
+| # | Strateji | Yön | Tez |
+|---|---|---|---|
+| 14 | `vwap_managed` | long + short | VWAP sapma-dönüş sinyali, ev kurallarıyla — katman İÇİ kıyas için |
+| 19 | `vwap_reentry` | long + short | `vwap_managed`in ikizi, tek farkı giriş onayı (dönüş bandın İÇİNE kapanmalı); scalp'teki eksenin 1H karşılığı |
+
 ### Kadro — `ema` (tanımlı, tetikleyicisi YOK)
 
 4H, **sabit 13 sembol** (scalp katmanının evreninin aynısı), `config.yaml > layers.ema`.

@@ -357,6 +357,89 @@ layers:
     # olmadığını kendi defterimizden okumak için var.
     breakdowns: ["arm", "symbol", "exit_rule", "session", "loss_streak"]
 
+  h1:
+    # 1 saatlik (H1) GÖZLEM katmanı (karar 59): `vwap_managed` ↔ `vwap_reentry`, scalp'teki
+    # (15m) eksenin AYNISI (karar 54: tek farkı giriş onayı) bu kez 1H barlarda.
+    #
+    # ÖN-KAYITSIZDIR ve bu bilinçli bir kullanıcı kararıdır: backtest ve ön-kayıt yapılmadı;
+    # sonuçları bir hipotez testi sayılmaz, docs/backtest.md > 6c siciline GİRMEZ ve gerçek
+    # para için hiçbir eşiği (docs/backtest.md > 4) geçmiş anlamına gelmez. Test edilmek
+    # istenirse kendi ön-kaydıyla gelir. `vwap_managed` yalnızca KATMAN İÇİ kıyas için girdi
+    # (kıyas katman içinde yapılır: CLAUDE.md > Katmanlar) — iki modelin farkı burada da bir
+    # hipotez testi DEĞİLDİR.
+    #
+    # Model kodu ve parametreleri DEĞİŞMEDİ: vwap.band_mult, vwap.min_vwap_bars, vwap.managed.*,
+    # scalp.min_stop_pct, scalp.min_reward_risk, scalp.time_stop_bars ve exit_management.*
+    # kökten AYNEN devralınır. Bunların BAR cinsinden tanımlı olduğu unutulmamalı: bu katmanda
+    # `scalp.time_stop_bars: 16` = 16 SAAT (strategies/time_stop.py süreyi katmanın timeframe'inden
+    # alır; scalp'te 4 saat, base'te 64 saat) ve `vwap.min_vwap_bars: 8` = UTC gününün ilk 8
+    # saati sinyalsizdir (15m'de 2 saat). İkisi de modelin tanımıdır, bu katmanın ayarı değil.
+    timeframe: "1H"
+
+    # Telafi edilen HER bar kendi sinyalini üretir — scalp katmanındakiyle AYNI gerekçe:
+    # tetikleyici (run-h1, her scalp turundan sonra) bir turu kaçırabilir ve sinyal yalnızca
+    # `as_of` barında üretilseydi kaçan tetiklemenin sinyal FIRSATI da kaybolurdu; tablo modelin
+    # değil tetikleyicinin kadansını ölçerdi (karar 39).
+    signals_per_bar: true
+
+    # Yalnızca iki model, tek eksen: vwap_managed ↔ vwap_reentry. Başka hiçbir modelin
+    # defteri, davranışı ya da ayarı değişmez.
+    models: ["vwap_managed", "vwap_reentry"]
+
+    # scalp katmanıyla AYNI sabit 13 sembol (bu satırlar scalp bloğunun birebir kopyasıdır ve
+    # tests/test_layers.py eşitliği sınar): iki zaman diliminin aynı evreni görmesi, farkın
+    # evrenden değil zaman diliminden gelmesi içindir. Katmanlar arası kıyas yine YAPILMAZ.
+    universe:
+      - "BTC-USDT-SWAP"
+      - "ETH-USDT-SWAP"
+      - "SOL-USDT-SWAP"
+      - "XRP-USDT-SWAP"
+      - "DOGE-USDT-SWAP"
+      - "BNB-USDT-SWAP"
+      - "AVAX-USDT-SWAP"
+      - "LINK-USDT-SWAP"
+      - "ADA-USDT-SWAP"
+      - "SUI-USDT-SWAP"
+      - "NEAR-USDT-SWAP"
+      - "PENGU-USDT-SWAP"
+      - "ETHFI-USDT-SWAP"
+
+    ledger_dir: "ledgers_h1"
+    metrics_file: "docs/data/metrics_h1.json"
+
+    # Stop mesafesi tavanı (kural 14) 3×ATR — kökün değeri, scalp'in 8×'i DEĞİL. Gerekçe:
+    # scalp'te 8× gerekiyordu çünkü %1 stop tabanı 15m ATR'sinden (fiyatın ~%0.2'si) çok
+    # büyüktü. 1H ATR'si yaklaşık 2 kat (√4) büyüktür ve modelin stop'u sabit 2.5×ATR
+    # (vwap.managed.atr_multiple) olduğundan 3× tavan modelin kendi stop'unu hiçbir
+    # zaman elemez; kural 14'ün atlama davranışı 4H katmanlarla aynı kalır.
+    max_stop_atr_multiple: 3.0
+
+    data:
+      # 1H barda 720 bar = 30 gün. Gerekenler: gün-çapalı VWAP (≤ 24 bar), ATR(14) ve
+      # `min_vwap_bars` (8) — yani ~48 bar yeter; 720 bilinçli bir tamponla seçildi:
+      # (1) çok günlük bir telafi gecikmesinde bile motorun işleyeceği barların tamamı
+      # veride bulunur, (2) scalp'in 1500 15m barı ≈ 15.6 gün; aynı mantıkla 30 günlük bir
+      # pencere seçildi, (3) önbellek küçük kalır (13 sembol × 720 satır). Şart: ≥ 500.
+      history_bars: 720
+      # Çıpanın (BTC) tazelik sınırı bar cinsindendir: 1H'de 3 bar = 3 saat. Tetikleyici her
+      # scalp turundan sonra koşar (~15 dk), yani olağan gecikme dakikalardır; 3 saat,
+      # tetikleyicinin birkaç ardışık turu kaçırdığı durumu tolere eder (telafi motor
+      # tarafından yapılır) ama gerçekten bayat veriyle işlem açmayı reddeder. 2 bar (base'in
+      # 8 saatine denk 2×4H) 1H'de fazla sıkı: tek bir kaçan tur turu düşürürdü.
+      max_staleness_bars: 3
+
+    retention:
+      # Günde 24 tur × 2 model: equity.csv 90 günde ~2.2 bin satır/model — scalp'in 30 günlük
+      # penceresindeki (2.9 bin) büyüklük. 90 günden eski satırlar GÜNLÜK özete iner; taze 90
+      # gün bar bazında kalır. trades.csv'ye DOKUNULMAZ — denetim izi odur.
+      equity_compaction_days: 90
+      # H1 işlem sayısı düşüktür (~1/gün/model): JSON'a son 100 işlem ≈ 3 ay görünür.
+      model_trade_limit: 100
+    # Kırılımlar scalp'in listesidir (gerekçeler orada). `arm` iki modelin kolunu
+    # (`vwap_revert` ↔ `vwap_revert_reentry`) ayırır; `session` UTC sabit sınırlarla ÖLÇÜMDÜR,
+    # kural değil.
+    breakdowns: ["arm", "symbol", "exit_rule", "session", "loss_streak"]
+
 # --- Scalp katmanının model kısıtları (core/layers.py'nin değil, modellerin okuduğu blok) ---
 # İki scalp modeli de bu değerleri BİREBİR aynı okur: aralarındaki tek fark kol seçimidir.
 # Blok kökte durur ama yalnızca scalp modelleri okur — 4 saatlik modeller bu anahtarları

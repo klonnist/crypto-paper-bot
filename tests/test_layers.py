@@ -6,6 +6,8 @@ sınırı ölçer: bar/evren/defter katmana göre değişir, maliyet ve risk sab
 
 from __future__ import annotations
 
+import pandas as pd
+
 import pytest
 
 from core.config import ConfigError, load_config
@@ -26,7 +28,7 @@ SHARED_KEYS = (
 
 
 def test_repository_defines_its_layers() -> None:
-    assert layer_names(load_config()) == ["base", "ema", "scalp"]
+    assert layer_names(load_config()) == ["base", "ema", "h1", "scalp"]
 
 
 def test_base_layer_matches_the_root_config() -> None:
@@ -190,3 +192,59 @@ def test_overrides_merge_deeply() -> None:
     resolved = resolve_layer(config, "x").config
 
     assert resolved["data"] == {"cache_dir": "c", "history_bars": 999}
+
+
+# --------------------------------------------------------------------------- #
+# h1: 1 saatlik GÖZLEM katmanı (karar 59)
+# --------------------------------------------------------------------------- #
+def test_h1_layer_resolves_with_exactly_the_two_vwap_twins() -> None:
+    """Katmana `vwap_managed` (katman İÇİ kıyas için) ve `vwap_reentry` girer, başkası değil."""
+    h1 = resolve_layer(load_config(), "h1")
+
+    assert h1.timeframe == "1H"
+    assert h1.models == ["vwap_managed", "vwap_reentry"]
+    assert h1.ledger_root.name == "ledgers_h1"
+    assert h1.metrics_path.name == "metrics_h1.json"
+    assert h1.config["signals_per_bar"] is True
+    assert h1.config["data"]["history_bars"] >= 500          # VWAP (gün çapası) + ATR(14) payı
+
+
+def test_h1_uses_the_scalp_universe_and_changes_no_other_layer() -> None:
+    config = load_config()
+
+    assert resolve_layer(config, "h1").symbols == resolve_layer(config, "scalp").symbols
+    # Mevcut katmanların kadrosu H1 eklenmesinden etkilenmedi.
+    assert resolve_layer(config, "scalp").models == [
+        "scalp_fixed", "scalp_patient", "vwap_clone", "vwap_managed", "vwap_reentry",
+    ]
+    assert resolve_layer(config, "ema").ledger_root.name == "ledgers_ema"
+    assert resolve_layer(config, "base").ledger_root.name == "ledgers"
+
+
+def test_h1_inherits_every_model_parameter_from_the_root_unchanged() -> None:
+    """Model kodu ve parametreleri DEĞİŞMEZ: yalnızca zaman dilimi ve katman koşulları ayrışır."""
+    config = load_config()
+    h1 = resolve_layer(config, "h1").config
+    root = resolve_layer(config, "base").config
+
+    for block in ("vwap", "scalp", "exit_management"):
+        assert h1[block] == root[block], block
+
+
+def test_the_time_stop_is_sixteen_hours_on_the_h1_layer() -> None:
+    """`scalp.time_stop_bars: 16` BAR cinsindendir: süre katmanın timeframe'inden gelir."""
+    from strategies.time_stop import TimeStop
+
+    config = load_config()
+    h1 = TimeStop.from_config(resolve_layer(config, "h1").config)
+    scalp = TimeStop.from_config(resolve_layer(config, "scalp").config)
+
+    assert h1.bars == 16 and h1.duration * h1.bars == pd.Timedelta(hours=16)
+    assert scalp.duration * scalp.bars == pd.Timedelta(hours=4)
+
+
+def test_the_1h_bar_code_is_supported_by_the_data_layer() -> None:
+    from core.data import bar_duration, okx_bar
+
+    assert bar_duration("1H") == pd.Timedelta(hours=1)
+    assert okx_bar(resolve_layer(load_config(), "h1").config) == "1H"
