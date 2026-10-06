@@ -365,6 +365,7 @@ onu üretecek olan tek şey bu tabloyu düzenlemektir.
 | 1 | `scalp_vol`: edge σ ile ölçeklenir | §6b, commit `a7c08ae` | 2026-07-19 → 09-04 | P1: brüt sürüklenme% `vol` > `patient` | **DÜŞTÜ** (0.253 < 0.263) — karar 36 |
 | 2 | `ema_trend`: EMA(21/55) kesişimi long-only bir edge taşır (dış sistemden) | §6d, commit `e912efd` (TADİLAT-1: `93cd891`) | A: 2022-01-01 → 2024-12-30 (sinyal kesimi 06-30), B: 2024-07-21 → 2026-09-18 | P1: BTC tek-sembollü PF A 1.551±0.2 / B 1.299±0.2 | **P1 TUTTU** (1.549 / 1.206) ama **hipotez DÜŞTÜ**: ortalama R A −0.0015 / B −0.0165 (C-1), çıpa da geçilemedi (C-3) → **BLOKE**, §6d > SONUÇ |
 | 3 | `ema_trend` çıkış varyantları: kenar giriş sinyalinde, çıkış geometrisi yiyor | §6e (güç ve kabul kuralları), commit `9ce4f34`; varyant tanımları HİÇ yazılmadı | A: 2022-01-01 → 2024-12-30 (teşhis; B'ye dokunulmadı) | ön-kayıtlı seçim kuralının bir dalının tetiklemesi | **DÜŞTÜ — teşhis aşamasında** (M2 0.153 < 0.25, M1 0.552 < 1.0, M4 0.667 < 2.0): tur kapandı, varyant kurulmadı — §6e > SONUÇ, karar 49 |
+| 4 | `vwap_reentry`: dönüşü bandın İÇİNE kapanan VWAP sapma-dönüş kurulumları, dışarıda kalanlardan daha yüksek ortalama R üretir (karar 52 > V3'ten, post-hoc) | §6g | A: 2026-04-01 → 2026-07-17 (canlı, kalibrasyon ve daha önce okunmuş pencerelerin DIŞINDA) | P1: ort(R_korunan) − ort(R_elenen) > 0, `bootstrap_diff_ci` alt sınırı > 0 (BAZ defteri; `paired_axis.py --sets`) | **BEKLİYOR** — ön-kayıt commit'i bu satırın hemen öncesidir; koşu henüz yok |
 
 **3. satır BH paydasına GİRMEZ ve bu bir muafiyet değil bir tanımdır:** hipotez bir
 model koşusuna hiç dönüşmedi, yani ortada düzeltilecek bir `p` değeri yok. Satırın
@@ -373,6 +374,8 @@ görünmesidir** — düşen bir denemeyi silmek, sicilin engellemek için var o
 yanlılığının ta kendisidir.
 
 **Sicildeki 2. satır bu paydaya AİT DEĞİLDİR:** `ema_trend` hipotezi dış bir sistemden geldi, ev içi arama uzayından seçilmedi (bkz. §6d > Çoklu karşılaştırma). İki payda ayrı tutulur.
+
+**4. satır BH paydasına GİRER:** hipotez ev içi arama uzayından (canlı pencere gözlemi) geldi ve bir modele dönüştü (`vwap_reentry`, §6g). Ev içi payda bu satırla m = 2'dir (satır 1: `scalp_vol`); satır 2 dış sistemden, satır 3 hiçbir model koşusuna dönüşmediği için hariçtir.
 
 **Araştırmadan çıkan öneri sayısı: 10.** Bunların 1'i test edildi (yukarıdaki), 4'ü
 ölçüm katmanı olduğu için hipotez DEĞİLDİR ve sicile girmez (kabul kapısı, belge
@@ -1274,6 +1277,120 @@ olay sayar — hiçbiri burada yok, çünkü hiçbiri veri görülmeden seçilem
 dağılım GÖRÜLDÜKTEN sonra **ayrı bir ön-kayıtla** seçilir ve o ön-kayıt §6c'nin siciline
 kendi satırını açar. Bu belge yalnızca **hangi veriyle** sorulacağını sabitler, **ne
 sorulacağını** değil.
+
+---
+
+## 6g. ÖN-KAYIT — `vwap_reentry` (model 19)
+
+**Bu bölüm koşudan ÖNCE yazıldı ve commit edildi; tarih damgası git'tedir.** Sonuç görüldükten
+sonra hiçbir satırı değiştirilmeyecek (§7). Bu bölüm yazılırken `vwap_reentry`in ya da
+`vwap_managed`in bu pencerede hiçbir getiri/R sayısına bakılmadı; yalnızca kurulum SIKLIĞI ölçüldü
+(`scripts/measure_vwap_signal.py --reentry`, karar 53) ve model henüz hiçbir pencerede koşmadı.
+
+**Hipotez.** Dönüş barının kapanışı bandın İÇİNE girmiş (`|z_now| < band_mult`) VWAP
+sapma-dönüş kurulumları, dönüşü yalnızca küçük bir geri adımdan ibaret olup hâlâ bandın DIŞINDA
+kapanan kurulumlardan ayırt edilebilir biçimde daha yüksek ortalama R üretir. Hipotezin kaynağı
+karar 52 > V3'tür: canlı `2026-09-20 → 10-05` penceresinde içeriye dönen 13 pozisyon +0.46R,
+dışarıda kalan 12 pozisyon −0.10R (tek yönlü permütasyon p≈0.03). **Bu bir POST-HOC bölmedir:**
+eşik sonuç görüldükten sonra seçildi ve "kazananın laneti" beklenir — gerçek etkinin gözlenen
++0.56R'den küçük olması en olası durumdur (aşağıdaki güç hesabına bakınız).
+
+**Eksen ve tek değişken.** `vwap_managed` ↔ `vwap_reentry`; ayrışan TEK şey giriş onayı. Kapılar,
+stop (`vwap.managed.atr_multiple × ATR`), hedef, üç aşamalı çıkış yönetimi, zaman stop'u, "barda
+tek sinyal" seçimi ve evren birebir aynıdır (`tests/test_vwap_reentry.py` bunu çiviler; yeni config
+anahtarı yoktur — model 19 ayrı bir çıta ya da parametre taşıyamaz).
+
+**Pencere (sonuç görülmeden sabit).** `2026-04-01T00:00Z → 2026-07-17T23:45Z` (108 gün, 15.4
+hafta, `layers.scalp` evreni, 13 sembol). Seçimin dört gerekçesi:
+
+1. **Hipotezin kaynağı dışarıda:** canlı `2026-09-20 → 10-05` test penceresine GİREMEZ (§6).
+2. **Kalibrasyon penceresi dışarıda:** `vwap.managed.atr_multiple = 2.5` `2026-08-17 → 09-16`'da
+   seçildi (§6 tablosu: IS). Pencere 07-17'de biter; ikiz ile baz aynı sabiti paylaştığı için
+   o veri iki model için de IN-SAMPLE'dır ve kullanılmaz.
+3. **Daha önce OKUNMUŞ hiçbir pencereyle örtüşmez:** `vwap_managed`in ortalama R'si
+   `2026-07-19 → 08-17` (karar 37, C-5) ve `07-19 → 09-04` (karar 32) pencerelerinde OKUNDU. 07-17
+   bitişi onlardan 2 gün öncedir (tutuş üst sınırı 17 bar = 4.25 saat ≪ 2 gün: OOS pozisyonları
+   o pencerelere taşmaz, §6.1'in embargosunun TERS yöndeki karşılığı).
+4. **Veri derinliği ölçüldü:** OKX 15m geçmişine en az `2026-03-12`'ye kadar erişildi (ölçüm 12.000
+   barda durdu); ısınma payıyla başlangıç 04-01. 108 gün karar 33'ün `≤ 60 gün` ölçülebilirlik ölçütünün ÜZERİNDEDİR çünkü
+   eksen istatistiği iki küme gerektirir ve küçük küme (korunan) n ≥ 30'a ulaşmalıdır; aşağıdaki
+   sıklık aralığı (4.9 – 8.1 varyant sinyali/hafta) altında 60 gün korunan kümeyi ~25–40'a bırakırdı.
+
+**Koşu (backtest workflow girdileri, SABİT).** `layer=scalp`, `start=2026-04-01T00:00:00Z`,
+`end=2026-07-17T23:45:00Z`, `models=vwap_managed,vwap_reentry`, `history_bars=19000` (bugünden
+geriye pencere başlangıcını + ısınmayı kapsar), `embargo_bars` boş, `verify_live` boş. **Kapı 0**
+(canlı ↔ backtest) bu pencere için tanımsızdır: canlı defter 2026-09-20'de başladı. Yerine iki
+şey geçer: baz için karar 37/§1'de geçilmiş harness aynıdır; ikiz için **eşdeğerlik kapısı**
+aşağıda (V-1).
+
+**Birincil tahmin (TEK).** *P1:* `ort(R_korunan) − ort(R_elenen) > 0` ve bu farkın
+`bootstrap_diff_ci` (alfa = `acceptance.edge_ci_alpha` = 0.05, iki yanlı) aralığının **ALT SINIRI
+> 0**. Kümeler BAZ (`vwap_managed`) defterindeki pozisyonlardır: *korunan* = ikizin de aldığı
+(aynı sembol, yön, `opened_at`), *elenen* = ikizin almadığı. Hesap `scripts/paired_axis.py
+--a vwap_reentry --b vwap_managed --sets`: R `merge_fills` + `r_multiple`ten, aralık
+`bootstrap_diff_ci`dan gelir (§6e: ikinci bir tanım yok). **Çürüten:** alt sınır ≤ 0. Birincil
+metrik ortalama R'dir (§2); bu bir performans iddiasıdır ve §6c'de BH paydasına girer.
+
+**Neden "eşleştirilmiş ΔR" birincil DEĞİL.** §6e'nin eksen istatistiği eşleşen pozisyonlarda
+`ΔR = R_varyant − R_taban`dır ve girişi + stop'u + çıkışı miras alan varyantlar için doğrudur.
+Burada varyant yalnızca bir giriş FİLTRESİdir: ikizin aldığı her pozisyon, bazın aldığı aynı
+sinyalin aynı stop/hedef/çıkışla kopyasıdır ve eşleşenlerde `ΔR` yapısal olarak ≈ 0'dır
+(`scripts/paired_axis.py --sets` bunu geçerlilik KAPISI olarak raporlar). Etki eşleşenlerde değil
+**küme farkındadır**: filtrenin neyi ayıkladığı. Bu seçim sonuç görülmeden, istatistiğin yapısal
+bir özelliğinden türetildi — "eşleştirme MDE'yi küçültür" beklentisi (§6e) bu eksende geçerli
+değildir ve burada bir kazanç iddia edilmez.
+
+**Geçerlilik kapıları (okunabilirlik koşulları; sonucun parçası değil, sağlanmazsa satır
+OKUNMAZ).**
+
+| Kapı | Koşul |
+|---|---|
+| **V-1** eşdeğerlik | eşleşen pozisyonlarda `|ort. ΔR| ≤ 0.05`. Aşılırsa ikiz yalnızca filtrede ayrışmıyor demektir (ör. yol bağımlı bir nakit/kota farkı) ve P1 yorumlanmaz |
+| **B-1** örneklem | korunan `n ≥ 30` **ve** elenen `n ≥ 30` (karar 33; `acceptance.min_trades`) |
+| **B-2** veri | `missing_bars = 0`, `unchecked_position_bars = 0` (§3) |
+| **C-4** stop bandı | uygulanmaz: iki model aynı geometriyi kurar (ayrışan şey giriş onayıdır) |
+
+**Örneklem ve güç (§6e deseni; SONUÇ görülmeden).** Pencerenin sıklığı henüz ölçülmedi; iki ölçülmüş
+pencerenin aralığı kullanılır (`measure_vwap_signal.py --reentry`, `atr_multiple = 2.5`): varyant
+**4.94** (`07-20 → 08-15`) ile **8.05** (`07-21 → 09-19`) sinyal/hafta, baz **11.70** ile
+**14.82**. Gerçekleşme oranı canlı `vwap_managed`dan (26 pozisyon / 35 sinyal) **0.74**; korunan küme
+varyant pozisyonlarının ~%0.8'i varsayılır (yedekler hariç).
+
+| senaryo | varyant poz. | baz poz. | korunan n | elenen n | MDE (`sd(R)` = 1.0 / 1.3 / 1.6) |
+|---|---:|---:|---:|---:|---|
+| düşük sıklık | 56 | 134 | 45 | 89 | **±0.51 / ±0.67 / ±0.82 R** |
+| yüksek sıklık | 92 | 169 | 74 | 96 | **±0.43 / ±0.56 / ±0.70 R** |
+
+(`MDE = (z₁₋α/₂ + z_güç)·sd·√(1/n₁ + 1/n₂)`, iki yanlı α=0.05, güç 0.80; `sd(R)` bu pencerenin
+sonucundan DEĞİL, R'nin sınırlı aralığından (≈ [−1.2, +2.0], üst sınır ≈ 1.6) ve tipik bir 1.0
+varsayımından gelir.)
+
+**Dürüst beklenti — ÖNCEDEN yazılıyor.** MDE gözlenen post-hoc etkinin (+0.56R) bile ancak
+**sınırında** durur ve kazananın laneti nedeniyle gerçek etki büyük olasılıkla ~0.25–0.30R
+mertebesindedir — yani MDE'nin **altında**. Bu yüzden en olası sonuç "fark ayırt edilemedi"dir ve
+bu hipotezin YANLIŞ olduğunu değil, bu pencerede ölçülemediğini söyler (karar 36'daki "ölçüt
+ölçülebilirliktir" ayrımı). **Aralığı 0'ı içeren bir sonuç P1'i çürütür ama hipotezi reddetmez;**
+daha geniş bir pencere ancak yeni bir ön-kayıtla ve taze veriyle gelir (§7.1). Pencereyi sonuç
+görüldükten sonra uzatmak yasaktır (§7.3).
+
+**Çoklu karşılaştırma.** Hipotez ev içi arama uzayından (canlı pencere gözlemi) geldi: §6c
+sicilinin **4.** satırıdır ve BH paydasına GİRER. Ev içi payda bu satırla **m = 2**'dir (satır 1:
+`scalp_vol`; satır 2 `ema_trend` dış sistemden geldi, satır 3 hiçbir modele dönüşmedi — §6c). P1'in
+kabul kuralı (alt sınır > 0, iki yanlı α=0.05 ≈ tek yanlı p < 0.025) m ≤ 4 için BH eşiğinin
+(`q·i/m = 0.10·1/4 = 0.025`) altında kalır; yani ayrı bir `p` hesaplamak gerekmez ve BH ek bir
+sıkılık getirmez. **m > 4 olursa bu cümle yeniden değerlendirilir** (ve değişiklik yeni bir
+ön-kayıttır).
+
+**Raporlanacak ama kabul çıtasına ADAY olmayan (ikincil).** İkizin KENDİ ortalama R'si ve aralığı
+(C-1 ayrı bir sorudur, §6e "Üç şart" 3), korunan/elenen/yedek pozisyon sayıları, eşleşen ΔR,
+`gates`/`donus_bant_disi` sayımları. Hiçbiri birincil tahmin değildir ve hiçbiri sonuca göre
+yeniden yorumlanmayacaktır.
+
+**Sonucu gördükten sonra YAPILMAYACAKLAR (§7'ye ek).** `band_mult`, `atr_multiple`, bandın
+eşiği (`|z_now| < band_mult` yerine başka bir kesim) ya da `time_stop_bars` süpürmesi yok; sonuç
+kötü çıkarsa "başka bir eşikle olur muydu" diye ikinci bir kesim denenmez (V3'ün eşiği zaten
+post-hoc'tu: ikinci bir post-hoc kesim paydayı büyütür, kanıt üretmez); pencere kaydırılmaz;
+sembol/seans filtresi yok.
 
 ---
 

@@ -4348,3 +4348,73 @@ tahmin etmek yerine soruyorum. Seçenekler ve her birinin bedeli ilgili rapordad
 
 Hiçbir model, config değeri, defter ya da `core/`; `docs/data/`. Araçlar (`scripts/`) salt
 okunurdur. Backtest koşulmadı.
+
+---
+
+## 54. `vwap_reentry` (model 19) kuruldu ve ön-kaydedildi; `scalp_thesis` (model 20) KURULMADI
+
+**Kapsam.** Karar 52/53'ün P4 paketi. Karar 53, `vwap_reentry`in ölçülebilir olduğunu gösterdi
+(8.05 varyant sinyali/hafta, tavanda 26, canlı gerçekleşme oranıyla ~35 gün) ve `scalp_thesis`in
+sınırda olduğunu, eşleştirilmiş eksen istatistiğinin ise ölçülemediğini yazdı. Bu karar yalnızca
+**modeli kurar ve ön-kaydeder**; hiçbir backtest koşulmadı ve hiçbir getiri/R sayısı bir
+karara dayanak yapılmadı.
+
+### Model 19 — `vwap_reentry`
+
+`vwap_managed`in ikizi; ayrışan TEK şey giriş onayı: önceki bar bandın dışında VE bu barın
+kapanışı bandın İÇİNDE (`|z_now| < band_mult`). Ezilen yalnızca `_reentry = True` ve kol etiketi
+(`arm=vwap_revert_reentry`); kapılar, stop, hedef, üç aşamalı çıkış yönetimi, zaman stop'u, "barda
+tek sinyal" seçimi ve evren `VwapManaged`ten MİRAS ALINIR. **Yeni config anahtarı yoktur.**
+
+- **Eşitlik bir testtir:** `tests/test_vwap_reentry.py` sınıf gövdesinin `name`, `_reentry`,
+  `_arm_name`den ibaret olduğunu, miras alınan her ayarın modelle aynı olduğunu ve modülün
+  `get_setting`/`load_config` çağırmadığını sınar. Aday kümesi baz kümenin ALT KÜMESİDİR (şart yalnızca
+  eler); OYNANAN sinyaller alt küme olmak zorunda değildir ve bu da testlidir (baz bandın dışına
+  kapanan en güçlü adayı oynar, ikiz içeri dönen en güçlüyü).
+- **Model 14 değişmedi:** `reentry` bayrağı `scan`/`propose`/`_evaluate`e eklendi; yeni sebep anahtarı
+  (`donus_bant_disi`) `counts`a YALNIZCA `reentry=True` iken yazılır, yani model 14'ün tur raporu
+  bit düzeyinde aynıdır (test: `test_the_base_survey_never_carries_the_new_reason`). `VwapManaged`e
+  eklenen iki sınıf alanı (`_reentry`, `_arm_name`) varsayılanlarıyla bugünkü davranışı verir.
+- **Canlıda KOŞMAZ:** `REGISTRY`de durur, `layers.scalp.models`te YOKTUR (test:
+  `test_the_candidate_is_registered_but_not_in_the_live_layer`). README kataloğuna eklendi
+  (`tests/test_docs_sync.py` bunu zorunlu kılar).
+- **Araç senkronu:** `scripts/measure_vwap_signal.py::arm_verdict(reentry=True)` modelin
+  `_evaluate(reentry=True)` mantığının kopyasıdır; `--verify` aday kümesini ve `--reentry` alt
+  kümesini gerçek `scan()` çıktısıyla rastgele barlarda karşılaştırır (karar 53'te `--verify 200`
+  geçti).
+
+### Ön-kayıt: `docs/backtest.md > 6g`, sicil satır 4
+
+Pencere `2026-04-01 → 2026-07-17` (canlı, kalibrasyon ve daha önce OKUNMUŞ pencereler dışında), birincil
+tahmin P1 (korunan − elenen ortalama R farkının `bootstrap_diff_ci` alt sınırı > 0), geçerlilik
+kapıları V-1/B-1/B-2, güç hesabı ve BH payda (m = 2). **Dürüst beklenti ÖNCEDEN yazıldı:** MDE
+±0.43–0.82R, gözlenen post-hoc etki +0.56R (kazananın laneti nedeniyle gerçek etki ~0.25–0.30R
+beklenir) — en olası sonuç "ayırt edilemedi"dir ve bu hipotezin yanlışlığı değil ölçülemezliğidir.
+
+### Talimatla çelişen iki nokta (çelişki kuralı: kural kazanır, çelişki yazılır)
+
+1. **"Birincil tahmin (eşleştirilmiş ΔR)" bu ikizde yapısal olarak ≈ 0'dır.** Varyant yalnızca bir
+   giriş FİLTRESİdir: ikizin aldığı her pozisyon, bazın aldığı aynı sinyalin aynı stop/hedef/çıkışla
+   kopyasıdır. Birincil tahmin bu yüzden **küme farkı** (baz defterinde ikizin de aldığı ↔ almadığı
+   pozisyonlar) olarak ön-kaydedildi ve eşleşen ΔR bir GEÇERLİLİK KAPISI (V-1: `|ort. ΔR| ≤ 0.05`)
+   oldu. Bu, §6e'nin eşleştirme mantığının bu eksende uygulanmadığını söyler; "eşleştirme MDE'yi
+   küçültür" beklentisi burada iddia edilmedi. Araç: `scripts/paired_axis.py --sets` (karar 52'nin aracının
+   uzantısı, yeni R tanımı yok).
+2. **Pencere 60 gün değil 108 gündür.** Karar 33'ün `≤ 60 gün` ölçütü varyantın KENDİ n = 30'una
+   bakar ve `vwap_reentry` bunu karşılar (karar 53). Eksen istatistiği iki küme gerektirir ve KÜÇÜK küme
+   (korunan) 60 günde ~25–40 pozisyonda kalırdı (B-1 kapısı n ≥ 30 ister); bu yüzden ön-kayıtlı
+   pencere uzun seçildi. Gerekçe §6g'de, sıklık aralığı iki ölçülmüş pencereden.
+
+### `scalp_thesis` (model 20) KURULMADI — kullanıcı kararı bekliyor
+
+Karar 53 > (b) iki okumanın çeliştiğini gösterdi: karar 33'ün yazılı ölçütü (kendi n = 30'u ≤ 60 gün)
+tavanda KARŞILANIYOR (47 gün; gerçekleşme ≥ 0.79 şartıyla), ama ölçütün AMACI olan "eksen okunabilir mi"
+HAYIR (aday = tek kol `vwap_pullback`, `scalp_patient` ile eşleşen pozisyon ≈ 5). Hangi okumanın
+kazanacağını tahmin etmek yerine bu karar o modeli kurmaz; `ScalpModel`e yeni bir override noktası
+(hedef politikası) eklemek de aynı onaya bağlıdır. Onay gelirse model, ön-kayıt (§6h) ve sicil satırı 5 ayrı
+bir commit olarak yazılır.
+
+### Neye DOKUNULMADI
+
+`vwap_managed`, `scalp_patient`, `scalp_fixed`, `vwap_clone`'un davranışı ve config değerleri;
+`ledgers*/`, `docs/data/`; `core/` (bu paket hiçbir `core/` dosyasına dokunmadı). Backtest koşulmadı.
