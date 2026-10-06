@@ -180,11 +180,18 @@ def test_variant_plus_removed_equals_the_base_setups(config: dict[str, Any]) -> 
 # --------------------------------------------------------------------------- #
 # Kayıt ve canlı katman
 # --------------------------------------------------------------------------- #
-def test_the_candidate_is_registered_but_not_in_the_live_layer(config: dict[str, Any]) -> None:
+def test_the_twin_is_registered_and_runs_in_the_live_scalp_layer(config: dict[str, Any]) -> None:
+    """Karar 58: kullanıcı kararıyla kâğıt katmanına alındı (karar 33'ün `scalp_patient` deseni).
+
+    `vwap_managed` yerinde kalır; ikisi yan yana koşar. Bu, canlıya alma eşiğinin geçildiği
+    anlamına gelmez (docs/backtest.md > 4).
+    """
     layer = resolve_layer(load_config(), "scalp")
 
     assert "vwap_reentry" in REGISTRY
-    assert "vwap_reentry" not in layer.models
+    assert "vwap_reentry" in layer.models
+    assert "vwap_managed" in layer.models
+    assert layer.models.index("vwap_managed") != layer.models.index("vwap_reentry")
     assert build("vwap_reentry", config=config).name == "vwap_reentry"
 
 

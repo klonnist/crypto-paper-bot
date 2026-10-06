@@ -407,6 +407,7 @@ defter yazan modeller), **katalog** (`strategies/registry.py`'de kayıtlı ama l
 | 16 | `scalp_patient` | long + short | `scalp_fixed`in ikizi, tek farkı zaman stop'u sınırı (16 ↔ 100 bar) |
 | 13 | `vwap_clone` | long + short | **dış sistem kopyası** (kural 15b), yarışmacı değil |
 | 14 | `vwap_managed` | long + short | VWAP sapma-dönüş sinyali, ev kurallarıyla (risk boyutlandırma, %1 taban, 1.5R) |
+| 19 | `vwap_reentry` | long + short | `vwap_managed`in ikizi, tek farkı giriş onayı (dönüş bandın İÇİNE kapanmalı); kâğıt katmanına KULLANICI KARARIYLA alındı (karar 58, backtest sonucundan bağımsız; canlıya alma eşiğini geçmek DEĞİL); ön-kayıt `docs/backtest.md > 6g`, ölçülebilirlik karar 53 |
 
 ### Kadro — `ema` (tanımlı, tetikleyicisi YOK)
 
@@ -445,7 +446,6 @@ eklemek bir commit'tir. Backtest onları `--models` ile hâlâ çağırabilir.
 | 11 | `scalp_bandit` | emekli | adaptasyon ekseni İKİ bağımsız pencerede de sıfır fark verdi (karar 33) |
 | 15 | `scalp_managed` | emekli | çıkış yönetimi ekseni İKİ bağımsız pencerede de sıfır fark verdi (karar 33) |
 | 17 | `scalp_vol` | aday, canlıda koşmaz | ön-kayıtlı birincil tahmin P1 DÜŞTÜ (karar 36) |
-| 19 | `vwap_reentry` | aday, canlıda koşmaz | `vwap_managed`in ikizi, tek farkı giriş onayı (dönüş bandın İÇİNE kapanmalı); ön-kayıt `docs/backtest.md > 6g`, ölçülebilirlik karar 53 |
 
 **Emekli ≠ silinmiş.** Ölçüt performans değil ÖLÇÜLEBİLİRLİKTİR: ne kadar iyi olduğunu asla
 öğrenemeyeceğimiz bir satır, tabloda bir bilgi değil bir gürültü kaynağıdır.
