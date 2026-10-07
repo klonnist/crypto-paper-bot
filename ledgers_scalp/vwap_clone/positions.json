@@ -1,9 +1,58 @@
 {
   "cash": 3283.3081913890687,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-07T09:00:00+00:00",
+  "last_processed_bar": "2026-10-07T09:15:00+00:00",
   "model": "vwap_clone",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": 1.0,
+      "created_at": "2026-10-07T09:15:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": 0.5,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=784.2 (300 bar), σ=2.85093; bu bar -4.91σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (767.549), hedef VWAP mesafesinin %50'i (777.3); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp0 | combo_r=-0.4715 | combo_n=39 | pick=exploit",
+      "sizing": "notional_fraction",
+      "stop_price": 767.5490680522241,
+      "symbol": "BNB-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 777.3002310195214
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": 1.0,
+      "created_at": "2026-10-07T09:15:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": 0.5,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=13.9283 (300 bar), σ=0.0608419; bu bar -4.37σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (13.6082), hedef VWAP mesafesinin %50'i (13.7986); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp0 | combo_r=-0.3356 | combo_n=5 | pick=exploit",
+      "sizing": "notional_fraction",
+      "stop_price": 13.608158082923158,
+      "symbol": "LINK-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 13.798643510901098
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": 1.0,
