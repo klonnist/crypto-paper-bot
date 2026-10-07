@@ -1,9 +1,34 @@
 {
   "cash": 10876.627779119804,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-07T09:30:00+00:00",
+  "last_processed_bar": "2026-10-07T09:45:00+00:00",
   "model": "vwap_managed",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": 1.0,
+      "created_at": "2026-10-07T09:45:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "reason": "VWAP sapma-dönüş: gün-çapalı VWAP=0.759174 (40 bar), sapma=0.0159445; önceki bar -2.35σ ile bandın dışında kapandı, bu bar -2.16σ ile VWAP'e döndü (yön long, ATR=0.00827857); stop 2.5×ATR = %2.86 (0.704104), hedef 0.759174 (1.66R), zaman stop'u 16 bar; yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert | rr=1.661",
+      "sizing": "risk",
+      "stop_price": 0.7041035714285714,
+      "symbol": "ETHFI-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.7591740329358159
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    }
+  ],
   "positions": [],
   "version": 1
 }
