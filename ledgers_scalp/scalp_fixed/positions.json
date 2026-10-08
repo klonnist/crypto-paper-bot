@@ -1,27 +1,43 @@
 {
-  "cash": 1097.3063429789454,
+  "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-07T23:45:00+00:00",
+  "last_processed_bar": "2026-10-08T00:00:00+00:00",
   "model": "scalp_fixed",
   "pending_orders": [
     {
       "breakeven_at_r": null,
-      "created_at": "2026-10-07T23:45:00+00:00",
-      "direction": "short",
+      "created_at": "2026-10-08T00:00:00+00:00",
+      "direction": "long",
       "fraction": 1.0,
       "kind": "open",
       "notional_fraction": null,
       "partial_tp": null,
-      "reason": "VWAP geri çekilme: gün çapası 2026-10-07 00:00 UTC, VWAP=0.255213 (96 bar); bar aralığı [0.2548, 0.2555] VWAP'e dokundu ve 0.2552 ile altında kapandı; trend EMA20=0.25458 < EMA50=0.255174; engel günün dibi 0.2478; stop 1.92% (0.260093), hedef 0.2478 (1.51R), zaman stop'u 16 bar | arm=vwap_pullback | post_r=nan",
+      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.170% < 0.200%; engel Bollinger(20) orta bandı 0.008576; stop 2.27% (0.00847886), hedef 0.00907029 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
       "sizing": "risk",
-      "stop_price": 0.2600928571428571,
-      "symbol": "ADA-USDT-SWAP",
+      "stop_price": 0.008478857142857142,
+      "symbol": "PENGU-USDT-SWAP",
       "take_profits": [
         {
           "fraction": 1.0,
-          "price": 0.2478
+          "price": 0.009070285714285715
         }
       ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-10-08T00:00:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "exit",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "zaman stop'u: pozisyon 16 bardır açık (16 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
+      "sizing": "risk",
+      "stop_price": null,
+      "symbol": "BNB-USDT-SWAP",
+      "take_profits": [],
       "trail_giveback_pct": null,
       "trailing_atr": null
     }
@@ -34,7 +50,7 @@
       "entry_price": 771.1854,
       "entry_slippage": 3.3743728299228977,
       "final_target_price": 786.6285714285715,
-      "funding": 0.0,
+      "funding": -0.32529756121669606,
       "high_water": 773.7,
       "initial_qty": 8.755508121232126,
       "initial_stop_price": 762.7357142857143,
@@ -67,7 +83,7 @@
       "entry_price": 11.242376,
       "entry_slippage": 2.2686354440565994e-15,
       "final_target_price": 10.424857142857142,
-      "funding": 0.0,
+      "funding": 1.0965149025155033e-16,
       "high_water": 11.25,
       "initial_qty": 4.033846806644609e-13,
       "initial_stop_price": 11.658071428571429,
@@ -88,6 +104,39 @@
         {
           "fraction": 1.0,
           "price": 10.424857142857142
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": null,
+      "direction": "short",
+      "entry_fee": 2.1047473168155197,
+      "entry_price": 0.25517235000000005,
+      "entry_slippage": 1.9143638335669433,
+      "final_target_price": 0.2478,
+      "funding": 0.0,
+      "high_water": 0.2561,
+      "initial_qty": 14996.974802720373,
+      "initial_stop_price": 0.2600928571428571,
+      "leverage": 3.4952015217962393,
+      "liq_price": 0.3269029653897968,
+      "low_water": 0.255,
+      "margin": 1094.8762981009131,
+      "notes": "boyut komisyon+marj nakde sığsın diye 0.9981 oranında kırpıldı",
+      "opened_at": "2026-10-08T00:00:00+00:00",
+      "partial_done": false,
+      "partial_tp": null,
+      "qty": 14996.974802720373,
+      "reason": "VWAP geri çekilme: gün çapası 2026-10-07 00:00 UTC, VWAP=0.255213 (96 bar); bar aralığı [0.2548, 0.2555] VWAP'e dokundu ve 0.2552 ile altında kapandı; trend EMA20=0.25458 < EMA50=0.255174; engel günün dibi 0.2478; stop 1.92% (0.260093), hedef 0.2478 (1.51R), zaman stop'u 16 bar | arm=vwap_pullback | post_r=nan",
+      "stop_price": 0.2600928571428571,
+      "stop_rule": "",
+      "symbol": "ADA-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.2478
         }
       ],
       "trail_giveback_pct": null,
