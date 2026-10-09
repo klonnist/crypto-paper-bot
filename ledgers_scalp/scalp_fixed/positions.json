@@ -1,9 +1,31 @@
 {
   "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-09T13:45:00+00:00",
+  "last_processed_bar": "2026-10-09T14:00:00+00:00",
   "model": "scalp_fixed",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-10-09T14:00:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.102% < 0.200%; engel Bollinger(20) orta bandı 0.237885; stop 3.65% (0.245543), hedef 0.219614 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 0.24554285714285715,
+      "symbol": "ADA-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.2196142857142857
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -18,7 +40,7 @@
       "initial_stop_price": 0.08581,
       "leverage": 1.319881843712259,
       "liq_price": 0.1478666739301041,
-      "low_water": 0.08415,
+      "low_water": 0.08376,
       "margin": 3259.865558428116,
       "notes": "boyut komisyon+marj nakde sığsın diye 0.9993 oranında kırpıldı",
       "opened_at": "2026-10-09T11:30:00+00:00",
@@ -51,7 +73,7 @@
       "initial_stop_price": 0.008293214285714286,
       "leverage": 1.0,
       "liq_price": 0.01611951621,
-      "low_water": 0.00794,
+      "low_water": 0.007923,
       "margin": 2786.835034953994,
       "notes": "",
       "opened_at": "2026-10-09T11:45:00+00:00",
