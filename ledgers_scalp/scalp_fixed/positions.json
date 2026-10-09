@@ -1,9 +1,31 @@
 {
   "cash": 1333.7594686732737,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-09T12:00:00+00:00",
+  "last_processed_bar": "2026-10-09T12:15:00+00:00",
   "model": "scalp_fixed",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-10-09T12:15:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.161% < 0.200%; engel Bollinger(20) orta bandı 2499.52; stop 1.48% (2463.3), hedef 2574.28 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 2463.2971428571427,
+      "symbol": "ETH-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 2574.275714285714
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -51,7 +73,7 @@
       "initial_stop_price": 0.008293214285714286,
       "leverage": 1.0,
       "liq_price": 0.01611951621,
-      "low_water": 0.008056,
+      "low_water": 0.008035,
       "margin": 2786.835034953994,
       "notes": "",
       "opened_at": "2026-10-09T11:45:00+00:00",
