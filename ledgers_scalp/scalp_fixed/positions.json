@@ -1,9 +1,31 @@
 {
   "cash": -4.547473508864641e-13,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-10T15:30:00+00:00",
+  "last_processed_bar": "2026-10-10T15:45:00+00:00",
   "model": "scalp_fixed",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-10-10T15:45:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.099% < 0.200%; engel Bollinger(20) orta bandı 0.0083286; stop 2.02% (0.00849286), hedef 0.00798929 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 0.008492857142857144,
+      "symbol": "PENGU-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.007989285714285714
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -13,7 +35,7 @@
       "entry_slippage": 3.0351499285382566,
       "final_target_price": 0.08811,
       "funding": 0.0,
-      "high_water": 0.086213085,
+      "high_water": 0.08626,
       "initial_qty": 70445.62907133292,
       "initial_stop_price": 0.085185,
       "leverage": 1.3181256370955863,
@@ -51,7 +73,7 @@
       "initial_stop_price": 109.06642857142859,
       "leverage": 2.2373665098565043,
       "liq_price": 61.6223283982068,
-      "low_water": 110.37,
+      "low_water": 110.32,
       "margin": 2620.9726579874073,
       "notes": "boyut komisyon+marj nakde sığsın diye 0.9988 oranında kırpıldı",
       "opened_at": "2026-10-10T15:30:00+00:00",
