@@ -1,9 +1,31 @@
 {
   "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-11T03:00:00+00:00",
+  "last_processed_bar": "2026-10-11T03:15:00+00:00",
   "model": "scalp_fixed",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-10-11T03:15:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "Açılış aralığı kırılımı: ilk 4 bar [5.253, 5.309], kapanış 5.18 altta (10. bar); hacim 119496 ≥ 1.5× SMA20(36016.8); engel ölçülü hareket 5.197 (aralık genişliği 0.056); stop 4.02% (5.38821), hedef 4.76357 (2.00R), zaman stop'u 16 bar | arm=opening_range_breakout | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 5.388214285714285,
+      "symbol": "NEAR-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 4.76357142857143
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -18,7 +40,7 @@
       "initial_stop_price": 5.427857142857143,
       "leverage": 1.0,
       "liq_price": 10.5303272025,
-      "low_water": 5.224,
+      "low_water": 5.168,
       "margin": 2576.9115477804417,
       "notes": "",
       "opened_at": "2026-10-11T01:00:00+00:00",
@@ -51,7 +73,7 @@
       "initial_stop_price": 13.155285714285714,
       "leverage": 1.3762732948226053,
       "liq_price": 22.397139763354502,
-      "low_water": 12.931,
+      "low_water": 12.904,
       "margin": 4716.622388622784,
       "notes": "boyut komisyon+marj nakde sığsın diye 0.9992 oranında kırpıldı",
       "opened_at": "2026-10-11T01:15:00+00:00",
