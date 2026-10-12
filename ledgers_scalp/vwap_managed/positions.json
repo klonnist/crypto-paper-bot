@@ -1,9 +1,34 @@
 {
   "cash": 2314.958624902006,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-12T17:15:00+00:00",
+  "last_processed_bar": "2026-10-12T17:30:00+00:00",
   "model": "vwap_managed",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": 1.0,
+      "created_at": "2026-10-12T17:30:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "reason": "VWAP sapma-dönüş: gün-çapalı VWAP=10.8742 (71 bar), sapma=0.170968; önceki bar -2.46σ ile bandın dışında kapandı, bu bar -2.37σ ile VWAP'e döndü (yön long, ATR=0.0817857); stop 2.5×ATR = %1.95 (10.2645), hedef 10.8742 (1.98R), zaman stop'u 16 bar; yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert | rr=1.982",
+      "sizing": "risk",
+      "stop_price": 10.264535714285714,
+      "symbol": "AVAX-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 10.874166503083327
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": 1.0,
@@ -54,7 +79,7 @@
       "initial_stop_price": 10.308857142857143,
       "leverage": 1.0,
       "liq_price": 0.05260128749999815,
-      "low_water": 10.452,
+      "low_water": 10.45,
       "margin": 5176.999180150155,
       "notes": "",
       "opened_at": "2026-10-12T17:15:00+00:00",
