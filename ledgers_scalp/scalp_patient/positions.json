@@ -1,9 +1,31 @@
 {
   "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-13T10:15:00+00:00",
+  "last_processed_bar": "2026-10-13T10:30:00+00:00",
   "model": "scalp_patient",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-10-13T10:30:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "VWAP geri çekilme: gün çapası 2026-10-13 00:00 UTC, VWAP=10.2681 (43 bar); bar aralığı [10.208, 10.279] VWAP'e dokundu ve 10.219 ile altında kapandı; trend EMA20=10.376 < EMA50=10.4153; engel günün dibi 9.801; stop 2.67% (10.4922), hedef 9.801 (1.53R), zaman stop'u 100 bar | arm=vwap_pullback | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 10.492214285714285,
+      "symbol": "AVAX-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 9.801
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -18,7 +40,7 @@
       "initial_stop_price": 2431.5585714285717,
       "leverage": 1.0,
       "liq_price": 12.520206974999837,
-      "low_water": 2501.19,
+      "low_water": 2489.92,
       "margin": 2863.283045293304,
       "notes": "",
       "opened_at": "2026-10-13T03:45:00+00:00",
@@ -51,7 +73,7 @@
       "initial_stop_price": 1.3450285714285717,
       "leverage": 1.0,
       "liq_price": 0.006856426499999957,
-      "low_water": 1.3591,
+      "low_water": 1.3566,
       "margin": 4339.977506313707,
       "notes": "",
       "opened_at": "2026-10-13T05:45:00+00:00",
@@ -84,7 +106,7 @@
       "initial_stop_price": 1.0364642857142856,
       "leverage": 2.520612211322873,
       "liq_price": 0.6503233736713738,
-      "low_water": 1.0475,
+      "low_water": 1.0421,
       "margin": 1079.4365011482432,
       "notes": "boyut komisyon+marj nakde sığsın diye 0.9986 oranında kırpıldı",
       "opened_at": "2026-10-13T07:15:00+00:00",
@@ -117,7 +139,7 @@
       "initial_stop_price": 750.9642857142857,
       "leverage": 5.0,
       "liq_price": 886.2466549999999,
-      "low_water": 740.1,
+      "low_water": 738.4,
       "margin": 0.0806326825006297,
       "notes": "boyut leverage_cap=5 nedeniyle 0.0001 oranında kırpıldı (gereken kaldıraç 80709.93); boyut komisyon+marj nakde sığsın diye 0.9973 oranında kırpıldı",
       "opened_at": "2026-10-13T10:00:00+00:00",
