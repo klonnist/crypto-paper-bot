@@ -1,9 +1,31 @@
 {
   "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-14T09:30:00+00:00",
+  "last_processed_bar": "2026-10-14T09:45:00+00:00",
   "model": "scalp_fixed",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-10-14T09:45:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.054% < 0.200%; engel Bollinger(20) orta bandı 742.54; stop 1.03% (749.143), hedef 726.214 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 749.1428571428572,
+      "symbol": "BNB-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 726.2142857142857
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -18,7 +40,7 @@
       "initial_stop_price": 1.077342857142857,
       "leverage": 1.0,
       "liq_price": 2.09509842675,
-      "low_water": 1.0441,
+      "low_water": 1.0416,
       "margin": 2822.425040118251,
       "notes": "",
       "opened_at": "2026-10-14T06:30:00+00:00",
@@ -51,7 +73,7 @@
       "initial_stop_price": 1.3913428571428572,
       "leverage": 1.0,
       "liq_price": 2.72719721925,
-      "low_water": 1.3635,
+      "low_water": 1.3624,
       "margin": 4103.549406720152,
       "notes": "",
       "opened_at": "2026-10-14T07:00:00+00:00",
@@ -84,7 +106,7 @@
       "initial_stop_price": 0.00795857142857143,
       "leverage": 5.0,
       "liq_price": 0.0092984234625,
-      "low_water": 0.007701,
+      "low_water": 0.007694,
       "margin": 370.8607599654092,
       "notes": "boyut leverage_cap=5 nedeniyle 0.5841 oranında kırpıldı (gereken kaldıraç 8.56); boyut komisyon+marj nakde sığsın diye 0.9973 oranında kırpıldı",
       "opened_at": "2026-10-14T07:30:00+00:00",
@@ -117,7 +139,7 @@
       "initial_stop_price": 1.3436571428571424,
       "leverage": 5.0,
       "liq_price": 1.1047706092499998,
-      "low_water": 1.3635,
+      "low_water": 1.3624,
       "margin": 0.12770326384483036,
       "notes": "boyut leverage_cap=5 nedeniyle 0.0002 oranında kırpıldı (gereken kaldıraç 27160.67); boyut komisyon+marj nakde sığsın diye 0.9973 oranında kırpıldı",
       "opened_at": "2026-10-14T08:45:00+00:00",
