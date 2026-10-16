@@ -1,9 +1,34 @@
 {
   "cash": 1862.1388949650307,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-16T15:30:00+00:00",
+  "last_processed_bar": "2026-10-16T15:45:00+00:00",
   "model": "vwap_clone",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": 1.0,
+      "created_at": "2026-10-16T15:45:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": 0.5,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=0.65546 (300 bar), σ=0.00759046; bu bar +4.47σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2.5×0.5σ (0.697788), hedef VWAP mesafesinin %100'i (0.65546); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp2 | combo_r=-0.1954 | combo_n=10 | pick=explore",
+      "sizing": "notional_fraction",
+      "stop_price": 0.6977880735142057,
+      "symbol": "ETHFI-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.655459580774637
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": 1.0,
@@ -18,7 +43,7 @@
       "initial_stop_price": 10.238027910426341,
       "leverage": 10.0,
       "liq_price": 11.125109662499998,
-      "low_water": 10.148,
+      "low_water": 10.075,
       "margin": 98.42887336583975,
       "notes": "",
       "opened_at": "2026-10-16T15:30:00+00:00",
@@ -29,8 +54,8 @@
       },
       "qty": 96.87959903792503,
       "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=9.9742 (300 bar), σ=0.0730279; bu bar +2.58σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2×0.5σ (10.238), hedef VWAP mesafesinin %100'i (9.9742); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp2 | combo_r=0.02159 | combo_n=80 | pick=exploit",
-      "stop_price": 10.238027910426341,
-      "stop_rule": "",
+      "stop_price": 10.159917499999999,
+      "stop_rule": "breakeven",
       "symbol": "AVAX-USDT-SWAP",
       "take_profits": [
         {
