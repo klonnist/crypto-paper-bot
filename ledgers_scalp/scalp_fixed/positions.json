@@ -1,9 +1,31 @@
 {
   "cash": 2041.565746836165,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-17T09:15:00+00:00",
+  "last_processed_bar": "2026-10-17T09:30:00+00:00",
   "model": "scalp_fixed",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-10-17T09:30:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.054% < 0.200%; engel Bollinger(20) orta bandı 10.0085; stop 1.62% (9.85286), hedef 10.3393 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 9.852857142857143,
+      "symbol": "AVAX-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 10.339285714285717
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -84,7 +106,7 @@
       "initial_stop_price": 0.007701142857142858,
       "leverage": 1.0,
       "liq_price": 0.015092604922500003,
-      "low_water": 0.007543,
+      "low_water": 0.007541,
       "margin": 4163.237541991479,
       "notes": "",
       "opened_at": "2026-10-17T08:00:00+00:00",
@@ -117,7 +139,7 @@
       "initial_stop_price": 0.7050714285714286,
       "leverage": 5.0,
       "liq_price": 0.8218683602500002,
-      "low_water": 0.6866,
+      "low_water": 0.686,
       "margin": 501.0671160655881,
       "notes": "boyut leverage_cap=5 nedeniyle 0.8467 oranında kırpıldı (gereken kaldıraç 5.91); boyut komisyon+marj nakde sığsın diye 0.9973 oranında kırpıldı",
       "opened_at": "2026-10-17T08:45:00+00:00",
