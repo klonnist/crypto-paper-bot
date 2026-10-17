@@ -1,27 +1,22 @@
 {
   "cash": -4.547473508864641e-13,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-17T01:15:00+00:00",
+  "last_processed_bar": "2026-10-17T01:30:00+00:00",
   "model": "scalp_fixed",
   "pending_orders": [
     {
       "breakeven_at_r": null,
-      "created_at": "2026-10-17T01:15:00+00:00",
-      "direction": "short",
+      "created_at": "2026-10-17T01:30:00+00:00",
+      "direction": "long",
       "fraction": 1.0,
-      "kind": "open",
+      "kind": "exit",
       "notional_fraction": null,
       "partial_tp": null,
-      "reason": "VWAP geri çekilme: gün çapası 2026-10-17 00:00 UTC, VWAP=0.686189 (6 bar); bar aralığı [0.683, 0.6871] VWAP'e dokundu ve 0.683 ile altında kapandı; trend EMA20=0.68257 < EMA50=0.683159; engel günün dibi 0.683; stop 2.60% (0.700786), hedef 0.647429 (2.00R), zaman stop'u 16 bar | arm=vwap_pullback | post_r=nan",
+      "reason": "zaman stop'u: pozisyon 16 bardır açık (16 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
       "sizing": "risk",
-      "stop_price": 0.7007857142857143,
-      "symbol": "ETHFI-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 0.6474285714285715
-        }
-      ],
+      "stop_price": null,
+      "symbol": "BTC-USDT-SWAP",
+      "take_profits": [],
       "trail_giveback_pct": null,
       "trailing_atr": null
     }
@@ -40,7 +35,7 @@
       "initial_stop_price": 80421.9857142857,
       "leverage": 1.0,
       "liq_price": 408.632714249994,
-      "low_water": 81456.0,
+      "low_water": 81453.0,
       "margin": 4722.76199770788,
       "notes": "",
       "opened_at": "2026-10-16T21:30:00+00:00",
@@ -73,7 +68,7 @@
       "initial_stop_price": 0.07944214285714286,
       "leverage": 1.7028638125988538,
       "liq_price": 0.03371706350989755,
-      "low_water": 0.07999,
+      "low_water": 0.07995,
       "margin": 2810.2296619759127,
       "notes": "boyut komisyon+marj nakde sığsın diye 0.9991 oranında kırpıldı",
       "opened_at": "2026-10-17T00:30:00+00:00",
