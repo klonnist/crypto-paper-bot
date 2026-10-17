@@ -1,25 +1,25 @@
 {
-  "cash": 53.64723329975836,
+  "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-17T00:15:00+00:00",
+  "last_processed_bar": "2026-10-17T00:30:00+00:00",
   "model": "scalp_patient",
   "pending_orders": [
     {
       "breakeven_at_r": null,
-      "created_at": "2026-10-17T00:15:00+00:00",
-      "direction": "long",
+      "created_at": "2026-10-17T00:30:00+00:00",
+      "direction": "short",
       "fraction": 1.0,
       "kind": "open",
       "notional_fraction": null,
       "partial_tp": null,
-      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.198% < 0.200%; engel Bollinger(20) orta bandı 0.080547; stop 1.51% (0.0794421), hedef 0.0830957 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
+      "reason": "VWAP geri çekilme: gün çapası 2026-10-17 00:00 UTC, VWAP=0.0075713 (3 bar); bar aralığı [0.007547, 0.007581] VWAP'e dokundu ve 0.007547 ile altında kapandı; trend EMA20=0.00755453 < EMA50=0.00757343; engel günün dibi 0.007547; stop 1.86% (0.007687), hedef 0.007267 (2.00R), zaman stop'u 100 bar | arm=vwap_pullback | post_r=nan",
       "sizing": "risk",
-      "stop_price": 0.07944214285714286,
-      "symbol": "DOGE-USDT-SWAP",
+      "stop_price": 0.007687000000000001,
+      "symbol": "PENGU-USDT-SWAP",
       "take_profits": [
         {
           "fraction": 1.0,
-          "price": 0.08309571428571427
+          "price": 0.007266999999999998
         }
       ],
       "trail_giveback_pct": null,
@@ -106,7 +106,7 @@
       "initial_stop_price": 80421.9857142857,
       "leverage": 1.0,
       "liq_price": 408.632714249994,
-      "low_water": 81536.3,
+      "low_water": 81532.9,
       "margin": 5080.813917344815,
       "notes": "",
       "opened_at": "2026-10-16T21:30:00+00:00",
@@ -121,6 +121,39 @@
         {
           "fraction": 1.0,
           "price": 84213.12857142856
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": null,
+      "direction": "long",
+      "entry_fee": 0.14712529700756471,
+      "entry_price": 0.08071033500000001,
+      "entry_slippage": 0.13368342829273874,
+      "final_target_price": 0.08309571428571427,
+      "funding": 0.0,
+      "high_water": 0.08078,
+      "initial_qty": 3314.3282085714795,
+      "initial_stop_price": 0.07944214285714286,
+      "leverage": 5.0,
+      "liq_price": 0.064971819675,
+      "low_water": 0.08061,
+      "margin": 53.5001080027508,
+      "notes": "boyut leverage_cap=5 nedeniyle 0.0520 oranında kırpıldı (gereken kaldıraç 96.21); boyut komisyon+marj nakde sığsın diye 0.9973 oranında kırpıldı",
+      "opened_at": "2026-10-17T00:30:00+00:00",
+      "partial_done": false,
+      "partial_tp": null,
+      "qty": 3314.3282085714795,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.198% < 0.200%; engel Bollinger(20) orta bandı 0.080547; stop 1.51% (0.0794421), hedef 0.0830957 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
+      "stop_price": 0.07944214285714286,
+      "stop_rule": "",
+      "symbol": "DOGE-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.08309571428571427
         }
       ],
       "trail_giveback_pct": null,
