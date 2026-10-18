@@ -1,81 +1,10 @@
 {
-  "cash": -4.547473508864641e-13,
+  "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-18T06:45:00+00:00",
+  "last_processed_bar": "2026-10-18T07:00:00+00:00",
   "model": "scalp_fixed",
-  "pending_orders": [
-    {
-      "breakeven_at_r": null,
-      "created_at": "2026-10-18T06:45:00+00:00",
-      "direction": "short",
-      "fraction": 1.0,
-      "kind": "open",
-      "notional_fraction": null,
-      "partial_tp": null,
-      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.149% < 0.200%; engel Bollinger(20) orta bandı 0.0793845; stop 1.41% (0.0803743), hedef 0.0770314 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
-      "sizing": "risk",
-      "stop_price": 0.0803742857142857,
-      "symbol": "DOGE-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 0.07703142857142857
-        }
-      ],
-      "trail_giveback_pct": null,
-      "trailing_atr": null
-    },
-    {
-      "breakeven_at_r": null,
-      "created_at": "2026-10-18T06:45:00+00:00",
-      "direction": "long",
-      "fraction": 1.0,
-      "kind": "exit",
-      "notional_fraction": null,
-      "partial_tp": null,
-      "reason": "zaman stop'u: pozisyon 16 bardır açık (16 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
-      "sizing": "risk",
-      "stop_price": null,
-      "symbol": "NEAR-USDT-SWAP",
-      "take_profits": [],
-      "trail_giveback_pct": null,
-      "trailing_atr": null
-    }
-  ],
+  "pending_orders": [],
   "positions": [
-    {
-      "breakeven_at_r": null,
-      "direction": "long",
-      "entry_fee": 0.8788967360856137,
-      "entry_price": 4.961479499999999,
-      "entry_slippage": 0.7985977339380526,
-      "final_target_price": 5.433571428571428,
-      "funding": 0.0,
-      "high_water": 5.061,
-      "initial_qty": 322.08015081191144,
-      "initial_stop_price": 4.723214285714286,
-      "leverage": 1.0,
-      "liq_price": 0.024807397499999162,
-      "low_water": 4.921,
-      "margin": 1597.9940656102067,
-      "notes": "",
-      "opened_at": "2026-10-18T02:45:00+00:00",
-      "partial_done": false,
-      "partial_tp": null,
-      "qty": 322.08015081191144,
-      "reason": "Açılış aralığı kırılımı: ilk 4 bar [4.825, 4.882], kapanış 4.96 üstte (7. bar); hacim 67174.5 ≥ 1.5× SMA20(42847.5); engel ölçülü hareket 4.939 (aralık genişliği 0.057); stop 4.77% (4.72321), hedef 5.43357 (2.00R), zaman stop'u 16 bar | arm=opening_range_breakout | post_r=nan",
-      "stop_price": 4.723214285714286,
-      "stop_rule": "",
-      "symbol": "NEAR-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 5.433571428571428
-        }
-      ],
-      "trail_giveback_pct": null,
-      "trailing_atr": null
-    },
     {
       "breakeven_at_r": null,
       "direction": "long",
@@ -137,6 +66,39 @@
         {
           "fraction": 1.0,
           "price": 107.8557142857143
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": null,
+      "direction": "short",
+      "entry_fee": 2.880409818664292,
+      "entry_price": 0.07922037,
+      "entry_slippage": 2.6198643127602046,
+      "final_target_price": 0.07703142857142857,
+      "funding": 0.0,
+      "high_water": 0.07938,
+      "initial_qty": 66108.1078163079,
+      "initial_stop_price": 0.0803742857142857,
+      "leverage": 3.261963413384074,
+      "liq_price": 0.1031103682561364,
+      "low_water": 0.07916,
+      "margin": 1605.5081242541116,
+      "notes": "boyut komisyon+marj nakde sığsın diye 0.9982 oranında kırpıldı",
+      "opened_at": "2026-10-18T07:00:00+00:00",
+      "partial_done": false,
+      "partial_tp": null,
+      "qty": 66108.1078163079,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.149% < 0.200%; engel Bollinger(20) orta bandı 0.0793845; stop 1.41% (0.0803743), hedef 0.0770314 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+      "stop_price": 0.0803742857142857,
+      "stop_rule": "",
+      "symbol": "DOGE-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.07703142857142857
         }
       ],
       "trail_giveback_pct": null,
