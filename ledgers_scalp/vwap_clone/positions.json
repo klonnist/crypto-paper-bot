@@ -1,46 +1,35 @@
 {
-  "cash": 1488.2399263544887,
+  "cash": 1568.7011586817566,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-18T15:15:00+00:00",
+  "last_processed_bar": "2026-10-18T15:30:00+00:00",
   "model": "vwap_clone",
-  "pending_orders": [],
-  "positions": [
+  "pending_orders": [
     {
       "breakeven_at_r": 1.0,
+      "created_at": "2026-10-18T15:30:00+00:00",
       "direction": "long",
-      "entry_fee": 0.48509262367261247,
-      "entry_price": 1.27813875,
-      "entry_slippage": 0.4407729077939472,
-      "final_target_price": 1.3026571958231559,
-      "funding": 0.0,
-      "high_water": 1.279,
-      "initial_qty": 690.0554329454912,
-      "initial_stop_price": 1.268257310585153,
-      "leverage": 10.0,
-      "liq_price": 1.15671556875,
-      "low_water": 1.271,
-      "margin": 88.1986588495659,
-      "notes": "",
-      "opened_at": "2026-10-18T14:30:00+00:00",
-      "partial_done": false,
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": 0.5,
       "partial_tp": {
         "fraction": 0.5,
         "r": 1.5
       },
-      "qty": 690.0554329454912,
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=1.31101 (300 bar), σ=0.00747415; bu bar -4.47σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2.5×0.5σ (1.26826), hedef VWAP mesafesinin %75'i (1.30266); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=-0.2032 | combo_n=79 | pick=exploit",
-      "stop_price": 1.268257310585153,
-      "stop_rule": "",
-      "symbol": "XRP-USDT-SWAP",
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=5.05905 (300 bar), σ=0.0911443; bu bar -3.81σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (4.62286), hedef VWAP mesafesinin %75'i (4.97279); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp1 | combo_r=0.3261 | combo_n=14 | pick=exploit",
+      "sizing": "notional_fraction",
+      "stop_price": 4.6228556544520645,
+      "symbol": "NEAR-USDT-SWAP",
       "take_profits": [
         {
           "fraction": 1.0,
-          "price": 1.3026571958231559
+          "price": 4.9727857305288055
         }
       ],
       "trail_giveback_pct": 0.5,
       "trailing_atr": null
-    },
+    }
+  ],
+  "positions": [
     {
       "breakeven_at_r": 1.0,
       "direction": "long",
@@ -54,7 +43,7 @@
       "initial_stop_price": 101.16407620661188,
       "leverage": 10.0,
       "liq_price": 92.41048214999999,
-      "low_water": 102.06,
+      "low_water": 101.67,
       "margin": 87.50283406345585,
       "notes": "",
       "opened_at": "2026-10-18T15:00:00+00:00",
@@ -90,7 +79,7 @@
       "initial_stop_price": 0.07708932687868476,
       "leverage": 10.0,
       "liq_price": 0.07050758617499998,
-      "low_water": 0.07774,
+      "low_water": 0.07716,
       "margin": 87.45690600796061,
       "notes": "",
       "opened_at": "2026-10-18T15:00:00+00:00",
