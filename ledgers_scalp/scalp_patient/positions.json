@@ -1,9 +1,31 @@
 {
   "cash": -0.42178438491295067,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-19T11:15:00+00:00",
+  "last_processed_bar": "2026-10-19T11:30:00+00:00",
   "model": "scalp_patient",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-10-19T11:30:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.161% < 0.200%; engel Bollinger(20) orta bandı 1.31049; stop 1.67% (1.32245), hedef 1.2572 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 1.32245,
+      "symbol": "XRP-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 1.2572
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -51,7 +73,7 @@
       "initial_stop_price": 9.465499999999999,
       "leverage": 1.0599371085484766,
       "liq_price": 0.5997752814846571,
-      "low_water": 9.595,
+      "low_water": 9.582,
       "margin": 2633.194720153301,
       "notes": "boyut komisyon+marj nakde sığsın diye 0.9994 oranında kırpıldı",
       "opened_at": "2026-10-19T00:15:00+00:00",
