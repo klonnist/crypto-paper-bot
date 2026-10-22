@@ -1,12 +1,12 @@
 {
   "cash": 1142.051270011961,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-22T10:30:00+00:00",
+  "last_processed_bar": "2026-10-22T10:45:00+00:00",
   "model": "vwap_clone",
   "pending_orders": [
     {
       "breakeven_at_r": 1.0,
-      "created_at": "2026-10-22T10:30:00+00:00",
+      "created_at": "2026-10-22T10:45:00+00:00",
       "direction": "long",
       "fraction": 1.0,
       "kind": "open",
@@ -15,14 +15,14 @@
         "fraction": 0.5,
         "r": 1.5
       },
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=82874.4 (300 bar), σ=299.887; bu bar -2.69σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (81742.7), hedef VWAP mesafesinin %100'i (82874.4); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp2 | combo_r=-0.2452 | combo_n=80 | pick=exploit",
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=0.221396 (300 bar), σ=0.00103478; bu bar -4.76σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (0.215565), hedef VWAP mesafesinin %75'i (0.220197); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp1 | combo_r=0.0006717 | combo_n=26 | pick=exploit",
       "sizing": "notional_fraction",
-      "stop_price": 81742.71340184512,
-      "symbol": "BTC-USDT-SWAP",
+      "stop_price": 0.21556522277123494,
+      "symbol": "ADA-USDT-SWAP",
       "take_profits": [
         {
           "fraction": 1.0,
-          "price": 82874.42060361178
+          "price": 0.2201972983614374
         }
       ],
       "trail_giveback_pct": 0.5,
@@ -30,7 +30,7 @@
     },
     {
       "breakeven_at_r": 1.0,
-      "created_at": "2026-10-22T10:30:00+00:00",
+      "created_at": "2026-10-22T10:45:00+00:00",
       "direction": "long",
       "fraction": 1.0,
       "kind": "open",
@@ -39,14 +39,38 @@
         "fraction": 0.5,
         "r": 1.5
       },
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=105.833 (300 bar), σ=0.363193; bu bar -3.40σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2.5×0.5σ (104.096), hedef VWAP mesafesinin %75'i (105.512); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=-0.009503 | combo_n=139 | pick=exploit",
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=9.63308 (300 bar), σ=0.054619; bu bar -7.50σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 1.5×0.5σ (9.18804), hedef VWAP mesafesinin %100'i (9.63308); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band0_tp2 | combo_r=-0.592 | combo_n=6 | pick=explore",
       "sizing": "notional_fraction",
-      "stop_price": 104.09600815261781,
-      "symbol": "SOL-USDT-SWAP",
+      "stop_price": 9.188035775584101,
+      "symbol": "AVAX-USDT-SWAP",
       "take_profits": [
         {
           "fraction": 1.0,
-          "price": 105.51231384457958
+          "price": 9.633081610412757
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": 1.0,
+      "created_at": "2026-10-22T10:45:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": 0.5,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=0.697704 (300 bar), σ=0.00548011; bu bar -5.40σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2.5×0.5σ (0.66245), hedef VWAP mesafesinin %75'i (0.690603); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=0.3508 | combo_n=108 | pick=exploit",
+      "sizing": "notional_fraction",
+      "stop_price": 0.6624498562664495,
+      "symbol": "ETHFI-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.6906031419750752
         }
       ],
       "trail_giveback_pct": 0.5,
