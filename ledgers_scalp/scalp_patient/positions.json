@@ -1,81 +1,32 @@
 {
   "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-23T03:00:00+00:00",
+  "last_processed_bar": "2026-10-23T03:15:00+00:00",
   "model": "scalp_patient",
   "pending_orders": [
     {
       "breakeven_at_r": null,
-      "created_at": "2026-10-23T03:00:00+00:00",
+      "created_at": "2026-10-23T03:15:00+00:00",
       "direction": "long",
       "fraction": 1.0,
       "kind": "open",
       "notional_fraction": null,
       "partial_tp": null,
-      "reason": "Açılış aralığı kırılımı: ilk 4 bar [11.928, 12.004], kapanış 12.199 üstte (9. bar); hacim 41981.2 ≥ 1.5× SMA20(19646.4); engel ölçülü hareket 12.08 (aralık genişliği 0.076); stop 2.66% (11.874), hedef 12.849 (2.00R), zaman stop'u 100 bar | arm=opening_range_breakout | post_r=nan",
+      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.012% < 0.200%; engel Bollinger(20) orta bandı 103.868; stop 1.85% (102.141), hedef 107.927 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
       "sizing": "risk",
-      "stop_price": 11.874,
-      "symbol": "LINK-USDT-SWAP",
+      "stop_price": 102.14142857142856,
+      "symbol": "SOL-USDT-SWAP",
       "take_profits": [
         {
           "fraction": 1.0,
-          "price": 12.848999999999997
+          "price": 107.92714285714284
         }
       ],
-      "trail_giveback_pct": null,
-      "trailing_atr": null
-    },
-    {
-      "breakeven_at_r": null,
-      "created_at": "2026-10-23T03:00:00+00:00",
-      "direction": "short",
-      "fraction": 1.0,
-      "kind": "exit",
-      "notional_fraction": null,
-      "partial_tp": null,
-      "reason": "zaman stop'u: pozisyon 100 bardır açık (100 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
-      "sizing": "risk",
-      "stop_price": null,
-      "symbol": "PENGU-USDT-SWAP",
-      "take_profits": [],
       "trail_giveback_pct": null,
       "trailing_atr": null
     }
   ],
   "positions": [
-    {
-      "breakeven_at_r": null,
-      "direction": "short",
-      "entry_fee": 1.1906683708144785,
-      "entry_price": 0.008029983,
-      "entry_slippage": 1.0829672752872386,
-      "final_target_price": 0.007554714285714283,
-      "funding": 0.2671590716715965,
-      "high_water": 0.008039,
-      "initial_qty": 269596.035670194,
-      "initial_stop_price": 0.008273642857142858,
-      "leverage": 5.0,
-      "liq_price": 0.009595829684999998,
-      "low_water": 0.007605,
-      "margin": 432.9703166598103,
-      "notes": "boyut leverage_cap=5 nedeniyle 0.8958 oranında kırpıldı (gereken kaldıraç 5.58); boyut komisyon+marj nakde sığsın diye 0.9973 oranında kırpıldı",
-      "opened_at": "2026-10-22T02:00:00+00:00",
-      "partial_done": false,
-      "partial_tp": null,
-      "qty": 269596.035670194,
-      "reason": "Açılış aralığı kırılımı: ilk 4 bar [0.008103, 0.008155], kapanış 0.008034 altta (4. bar); hacim 616994 ≥ 1.5× SMA20(228893); engel ölçülü hareket 0.008051 (aralık genişliği 5.2e-05); stop 2.98% (0.00827364), hedef 0.00755471 (2.00R), zaman stop'u 100 bar | arm=opening_range_breakout | post_r=nan",
-      "stop_price": 0.008273642857142858,
-      "stop_rule": "",
-      "symbol": "PENGU-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 0.007554714285714283
-        }
-      ],
-      "trail_giveback_pct": null,
-      "trailing_atr": null
-    },
     {
       "breakeven_at_r": null,
       "direction": "long",
@@ -122,7 +73,7 @@
       "initial_stop_price": 0.07810214285714286,
       "leverage": 5.0,
       "liq_price": 0.06401339069999998,
-      "low_water": 0.07942,
+      "low_water": 0.07941,
       "margin": 423.6396362053174,
       "notes": "boyut leverage_cap=5 nedeniyle 0.5042 oranında kırpıldı (gereken kaldıraç 9.92); boyut komisyon+marj nakde sığsın diye 0.9973 oranında kırpıldı",
       "opened_at": "2026-10-23T02:45:00+00:00",
@@ -137,6 +88,39 @@
         {
           "fraction": 1.0,
           "price": 0.08220571428571427
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": null,
+      "direction": "long",
+      "entry_fee": 1.2847734672856523,
+      "entry_price": 12.2061,
+      "entry_slippage": 1.1673921832589624,
+      "final_target_price": 12.848999999999997,
+      "funding": 0.0,
+      "high_water": 12.207,
+      "initial_qty": 191.37576774737107,
+      "initial_stop_price": 11.874,
+      "leverage": 5.0,
+      "liq_price": 9.825910499999999,
+      "low_water": 12.161,
+      "margin": 467.1903517402372,
+      "notes": "boyut leverage_cap=5 nedeniyle 0.8471 oranında kırpıldı (gereken kaldıraç 5.90); boyut komisyon+marj nakde sığsın diye 0.9973 oranında kırpıldı",
+      "opened_at": "2026-10-23T03:15:00+00:00",
+      "partial_done": false,
+      "partial_tp": null,
+      "qty": 191.37576774737107,
+      "reason": "Açılış aralığı kırılımı: ilk 4 bar [11.928, 12.004], kapanış 12.199 üstte (9. bar); hacim 41981.2 ≥ 1.5× SMA20(19646.4); engel ölçülü hareket 12.08 (aralık genişliği 0.076); stop 2.66% (11.874), hedef 12.849 (2.00R), zaman stop'u 100 bar | arm=opening_range_breakout | post_r=nan",
+      "stop_price": 11.874,
+      "stop_rule": "",
+      "symbol": "LINK-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 12.848999999999997
         }
       ],
       "trail_giveback_pct": null,
