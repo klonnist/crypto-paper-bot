@@ -1,9 +1,34 @@
 {
   "cash": 1067.8557467050705,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-26T17:00:00+00:00",
+  "last_processed_bar": "2026-10-26T17:15:00+00:00",
   "model": "vwap_clone",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": 1.0,
+      "created_at": "2026-10-26T17:15:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": 0.5,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=737.592 (300 bar), σ=2.24622; bu bar +3.36σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2.5×0.5σ (747.508), hedef VWAP mesafesinin %75'i (739.369); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=-0.3125 | combo_n=12 | pick=exploit",
+      "sizing": "notional_fraction",
+      "stop_price": 747.5077716423301,
+      "symbol": "BNB-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 739.368680705959
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    }
+  ],
   "positions": [],
   "version": 1
 }
