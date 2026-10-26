@@ -1,9 +1,34 @@
 {
   "cash": 955.8649642420287,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-26T12:30:00+00:00",
+  "last_processed_bar": "2026-10-26T12:45:00+00:00",
   "model": "vwap_clone",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": 1.0,
+      "created_at": "2026-10-26T12:45:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": 0.5,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=11.5798 (300 bar), σ=0.0448263; bu bar -2.63σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 1.5×0.5σ (11.4274), hedef VWAP mesafesinin %50'i (11.5204); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band0_tp0 | combo_r=-1.633 | combo_n=3 | pick=explore",
+      "sizing": "notional_fraction",
+      "stop_price": 11.427380256052322,
+      "symbol": "LINK-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 11.520388087593677
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": 1.0,
