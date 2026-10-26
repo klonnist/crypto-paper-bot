@@ -1,9 +1,31 @@
 {
   "cash": 0.20386649128037376,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-26T01:15:00+00:00",
+  "last_processed_bar": "2026-10-26T01:30:00+00:00",
   "model": "scalp_patient",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-10-26T01:30:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "Açılış aralığı kırılımı: ilk 4 bar [4.545, 4.617], kapanış 4.461 altta (3. bar); hacim 132159 ≥ 1.5× SMA20(43912.6); engel ölçülü hareket 4.473 (aralık genişliği 0.072); stop 5.35% (4.69957), hedef 3.98386 (2.00R), zaman stop'u 100 bar | arm=opening_range_breakout | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 4.69957142857143,
+      "symbol": "NEAR-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 3.9838571428571425
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -18,7 +40,7 @@
       "initial_stop_price": 747.5785714285714,
       "leverage": 5.0,
       "liq_price": 881.8273657499999,
-      "low_water": 735.2,
+      "low_water": 734.5,
       "margin": 59.071041113376644,
       "notes": "boyut leverage_cap=5 nedeniyle 0.0528 oranında kırpıldı (gereken kaldıraç 94.72); boyut komisyon+marj nakde sığsın diye 0.9973 oranında kırpıldı",
       "opened_at": "2026-10-25T10:30:00+00:00",
@@ -51,7 +73,7 @@
       "initial_stop_price": 103.18142857142857,
       "leverage": 1.0,
       "liq_price": 202.610594025,
-      "low_water": 100.56,
+      "low_water": 100.52,
       "margin": 4594.313240452068,
       "notes": "",
       "opened_at": "2026-10-25T22:30:00+00:00",
@@ -84,7 +106,7 @@
       "initial_stop_price": 0.9483642857142858,
       "leverage": 1.0596216748555964,
       "liq_price": 1.7924314115267184,
-      "low_water": 0.9096,
+      "low_water": 0.9005,
       "margin": 2682.179681630028,
       "notes": "boyut komisyon+marj nakde sığsın diye 0.9994 oranında kırpıldı",
       "opened_at": "2026-10-25T22:45:00+00:00",
