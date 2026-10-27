@@ -1,13 +1,13 @@
 {
   "cash": 828.871517551938,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-27T04:00:00+00:00",
+  "last_processed_bar": "2026-10-27T04:15:00+00:00",
   "model": "vwap_clone",
   "pending_orders": [
     {
       "breakeven_at_r": 1.0,
-      "created_at": "2026-10-27T04:00:00+00:00",
-      "direction": "long",
+      "created_at": "2026-10-27T04:15:00+00:00",
+      "direction": "short",
       "fraction": 1.0,
       "kind": "open",
       "notional_fraction": 0.5,
@@ -15,62 +15,14 @@
         "fraction": 0.5,
         "r": 1.5
       },
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=80189.6 (300 bar), σ=187.389; bu bar -2.12σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (79611.8), hedef VWAP mesafesinin %100'i (80189.6); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp2 | combo_r=-0.4712 | combo_n=129 | pick=exploit",
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=0.0768802 (300 bar), σ=0.000211785; bu bar +2.55σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2×0.5σ (0.0775718), hedef VWAP mesafesinin %75'i (0.0770002); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp1 | combo_r=0.1364 | combo_n=11 | pick=exploit",
       "sizing": "notional_fraction",
-      "stop_price": 79611.81114759721,
-      "symbol": "BTC-USDT-SWAP",
+      "stop_price": 0.07757178517420528,
+      "symbol": "DOGE-USDT-SWAP",
       "take_profits": [
         {
           "fraction": 1.0,
-          "price": 80189.58132257464
-        }
-      ],
-      "trail_giveback_pct": 0.5,
-      "trailing_atr": null
-    },
-    {
-      "breakeven_at_r": 1.0,
-      "created_at": "2026-10-27T04:00:00+00:00",
-      "direction": "long",
-      "fraction": 1.0,
-      "kind": "open",
-      "notional_fraction": 0.5,
-      "partial_tp": {
-        "fraction": 0.5,
-        "r": 1.5
-      },
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=2329.59 (300 bar), σ=5.84456; bu bar -2.76σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2.5×0.5σ (2307.08), hedef VWAP mesafesinin %75'i (2325.79); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=-0.2929 | combo_n=157 | pick=explore",
-      "sizing": "notional_fraction",
-      "stop_price": 2307.084306064525,
-      "symbol": "ETH-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 2325.789412056235
-        }
-      ],
-      "trail_giveback_pct": 0.5,
-      "trailing_atr": null
-    },
-    {
-      "breakeven_at_r": 1.0,
-      "created_at": "2026-10-27T04:00:00+00:00",
-      "direction": "long",
-      "fraction": 1.0,
-      "kind": "open",
-      "notional_fraction": 0.5,
-      "partial_tp": {
-        "fraction": 0.5,
-        "r": 1.5
-      },
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=11.4588 (300 bar), σ=0.0327488; bu bar -4.00σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (11.3053), hedef VWAP mesafesinin %50'i (11.3984); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp0 | combo_r=0.01805 | combo_n=38 | pick=exploit",
-      "sizing": "notional_fraction",
-      "stop_price": 11.305251231269196,
-      "symbol": "LINK-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 11.39842000865874
+          "price": 0.0770001702176875
         }
       ],
       "trail_giveback_pct": 0.5,
@@ -91,7 +43,7 @@
       "initial_stop_price": 79589.38096579429,
       "leverage": 10.0,
       "liq_price": 72223.32811724998,
-      "low_water": 79728.5,
+      "low_water": 79702.1,
       "margin": 51.86563162970735,
       "notes": "",
       "opened_at": "2026-10-27T03:30:00+00:00",
@@ -127,7 +79,7 @@
       "initial_stop_price": 2305.1396919615145,
       "leverage": 10.0,
       "liq_price": 2094.87301305,
-      "low_water": 2311.2,
+      "low_water": 2311.06,
       "margin": 51.838408653065734,
       "notes": "",
       "opened_at": "2026-10-27T03:30:00+00:00",
