@@ -1,25 +1,25 @@
 {
-  "cash": 2404.063391998196,
+  "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-27T00:15:00+00:00",
+  "last_processed_bar": "2026-10-27T00:30:00+00:00",
   "model": "scalp_fixed",
   "pending_orders": [
     {
       "breakeven_at_r": null,
-      "created_at": "2026-10-27T00:15:00+00:00",
-      "direction": "short",
+      "created_at": "2026-10-27T00:30:00+00:00",
+      "direction": "long",
       "fraction": 1.0,
       "kind": "open",
       "notional_fraction": null,
       "partial_tp": null,
-      "reason": "VWAP geri çekilme: gün çapası 2026-10-27 00:00 UTC, VWAP=0.007551 (2 bar); bar aralığı [0.007538, 0.007568] VWAP'e dokundu ve 0.007538 ile altında kapandı; trend EMA20=0.00749776 < EMA50=0.00750233; engel günün dibi 0.007538; stop 2.46% (0.00772371), hedef 0.00716657 (2.00R), zaman stop'u 16 bar | arm=vwap_pullback | post_r=nan",
+      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.188% < 0.200%; engel Bollinger(20) orta bandı 0.205225; stop 2.01% (0.202257), hedef 0.214686 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
       "sizing": "risk",
-      "stop_price": 0.007723714285714286,
-      "symbol": "PENGU-USDT-SWAP",
+      "stop_price": 0.20225714285714286,
+      "symbol": "ADA-USDT-SWAP",
       "take_profits": [
         {
           "fraction": 1.0,
-          "price": 0.007166571428571428
+          "price": 0.21468571428571429
         }
       ],
       "trail_giveback_pct": null,
@@ -35,7 +35,7 @@
       "entry_slippage": 2.521592704464212,
       "final_target_price": 2247.344285714286,
       "funding": 0.5065749070240299,
-      "high_water": 2329.0,
+      "high_water": 2330.88,
       "initial_qty": 2.1800638947183972,
       "initial_stop_price": 2346.322857142857,
       "leverage": 1.0,
@@ -55,6 +55,39 @@
         {
           "fraction": 1.0,
           "price": 2247.344285714286
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": null,
+      "direction": "short",
+      "entry_fee": 1.6195997612252868,
+      "entry_price": 0.007534231000000001,
+      "entry_slippage": 1.4730999692802853,
+      "final_target_price": 0.007166571428571428,
+      "funding": 0.0,
+      "high_water": 0.007552,
+      "initial_qty": 390846.370199086,
+      "initial_stop_price": 0.007723714285714286,
+      "leverage": 1.2257214291991936,
+      "liq_price": 0.013643332529656722,
+      "low_water": 0.007528,
+      "margin": 2402.4437922369707,
+      "notes": "boyut komisyon+marj nakde sığsın diye 0.9993 oranında kırpıldı",
+      "opened_at": "2026-10-27T00:30:00+00:00",
+      "partial_done": false,
+      "partial_tp": null,
+      "qty": 390846.370199086,
+      "reason": "VWAP geri çekilme: gün çapası 2026-10-27 00:00 UTC, VWAP=0.007551 (2 bar); bar aralığı [0.007538, 0.007568] VWAP'e dokundu ve 0.007538 ile altında kapandı; trend EMA20=0.00749776 < EMA50=0.00750233; engel günün dibi 0.007538; stop 2.46% (0.00772371), hedef 0.00716657 (2.00R), zaman stop'u 16 bar | arm=vwap_pullback | post_r=nan",
+      "stop_price": 0.007723714285714286,
+      "stop_rule": "",
+      "symbol": "PENGU-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.007166571428571428
         }
       ],
       "trail_giveback_pct": null,
