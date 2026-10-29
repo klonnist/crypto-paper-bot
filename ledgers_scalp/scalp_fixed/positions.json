@@ -1,27 +1,43 @@
 {
-  "cash": 2124.5656850086552,
+  "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-29T05:30:00+00:00",
+  "last_processed_bar": "2026-10-29T05:45:00+00:00",
   "model": "scalp_fixed",
   "pending_orders": [
     {
       "breakeven_at_r": null,
-      "created_at": "2026-10-29T05:30:00+00:00",
+      "created_at": "2026-10-29T05:45:00+00:00",
       "direction": "long",
       "fraction": 1.0,
       "kind": "open",
       "notional_fraction": null,
       "partial_tp": null,
-      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.002% < 0.200%; engel Bollinger(20) orta bandı 750.438; stop 1.93% (741.421), hedef 785.307 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.020% < 0.200%; engel Bollinger(20) orta bandı 750.394; stop 1.92% (740.122), hedef 783.526 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
       "sizing": "risk",
-      "stop_price": 741.4214285714284,
+      "stop_price": 740.1221428571428,
       "symbol": "BNB-USDT-SWAP",
       "take_profits": [
         {
           "fraction": 1.0,
-          "price": 785.3071428571432
+          "price": 783.5257142857147
         }
       ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-10-29T05:45:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "exit",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "zaman stop'u: pozisyon 16 bardır açık (16 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
+      "sizing": "risk",
+      "stop_price": null,
+      "symbol": "LINK-USDT-SWAP",
+      "take_profits": [],
       "trail_giveback_pct": null,
       "trailing_atr": null
     }
@@ -88,6 +104,39 @@
         {
           "fraction": 1.0,
           "price": 0.007086142857142858
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": null,
+      "direction": "long",
+      "entry_fee": 2.0371490571550592,
+      "entry_price": 756.4280249999999,
+      "entry_slippage": 1.8510281742355637,
+      "final_target_price": 785.3071428571432,
+      "funding": 0.0,
+      "high_water": 756.92,
+      "initial_qty": 4.896576084215762,
+      "initial_stop_price": 741.4214285714284,
+      "leverage": 1.7450447962929987,
+      "liq_price": 326.73818400057195,
+      "low_water": 754.43,
+      "margin": 2122.5285359515,
+      "notes": "boyut komisyon+marj nakde sığsın diye 0.9990 oranında kırpıldı",
+      "opened_at": "2026-10-29T05:45:00+00:00",
+      "partial_done": false,
+      "partial_tp": null,
+      "qty": 4.896576084215762,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.002% < 0.200%; engel Bollinger(20) orta bandı 750.438; stop 1.93% (741.421), hedef 785.307 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+      "stop_price": 741.4214285714284,
+      "stop_rule": "",
+      "symbol": "BNB-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 785.3071428571432
         }
       ],
       "trail_giveback_pct": null,
