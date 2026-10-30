@@ -1,27 +1,43 @@
 {
   "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-30T11:15:00+00:00",
+  "last_processed_bar": "2026-10-30T11:30:00+00:00",
   "model": "scalp_fixed",
   "pending_orders": [
     {
       "breakeven_at_r": null,
-      "created_at": "2026-10-30T11:15:00+00:00",
+      "created_at": "2026-10-30T11:30:00+00:00",
       "direction": "long",
       "fraction": 1.0,
       "kind": "open",
       "notional_fraction": null,
       "partial_tp": null,
-      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.090% < 0.200%; engel Bollinger(20) orta bandı 8.5253; stop 2.68% (8.339), hedef 9.029 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.083% < 0.200%; engel Bollinger(20) orta bandı 0.19295; stop 2.77% (0.187843), hedef 0.203914 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
       "sizing": "risk",
-      "stop_price": 8.339,
-      "symbol": "AVAX-USDT-SWAP",
+      "stop_price": 0.18784285714285714,
+      "symbol": "ADA-USDT-SWAP",
       "take_profits": [
         {
           "fraction": 1.0,
-          "price": 9.029000000000002
+          "price": 0.20391428571428574
         }
       ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-10-30T11:30:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "exit",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "zaman stop'u: pozisyon 16 bardır açık (16 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
+      "sizing": "risk",
+      "stop_price": null,
+      "symbol": "XRP-USDT-SWAP",
+      "take_profits": [],
       "trail_giveback_pct": null,
       "trailing_atr": null
     }
@@ -106,7 +122,7 @@
       "initial_stop_price": 715.3942857142857,
       "leverage": 1.9449070136497615,
       "liq_price": 1060.3812300690388,
-      "low_water": 699.69,
+      "low_water": 699.51,
       "margin": 2102.504324400535,
       "notes": "boyut komisyon+marj nakde sığsın diye 0.9989 oranında kırpıldı",
       "opened_at": "2026-10-30T09:15:00+00:00",
