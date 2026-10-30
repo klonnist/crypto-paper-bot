@@ -1,27 +1,22 @@
 {
-  "cash": 2796.8136302252865,
+  "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-30T18:30:00+00:00",
+  "last_processed_bar": "2026-10-30T18:45:00+00:00",
   "model": "scalp_fixed",
   "pending_orders": [
     {
       "breakeven_at_r": null,
-      "created_at": "2026-10-30T18:30:00+00:00",
+      "created_at": "2026-10-30T18:45:00+00:00",
       "direction": "short",
       "fraction": 1.0,
-      "kind": "open",
+      "kind": "exit",
       "notional_fraction": null,
       "partial_tp": null,
-      "reason": "VWAP geri çekilme: gün çapası 2026-10-30 00:00 UTC, VWAP=0.0749652 (75 bar); bar aralığı [0.07481, 0.07508] VWAP'e dokundu ve 0.07491 ile altında kapandı; trend EMA20=0.0755206 < EMA50=0.0757123; engel günün dibi 0.07204; stop 2.53% (0.0768064), hedef 0.07204 (1.51R), zaman stop'u 16 bar | arm=vwap_pullback | post_r=nan",
+      "reason": "zaman stop'u: pozisyon 16 bardır açık (16 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
       "sizing": "risk",
-      "stop_price": 0.07680642857142858,
-      "symbol": "DOGE-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 0.07204
-        }
-      ],
+      "stop_price": null,
+      "symbol": "LINK-USDT-SWAP",
+      "take_profits": [],
       "trail_giveback_pct": null,
       "trailing_atr": null
     }
@@ -73,7 +68,7 @@
       "initial_stop_price": 0.8460999999999999,
       "leverage": 1.0,
       "liq_price": 0.004454726249999874,
-      "low_water": 0.8792,
+      "low_water": 0.8744,
       "margin": 1474.4743728634262,
       "notes": "",
       "opened_at": "2026-10-30T17:00:00+00:00",
@@ -106,7 +101,7 @@
       "initial_stop_price": 2179.200714285714,
       "leverage": 1.0,
       "liq_price": 11.211753074999706,
-      "low_water": 2221.01,
+      "low_water": 2217.0,
       "margin": 2631.206586686224,
       "notes": "",
       "opened_at": "2026-10-30T18:15:00+00:00",
@@ -121,6 +116,39 @@
         {
           "fraction": 1.0,
           "price": 2365.318571428571
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": null,
+      "direction": "short",
+      "entry_fee": 1.5809440441058549,
+      "entry_price": 0.07488254000000001,
+      "entry_slippage": 1.43794082869198,
+      "final_target_price": 0.07204,
+      "funding": 0.0,
+      "high_water": 0.07498,
+      "initial_qty": 38386.033867923004,
+      "initial_stop_price": 0.07680642857142858,
+      "leverage": 1.028337902159815,
+      "liq_price": 0.14732712953917104,
+      "low_water": 0.0744,
+      "margin": 2795.2326861811807,
+      "notes": "boyut komisyon+marj nakde sığsın diye 0.9994 oranında kırpıldı",
+      "opened_at": "2026-10-30T18:45:00+00:00",
+      "partial_done": false,
+      "partial_tp": null,
+      "qty": 38386.033867923004,
+      "reason": "VWAP geri çekilme: gün çapası 2026-10-30 00:00 UTC, VWAP=0.0749652 (75 bar); bar aralığı [0.07481, 0.07508] VWAP'e dokundu ve 0.07491 ile altında kapandı; trend EMA20=0.0755206 < EMA50=0.0757123; engel günün dibi 0.07204; stop 2.53% (0.0768064), hedef 0.07204 (1.51R), zaman stop'u 16 bar | arm=vwap_pullback | post_r=nan",
+      "stop_price": 0.07680642857142858,
+      "stop_rule": "",
+      "symbol": "DOGE-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.07204
         }
       ],
       "trail_giveback_pct": null,
