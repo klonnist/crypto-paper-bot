@@ -1,12 +1,12 @@
 {
-  "cash": 10183.795114663539,
+  "cash": 5160.749989417061,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-30T05:15:00+00:00",
+  "last_processed_bar": "2026-10-30T05:30:00+00:00",
   "model": "vwap_managed",
   "pending_orders": [
     {
       "breakeven_at_r": 1.0,
-      "created_at": "2026-10-30T05:15:00+00:00",
+      "created_at": "2026-10-30T05:30:00+00:00",
       "direction": "short",
       "fraction": 1.0,
       "kind": "open",
@@ -15,9 +15,47 @@
         "fraction": 0.5,
         "r": 1.5
       },
-      "reason": "VWAP sapma-dönüş: gün-çapalı VWAP=0.862769 (22 bar), sapma=0.0178262; önceki bar +2.20σ ile bandın dışında kapandı, bu bar +2.11σ ile VWAP'e döndü (yön short, ATR=0.00712143); stop 2.5×ATR = %1.98 (0.918104), hedef 0.864693 (2.00R), zaman stop'u 16 bar; yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert | rr=2",
+      "reason": "VWAP sapma-dönüş: gün-çapalı VWAP=0.0743206 (23 bar), sapma=0.00098545; önceki bar +2.13σ ile bandın dışında kapandı, bu bar +2.06σ ile VWAP'e döndü (yön short, ATR=0.000400714); stop 2.5×ATR = %1.31 (0.0773518), hedef 0.0743464 (2.00R), zaman stop'u 16 bar; yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert | rr=2",
       "sizing": "risk",
+      "stop_price": 0.07735178571428572,
+      "symbol": "DOGE-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.07434642857142856
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    }
+  ],
+  "positions": [
+    {
+      "breakeven_at_r": 1.0,
+      "direction": "short",
+      "entry_fee": 2.7611561829849207,
+      "entry_price": 0.8998498500000001,
+      "entry_slippage": 2.5113976833730254,
+      "final_target_price": 0.8646928571428573,
+      "funding": 0.0,
+      "high_water": 0.9015,
+      "initial_qty": 5579.024066141136,
+      "initial_stop_price": 0.9181035714285714,
+      "leverage": 1.0,
+      "liq_price": 1.7952004507500001,
+      "low_water": 0.8968,
+      "margin": 5020.283969063492,
+      "notes": "",
+      "opened_at": "2026-10-30T05:30:00+00:00",
+      "partial_done": false,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "qty": 5579.024066141136,
+      "reason": "VWAP sapma-dönüş: gün-çapalı VWAP=0.862769 (22 bar), sapma=0.0178262; önceki bar +2.20σ ile bandın dışında kapandı, bu bar +2.11σ ile VWAP'e döndü (yön short, ATR=0.00712143); stop 2.5×ATR = %1.98 (0.918104), hedef 0.864693 (2.00R), zaman stop'u 16 bar; yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert | rr=2",
       "stop_price": 0.9181035714285714,
+      "stop_rule": "",
       "symbol": "SUI-USDT-SWAP",
       "take_profits": [
         {
@@ -29,6 +67,5 @@
       "trailing_atr": null
     }
   ],
-  "positions": [],
   "version": 1
 }
