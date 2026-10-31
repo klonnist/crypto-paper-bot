@@ -1,27 +1,22 @@
 {
-  "cash": 6156.856350502319,
+  "cash": 841.5848129018514,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-31T12:45:00+00:00",
+  "last_processed_bar": "2026-10-31T13:00:00+00:00",
   "model": "scalp_fixed",
   "pending_orders": [
     {
       "breakeven_at_r": null,
-      "created_at": "2026-10-31T12:45:00+00:00",
-      "direction": "long",
+      "created_at": "2026-10-31T13:00:00+00:00",
+      "direction": "short",
       "fraction": 1.0,
-      "kind": "open",
+      "kind": "exit",
       "notional_fraction": null,
       "partial_tp": null,
-      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.004% < 0.200%; engel Bollinger(20) orta bandı 0.89637; stop 1.29% (0.885464), hedef 0.920071 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+      "reason": "zaman stop'u: pozisyon 16 bardır açık (16 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
       "sizing": "risk",
-      "stop_price": 0.8854642857142858,
-      "symbol": "SUI-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 0.9200714285714285
-        }
-      ],
+      "stop_price": null,
+      "symbol": "LINK-USDT-SWAP",
+      "take_profits": [],
       "trail_giveback_pct": null,
       "trailing_atr": null
     }
@@ -55,6 +50,39 @@
         {
           "fraction": 1.0,
           "price": 10.873285714285716
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": null,
+      "direction": "long",
+      "entry_fee": 2.921792359882322,
+      "entry_price": 0.8974485,
+      "entry_slippage": 2.654847448895625,
+      "final_target_price": 0.9200714285714285,
+      "funding": 0.0,
+      "high_water": 0.8974485,
+      "initial_qty": 5919.3923052304235,
+      "initial_stop_price": 0.8854642857142858,
+      "leverage": 1.0,
+      "liq_price": 0.004487242499999877,
+      "low_water": 0.894,
+      "margin": 5312.349745240585,
+      "notes": "",
+      "opened_at": "2026-10-31T13:00:00+00:00",
+      "partial_done": false,
+      "partial_tp": null,
+      "qty": 5919.3923052304235,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.004% < 0.200%; engel Bollinger(20) orta bandı 0.89637; stop 1.29% (0.885464), hedef 0.920071 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+      "stop_price": 0.8854642857142858,
+      "stop_rule": "",
+      "symbol": "SUI-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.9200714285714285
         }
       ],
       "trail_giveback_pct": null,
