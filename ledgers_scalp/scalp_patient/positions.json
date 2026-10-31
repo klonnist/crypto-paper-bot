@@ -1,9 +1,31 @@
 {
   "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-10-31T11:45:00+00:00",
+  "last_processed_bar": "2026-10-31T12:00:00+00:00",
   "model": "scalp_patient",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-10-31T12:00:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.021% < 0.200%; engel Bollinger(20) orta bandı 0.896135; stop 1.28% (0.884936), hedef 0.919329 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 0.8849357142857144,
+      "symbol": "SUI-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.9193285714285713
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -13,7 +35,7 @@
       "entry_slippage": 1.2209054941830793,
       "final_target_price": 0.5793571428571429,
       "funding": 0.0,
-      "high_water": 0.619,
+      "high_water": 0.6199,
       "initial_qty": 3986.6301850882255,
       "initial_stop_price": 0.6290714285714286,
       "leverage": 1.023089007176148,
@@ -112,7 +134,7 @@
       "entry_slippage": 1.456834227698135,
       "final_target_price": 0.6416571428571426,
       "funding": 0.0,
-      "high_water": 0.6167,
+      "high_water": 0.6199,
       "initial_qty": 4743.070902485761,
       "initial_stop_price": 0.6006214285714286,
       "leverage": 1.545112868888098,
