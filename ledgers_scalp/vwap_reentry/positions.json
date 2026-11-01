@@ -1,34 +1,9 @@
 {
-  "cash": 1510.2275451903242,
+  "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-11-01T20:30:00+00:00",
+  "last_processed_bar": "2026-11-01T20:45:00+00:00",
   "model": "vwap_reentry",
-  "pending_orders": [
-    {
-      "breakeven_at_r": 1.0,
-      "created_at": "2026-11-01T20:30:00+00:00",
-      "direction": "long",
-      "fraction": 1.0,
-      "kind": "open",
-      "notional_fraction": null,
-      "partial_tp": {
-        "fraction": 0.5,
-        "r": 1.5
-      },
-      "reason": "VWAP sapma-dönüş: gün-çapalı VWAP=4.37139 (83 bar), sapma=0.055764; önceki bar -2.11σ ile bandın dışında kapandı, bu bar -1.82σ ile VWAP'e döndü (yön long, ATR=0.02); stop 2.5×ATR = %1.17 (4.22), hedef 4.37 (2.00R), zaman stop'u 16 bar; yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_reentry | rr=2",
-      "sizing": "risk",
-      "stop_price": 4.22,
-      "symbol": "NEAR-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 4.369999999999999
-        }
-      ],
-      "trail_giveback_pct": 0.5,
-      "trailing_atr": null
-    }
-  ],
+  "pending_orders": [],
   "positions": [
     {
       "breakeven_at_r": 1.0,
@@ -61,6 +36,42 @@
         {
           "fraction": 1.0,
           "price": 0.6213118576961125
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": 1.0,
+      "direction": "long",
+      "entry_fee": 4.141735975341204,
+      "entry_price": 4.2731354999999995,
+      "entry_slippage": 3.763332856608491,
+      "final_target_price": 4.369999999999999,
+      "funding": 0.0,
+      "high_water": 4.288,
+      "initial_qty": 1762.27246855966,
+      "initial_stop_price": 4.22,
+      "leverage": 5.0,
+      "liq_price": 3.439874077499999,
+      "low_water": 4.271,
+      "margin": 1506.085809214983,
+      "notes": "boyut leverage_cap=5 nedeniyle 0.9270 oranında kırpıldı (gereken kaldıraç 5.39); boyut komisyon+marj nakde sığsın diye 0.9973 oranında kırpıldı",
+      "opened_at": "2026-11-01T20:45:00+00:00",
+      "partial_done": false,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "qty": 1762.27246855966,
+      "reason": "VWAP sapma-dönüş: gün-çapalı VWAP=4.37139 (83 bar), sapma=0.055764; önceki bar -2.11σ ile bandın dışında kapandı, bu bar -1.82σ ile VWAP'e döndü (yön long, ATR=0.02); stop 2.5×ATR = %1.17 (4.22), hedef 4.37 (2.00R), zaman stop'u 16 bar; yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_reentry | rr=2",
+      "stop_price": 4.22,
+      "stop_rule": "",
+      "symbol": "NEAR-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 4.369999999999999
         }
       ],
       "trail_giveback_pct": 0.5,
