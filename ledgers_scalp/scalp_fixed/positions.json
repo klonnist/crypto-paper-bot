@@ -1,27 +1,22 @@
 {
-  "cash": 4837.4776761016465,
+  "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-11-01T20:15:00+00:00",
+  "last_processed_bar": "2026-11-01T20:30:00+00:00",
   "model": "scalp_fixed",
   "pending_orders": [
     {
       "breakeven_at_r": null,
-      "created_at": "2026-11-01T20:15:00+00:00",
+      "created_at": "2026-11-01T20:30:00+00:00",
       "direction": "short",
       "fraction": 1.0,
-      "kind": "open",
+      "kind": "exit",
       "notional_fraction": null,
       "partial_tp": null,
-      "reason": "RSI(2) aşırılık dönüşü: RSI=96.77 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.118% < 0.200%; engel Bollinger(20) orta bandı 1.24881; stop 1.12% (1.26276), hedef 1.22087 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+      "reason": "zaman stop'u: pozisyon 16 bardır açık (16 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
       "sizing": "risk",
-      "stop_price": 1.2627642857142853,
-      "symbol": "XRP-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 1.2208714285714288
-        }
-      ],
+      "stop_price": null,
+      "symbol": "ADA-USDT-SWAP",
+      "take_profits": [],
       "trail_giveback_pct": null,
       "trailing_atr": null
     }
@@ -55,6 +50,39 @@
         {
           "fraction": 1.0,
           "price": 0.18799999999999997
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": null,
+      "direction": "short",
+      "entry_fee": 3.387019355273186,
+      "entry_price": 1.24807565,
+      "entry_slippage": 3.0806488292075667,
+      "final_target_price": 1.2208714285714288,
+      "funding": 0.0,
+      "high_water": 1.2515,
+      "initial_qty": 4934.1696631831655,
+      "initial_stop_price": 1.2627642857142853,
+      "leverage": 1.2739142574815614,
+      "liq_price": 2.221552425137825,
+      "low_water": 1.24807565,
+      "margin": 4834.0906567463735,
+      "notes": "boyut komisyon+marj nakde sığsın diye 0.9993 oranında kırpıldı",
+      "opened_at": "2026-11-01T20:30:00+00:00",
+      "partial_done": false,
+      "partial_tp": null,
+      "qty": 4934.1696631831655,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=96.77 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.118% < 0.200%; engel Bollinger(20) orta bandı 1.24881; stop 1.12% (1.26276), hedef 1.22087 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+      "stop_price": 1.2627642857142853,
+      "stop_rule": "",
+      "symbol": "XRP-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 1.2208714285714288
         }
       ],
       "trail_giveback_pct": null,
