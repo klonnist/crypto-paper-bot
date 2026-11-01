@@ -1,9 +1,31 @@
 {
   "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-11-01T01:45:00+00:00",
+  "last_processed_bar": "2026-11-01T02:00:00+00:00",
   "model": "scalp_fixed",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-11-01T02:00:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.064% < 0.200%; engel Bollinger(20) orta bandı 0.899665; stop 1.25% (0.88845), hedef 0.9222 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 0.8884500000000001,
+      "symbol": "SUI-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.9222000000000001
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -13,7 +35,7 @@
       "entry_slippage": 2.7946954750760566,
       "final_target_price": 0.18807142857142856,
       "funding": -0.10825469020876305,
-      "high_water": 0.1933,
+      "high_water": 0.1934,
       "initial_qty": 28945.577162879683,
       "initial_stop_price": 0.19546428571428573,
       "leverage": 1.0,
@@ -46,7 +68,7 @@
       "entry_slippage": 1.6315548015202512,
       "final_target_price": 0.5986714285714284,
       "funding": 0.0,
-      "high_water": 0.6287,
+      "high_water": 0.6297,
       "initial_qty": 5220.9753648658425,
       "initial_stop_price": 0.6383142857142857,
       "leverage": 2.1296527045837386,
@@ -79,12 +101,12 @@
       "entry_slippage": 5.671588610141183e-16,
       "final_target_price": 93.30285714285716,
       "funding": 0.0,
-      "high_water": 95.88,
+      "high_water": 95.93,
       "initial_qty": 1.1868972711399646e-14,
       "initial_stop_price": 96.68857142857142,
       "leverage": 5.0,
       "liq_price": 114.14904692500001,
-      "low_water": 95.52,
+      "low_water": 95.49,
       "margin": 2.2675011263348996e-13,
       "notes": "boyut leverage_cap=5 nedeniyle 0.0000 oranında kırpıldı (gereken kaldıraç 25651032735914060.00); boyut komisyon+marj nakde sığsın diye 0.9973 oranında kırpıldı",
       "opened_at": "2026-11-01T00:45:00+00:00",
