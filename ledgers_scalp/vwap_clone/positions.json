@@ -1,9 +1,58 @@
 {
   "cash": 571.8373266616186,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-11-02T18:15:00+00:00",
+  "last_processed_bar": "2026-11-02T18:30:00+00:00",
   "model": "vwap_clone",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": 1.0,
+      "created_at": "2026-11-02T18:30:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": 0.5,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=0.192109 (300 bar), σ=0.000886737; bu bar -4.93σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2.5×0.5σ (0.186392), hedef VWAP mesafesinin %100'i (0.192109); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp2 | combo_r=-0.1134 | combo_n=80 | pick=exploit",
+      "sizing": "notional_fraction",
+      "stop_price": 0.18639157818779173,
+      "symbol": "ADA-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.19210884556985125
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": 1.0,
+      "created_at": "2026-11-02T18:30:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": 0.5,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=0.00726293 (300 bar), σ=5.22461e-05; bu bar -5.26σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (0.00692575), hedef VWAP mesafesinin %100'i (0.00726293); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp2 | combo_r=0.37 | combo_n=10 | pick=exploit",
+      "sizing": "notional_fraction",
+      "stop_price": 0.006925753857698321,
+      "symbol": "PENGU-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.0072629329201770575
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": 1.0,
@@ -18,7 +67,7 @@
       "initial_stop_price": 696.7808504060857,
       "leverage": 10.0,
       "liq_price": 633.0018427499999,
-      "low_water": 697.62,
+      "low_water": 697.31,
       "margin": 33.66703161659637,
       "notes": "",
       "opened_at": "2026-11-02T18:00:00+00:00",
@@ -54,7 +103,7 @@
       "initial_stop_price": 0.07358151151538314,
       "leverage": 10.0,
       "liq_price": 0.06702159404999998,
-      "low_water": 0.07376,
+      "low_water": 0.0736,
       "margin": 33.64936063127347,
       "notes": "",
       "opened_at": "2026-11-02T18:00:00+00:00",
@@ -90,7 +139,7 @@
       "initial_stop_price": 8.306087461010863,
       "leverage": 10.0,
       "liq_price": 7.585881045,
-      "low_water": 8.332,
+      "low_water": 8.317,
       "margin": 33.6316989210101,
       "notes": "",
       "opened_at": "2026-11-02T18:00:00+00:00",
