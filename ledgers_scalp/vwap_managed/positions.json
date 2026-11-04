@@ -1,9 +1,34 @@
 {
   "cash": 2398.2294446115056,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-11-04T08:00:00+00:00",
+  "last_processed_bar": "2026-11-04T08:15:00+00:00",
   "model": "vwap_managed",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": 1.0,
+      "created_at": "2026-11-04T08:15:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "reason": "VWAP sapma-dönüş: gün-çapalı VWAP=0.568754 (34 bar), sapma=0.00937538; önceki bar +2.20σ ile bandın dışında kapandı, bu bar +2.05σ ile VWAP'e döndü (yön short, ATR=0.00466429); stop 2.5×ATR = %1.98 (0.599661), hedef 0.568754 (1.65R), zaman stop'u 16 bar; yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert | rr=1.65",
+      "sizing": "risk",
+      "stop_price": 0.5996607142857142,
+      "symbol": "ETHFI-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.5687544271104782
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": 1.0,
@@ -13,7 +38,7 @@
       "entry_slippage": 2.3013289625646096,
       "final_target_price": 0.567808239432275,
       "funding": 0.22853013615003845,
-      "high_water": 0.5898,
+      "high_water": 0.5924,
       "initial_qty": 7818.3419825534875,
       "initial_stop_price": 0.6019392857142857,
       "leverage": 1.0,
@@ -49,7 +74,7 @@
       "entry_slippage": 1.7899967531056626,
       "final_target_price": 3.8328458807597903,
       "funding": 0.0,
-      "high_water": 4.05,
+      "high_water": 4.076,
       "initial_qty": 890.32417463603,
       "initial_stop_price": 4.138142857142857,
       "leverage": 1.0,
