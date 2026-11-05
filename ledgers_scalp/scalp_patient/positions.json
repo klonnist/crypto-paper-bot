@@ -1,9 +1,31 @@
 {
   "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-11-04T23:30:00+00:00",
+  "last_processed_bar": "2026-11-04T23:45:00+00:00",
   "model": "scalp_patient",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-11-04T23:45:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "VWAP geri çekilme: gün çapası 2026-11-04 00:00 UTC, VWAP=4.00392 (96 bar); bar aralığı [4.003, 4.031] VWAP'e dokundu ve 4.006 ile üstünde kapandı; trend EMA20=4.04072 > EMA50=4.0395; engel günün zirvesi 4.272; stop 3.38% (3.87064), hedef 4.272 (1.97R), zaman stop'u 100 bar | arm=vwap_pullback | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 3.8706428571428564,
+      "symbol": "NEAR-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 4.272
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -117,7 +139,7 @@
       "initial_stop_price": 3.8989999999999987,
       "leverage": 4.455416719172817,
       "liq_price": 3.1573581304035208,
-      "low_water": 4.02,
+      "low_water": 4.003,
       "margin": 397.23534206990536,
       "notes": "boyut komisyon+marj nakde sığsın diye 0.9976 oranında kırpıldı",
       "opened_at": "2026-11-04T23:15:00+00:00",
