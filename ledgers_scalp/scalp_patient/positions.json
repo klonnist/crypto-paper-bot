@@ -1,9 +1,47 @@
 {
   "cash": -0.08935864563104609,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-11-07T03:45:00+00:00",
+  "last_processed_bar": "2026-11-07T04:00:00+00:00",
   "model": "scalp_patient",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-11-07T04:00:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "Açılış aralığı kırılımı: ilk 4 bar [1.1781, 1.1819], kapanış 1.1525 altta (13. bar); hacim 42828.8 ≥ 1.5× SMA20(26873.8); engel ölçülü hareket 1.1743 (aralık genişliği 0.0038); stop 2.34% (1.17943), hedef 1.09864 (2.00R), zaman stop'u 100 bar | arm=opening_range_breakout | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 1.1794285714285717,
+      "symbol": "XRP-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 1.0986428571428566
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-11-07T04:00:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "exit",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "zaman stop'u: pozisyon 100 bardır açık (100 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
+      "sizing": "risk",
+      "stop_price": null,
+      "symbol": "ETHFI-USDT-SWAP",
+      "take_profits": [],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
