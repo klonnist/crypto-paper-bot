@@ -1,109 +1,32 @@
 {
-  "cash": 2237.311123570365,
+  "cash": 5330.858022340641,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-11-07T17:00:00+00:00",
+  "last_processed_bar": "2026-11-07T17:15:00+00:00",
   "model": "scalp_patient",
   "pending_orders": [
     {
       "breakeven_at_r": null,
-      "created_at": "2026-11-07T17:00:00+00:00",
-      "direction": "long",
-      "fraction": 1.0,
-      "kind": "exit",
-      "notional_fraction": null,
-      "partial_tp": null,
-      "reason": "zaman stop'u: pozisyon 101 bardır açık (100 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
-      "sizing": "risk",
-      "stop_price": null,
-      "symbol": "SOL-USDT-SWAP",
-      "take_profits": [],
-      "trail_giveback_pct": null,
-      "trailing_atr": null
-    },
-    {
-      "breakeven_at_r": null,
-      "created_at": "2026-11-07T17:00:00+00:00",
+      "created_at": "2026-11-07T17:15:00+00:00",
       "direction": "short",
       "fraction": 1.0,
-      "kind": "exit",
+      "kind": "open",
       "notional_fraction": null,
       "partial_tp": null,
-      "reason": "zaman stop'u: pozisyon 100 bardır açık (100 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
+      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.196% < 0.200%; engel Bollinger(20) orta bandı 0.0717455; stop 1.02% (0.0724586), hedef 0.0702729 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
       "sizing": "risk",
-      "stop_price": null,
-      "symbol": "BTC-USDT-SWAP",
-      "take_profits": [],
+      "stop_price": 0.07245857142857143,
+      "symbol": "DOGE-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.07027285714285715
+        }
+      ],
       "trail_giveback_pct": null,
       "trailing_atr": null
     }
   ],
   "positions": [
-    {
-      "breakeven_at_r": null,
-      "direction": "long",
-      "entry_fee": 0.9559010342412285,
-      "entry_price": 90.48522,
-      "entry_slippage": 0.8685666568908625,
-      "final_target_price": 97.07571428571427,
-      "funding": -0.3977251980023969,
-      "high_water": 90.78,
-      "initial_qty": 19.207577551765883,
-      "initial_stop_price": 87.12214285714286,
-      "leverage": 1.0,
-      "liq_price": 0.4524260999999967,
-      "low_water": 89.13,
-      "margin": 1738.0018804385973,
-      "notes": "",
-      "opened_at": "2026-11-06T15:45:00+00:00",
-      "partial_done": false,
-      "partial_tp": null,
-      "qty": 19.207577551765883,
-      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.166% < 0.200%; engel Bollinger(20) orta bandı 90.4085; stop 3.67% (87.1221), hedef 97.0757 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
-      "stop_price": 87.12214285714286,
-      "stop_rule": "",
-      "symbol": "SOL-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 97.07571428571427
-        }
-      ],
-      "trail_giveback_pct": null,
-      "trailing_atr": null
-    },
-    {
-      "breakeven_at_r": null,
-      "direction": "short",
-      "entry_fee": 1.2284775933776386,
-      "entry_price": 75780.99055,
-      "entry_slippage": 1.117356490406455,
-      "final_target_price": 71510.25714285714,
-      "funding": 0.28013008715227916,
-      "high_water": 76216.8,
-      "initial_qty": 0.029474352447917157,
-      "initial_stop_price": 77973.22142857141,
-      "leverage": 1.622948407431285,
-      "liq_price": 122095.492610688,
-      "low_water": 75367.8,
-      "margin": 1376.2579353081185,
-      "notes": "boyut komisyon+marj nakde sığsın diye 0.9991 oranında kırpıldı",
-      "opened_at": "2026-11-06T16:00:00+00:00",
-      "partial_done": false,
-      "partial_tp": null,
-      "qty": 0.029474352447917157,
-      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.170% < 0.200%; engel Bollinger(20) orta bandı 75884.3; stop 2.84% (77973.2), hedef 71510.3 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
-      "stop_price": 77973.22142857141,
-      "stop_rule": "",
-      "symbol": "BTC-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 71510.25714285714
-        }
-      ],
-      "trail_giveback_pct": null,
-      "trailing_atr": null
-    },
     {
       "breakeven_at_r": null,
       "direction": "long",
@@ -145,7 +68,7 @@
       "entry_slippage": 1.2139132182514651,
       "final_target_price": 0.5551285714285713,
       "funding": -0.1610251187839446,
-      "high_water": 0.5873,
+      "high_water": 0.5886,
       "initial_qty": 4151.549994020478,
       "initial_stop_price": 0.5994857142857144,
       "leverage": 2.916116852002926,
