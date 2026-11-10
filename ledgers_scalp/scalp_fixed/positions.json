@@ -1,27 +1,22 @@
 {
-  "cash": 614.4744368324864,
+  "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-11-10T23:15:00+00:00",
+  "last_processed_bar": "2026-11-10T23:30:00+00:00",
   "model": "scalp_fixed",
   "pending_orders": [
     {
       "breakeven_at_r": null,
-      "created_at": "2026-11-10T23:15:00+00:00",
-      "direction": "short",
+      "created_at": "2026-11-10T23:30:00+00:00",
+      "direction": "long",
       "fraction": 1.0,
-      "kind": "open",
+      "kind": "exit",
       "notional_fraction": null,
       "partial_tp": null,
-      "reason": "VWAP geri çekilme: gün çapası 2026-11-10 00:00 UTC, VWAP=8.3753 (94 bar); bar aralığı [8.344, 8.394] VWAP'e dokundu ve 8.375 ile altında kapandı; trend EMA20=8.30648 < EMA50=8.31653; engel günün dibi 8.057; stop 2.28% (8.56571), hedef 8.057 (1.67R), zaman stop'u 16 bar | arm=vwap_pullback | post_r=nan",
+      "reason": "zaman stop'u: pozisyon 16 bardır açık (16 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
       "sizing": "risk",
-      "stop_price": 8.565714285714286,
-      "symbol": "AVAX-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 8.057
-        }
-      ],
+      "stop_price": null,
+      "symbol": "ETHFI-USDT-SWAP",
+      "take_profits": [],
       "trail_giveback_pct": null,
       "trailing_atr": null
     }
@@ -68,7 +63,7 @@
       "entry_slippage": 2.465243769615259,
       "final_target_price": 75603.25714285712,
       "funding": 0.0,
-      "high_water": 73750.5,
+      "high_water": 73804.8,
       "initial_qty": 0.06694665896197348,
       "initial_stop_price": 72670.22142857143,
       "leverage": 1.0,
@@ -88,6 +83,39 @@
         {
           "fraction": 1.0,
           "price": 75603.25714285712
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": null,
+      "direction": "short",
+      "entry_fee": 1.5902710571659855,
+      "entry_price": 8.369813,
+      "entry_slippage": 1.4464241731465395,
+      "final_target_price": 8.057,
+      "funding": 0.0,
+      "high_water": 8.404,
+      "initial_qty": 345.4559763903893,
+      "initial_stop_price": 8.565714285714286,
+      "leverage": 4.717697215202561,
+      "liq_price": 10.102094960837917,
+      "low_water": 8.369813,
+      "margin": 612.8841657753204,
+      "notes": "boyut komisyon+marj nakde sığsın diye 0.9974 oranında kırpıldı",
+      "opened_at": "2026-11-10T23:30:00+00:00",
+      "partial_done": false,
+      "partial_tp": null,
+      "qty": 345.4559763903893,
+      "reason": "VWAP geri çekilme: gün çapası 2026-11-10 00:00 UTC, VWAP=8.3753 (94 bar); bar aralığı [8.344, 8.394] VWAP'e dokundu ve 8.375 ile altında kapandı; trend EMA20=8.30648 < EMA50=8.31653; engel günün dibi 8.057; stop 2.28% (8.56571), hedef 8.057 (1.67R), zaman stop'u 16 bar | arm=vwap_pullback | post_r=nan",
+      "stop_price": 8.565714285714286,
+      "stop_rule": "",
+      "symbol": "AVAX-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 8.057
         }
       ],
       "trail_giveback_pct": null,
