@@ -1,9 +1,31 @@
 {
   "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-11-11T07:00:00+00:00",
+  "last_processed_bar": "2026-11-11T07:15:00+00:00",
   "model": "scalp_fixed",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-11-11T07:15:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=98.67 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.023% < 0.200%; engel Bollinger(20) orta bandı 680.926; stop 1.37% (689.499), hedef 661.481 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 689.4992857142857,
+      "symbol": "BNB-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 661.4814285714285
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -13,7 +35,7 @@
       "entry_slippage": 1.8987698038591032,
       "final_target_price": 76282.44285714286,
       "funding": 0.0,
-      "high_water": 73942.2,
+      "high_water": 73970.0,
       "initial_qty": 0.05150749726654777,
       "initial_stop_price": 72450.47857142857,
       "leverage": 1.0,
