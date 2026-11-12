@@ -1,46 +1,35 @@
 {
-  "cash": 294.64819853451894,
+  "cash": 311.0131597960175,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-11-12T13:45:00+00:00",
+  "last_processed_bar": "2026-11-12T14:00:00+00:00",
   "model": "vwap_clone",
-  "pending_orders": [],
-  "positions": [
+  "pending_orders": [
     {
       "breakeven_at_r": 1.0,
+      "created_at": "2026-11-12T14:00:00+00:00",
       "direction": "long",
-      "entry_fee": 0.09541107871640708,
-      "entry_price": 72600.28199999999,
-      "entry_slippage": 0.08669399728897911,
-      "final_target_price": 73967.36605977268,
-      "funding": 0.0,
-      "high_water": 72736.8,
-      "initial_qty": 0.0023894492389889836,
-      "initial_stop_price": 72264.95452975493,
-      "leverage": 10.0,
-      "liq_price": 65703.25520999999,
-      "low_water": 72412.0,
-      "margin": 17.34746885752856,
-      "notes": "",
-      "opened_at": "2026-11-12T13:30:00+00:00",
-      "partial_done": false,
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": 0.5,
       "partial_tp": {
         "fraction": 0.5,
         "r": 1.5
       },
-      "qty": 0.0023894492389889836,
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=73967.4 (300 bar), σ=299.145; bu bar -4.74σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (72265), hedef VWAP mesafesinin %100'i (73967.4); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp2 | combo_r=-0.518 | combo_n=291 | pick=exploit",
-      "stop_price": 72264.95452975493,
-      "stop_rule": "",
-      "symbol": "BTC-USDT-SWAP",
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=0.627889 (300 bar), σ=0.00332483; bu bar -5.01σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2.5×0.5σ (0.607644), hedef VWAP mesafesinin %75'i (0.623867); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=0.1229 | combo_n=195 | pick=exploit",
+      "sizing": "notional_fraction",
+      "stop_price": 0.6076439590332664,
+      "symbol": "ETHFI-USDT-SWAP",
       "take_profits": [
         {
           "fraction": 1.0,
-          "price": 73967.36605977268
+          "price": 0.6238666961148529
         }
       ],
       "trail_giveback_pct": 0.5,
       "trailing_atr": null
-    },
+    }
+  ],
+  "positions": [
     {
       "breakeven_at_r": 1.0,
       "direction": "long",
@@ -54,7 +43,7 @@
       "initial_stop_price": 1993.475706960646,
       "leverage": 10.0,
       "liq_price": 1819.316653725,
-      "low_water": 2007.07,
+      "low_water": 2002.28,
       "margin": 17.33836360372829,
       "notes": "",
       "opened_at": "2026-11-12T13:30:00+00:00",
@@ -90,7 +79,7 @@
       "initial_stop_price": 80.78611501565481,
       "leverage": 10.0,
       "liq_price": 73.68572444999998,
-      "low_water": 81.3,
+      "low_water": 80.9,
       "margin": 17.329263129048677,
       "notes": "",
       "opened_at": "2026-11-12T13:30:00+00:00",
