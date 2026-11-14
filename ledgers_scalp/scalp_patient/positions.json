@@ -1,27 +1,43 @@
 {
   "cash": 1930.0956030224272,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-11-14T03:30:00+00:00",
+  "last_processed_bar": "2026-11-14T03:45:00+00:00",
   "model": "scalp_patient",
   "pending_orders": [
     {
       "breakeven_at_r": null,
-      "created_at": "2026-11-14T03:30:00+00:00",
+      "created_at": "2026-11-14T03:45:00+00:00",
       "direction": "short",
       "fraction": 1.0,
       "kind": "open",
       "notional_fraction": null,
       "partial_tp": null,
-      "reason": "Açılış aralığı kırılımı: ilk 4 bar [77.58, 78.45], kapanış 75.17 altta (11. bar); hacim 518759 ≥ 1.5× SMA20(234478); engel ölçülü hareket 76.71 (aralık genişliği 0.87); stop 4.09% (78.2414), hedef 69.0271 (2.00R), zaman stop'u 100 bar | arm=opening_range_breakout | post_r=nan",
+      "reason": "Açılış aralığı kırılımı: ilk 4 bar [1.0079, 1.0133], kapanış 0.9899 altta (12. bar); hacim 73209.6 ≥ 1.5× SMA20(42956.1); engel ölçülü hareket 1.0025 (aralık genişliği 0.0054); stop 3.71% (1.02661), hedef 0.916471 (2.00R), zaman stop'u 100 bar | arm=opening_range_breakout | post_r=nan",
       "sizing": "risk",
-      "stop_price": 78.24142857142857,
-      "symbol": "SOL-USDT-SWAP",
+      "stop_price": 1.0266142857142857,
+      "symbol": "XRP-USDT-SWAP",
       "take_profits": [
         {
           "fraction": 1.0,
-          "price": 69.02714285714288
+          "price": 0.9164714285714287
         }
       ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-11-14T03:45:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "exit",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "zaman stop'u: pozisyon 100 bardır açık (100 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
+      "sizing": "risk",
+      "stop_price": null,
+      "symbol": "DOGE-USDT-SWAP",
+      "take_profits": [],
       "trail_giveback_pct": null,
       "trailing_atr": null
     }
