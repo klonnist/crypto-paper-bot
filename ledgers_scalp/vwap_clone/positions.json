@@ -1,46 +1,35 @@
 {
-  "cash": 261.16997209336864,
+  "cash": 290.30447361502706,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-11-14T12:30:00+00:00",
+  "last_processed_bar": "2026-11-14T12:45:00+00:00",
   "model": "vwap_clone",
-  "pending_orders": [],
-  "positions": [
+  "pending_orders": [
     {
       "breakeven_at_r": 1.0,
+      "created_at": "2026-11-14T12:45:00+00:00",
       "direction": "long",
-      "entry_fee": 0.08501685432239586,
-      "entry_price": 75.847905,
-      "entry_slippage": 0.07724942467165016,
-      "final_target_price": 80.09581761682173,
-      "funding": 0.0,
-      "high_water": 76.0,
-      "initial_qty": 2.03797453295503,
-      "initial_stop_price": 75.48313081750644,
-      "leverage": 10.0,
-      "liq_price": 68.64235402499999,
-      "low_water": 75.52,
-      "margin": 15.457609876799248,
-      "notes": "",
-      "opened_at": "2026-11-14T11:15:00+00:00",
-      "partial_done": false,
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": 0.5,
       "partial_tp": {
         "fraction": 0.5,
         "r": 1.5
       },
-      "qty": 2.03797453295503,
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=80.0958 (300 bar), σ=0.269495; bu bar -16.16σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2.5×0.5σ (75.4831), hedef VWAP mesafesinin %100'i (80.0958); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp2 | combo_r=-0.06785 | combo_n=50 | pick=exploit",
-      "stop_price": 75.48313081750644,
-      "stop_rule": "",
-      "symbol": "SOL-USDT-SWAP",
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=8.36526 (300 bar), σ=0.0150163; bu bar -23.90σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (7.98598), hedef VWAP mesafesinin %100'i (8.36526); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp2 | combo_r=-0.02283 | combo_n=170 | pick=exploit",
+      "sizing": "notional_fraction",
+      "stop_price": 7.98598372676574,
+      "symbol": "AVAX-USDT-SWAP",
       "take_profits": [
         {
           "fraction": 1.0,
-          "price": 80.09581761682173
+          "price": 8.36526425283139
         }
       ],
       "trail_giveback_pct": 0.5,
       "trailing_atr": null
-    },
+    }
+  ],
+  "positions": [
     {
       "breakeven_at_r": 1.0,
       "direction": "long",
@@ -54,7 +43,7 @@
       "initial_stop_price": 0.9868736311385153,
       "leverage": 10.0,
       "liq_price": 0.8976656084999999,
-      "low_water": 0.991,
+      "low_water": 0.9907,
       "margin": 15.37738261885186,
       "notes": "",
       "opened_at": "2026-11-14T11:45:00+00:00",
@@ -72,42 +61,6 @@
         {
           "fraction": 1.0,
           "price": 1.0172005477667956
-        }
-      ],
-      "trail_giveback_pct": 0.5,
-      "trailing_atr": null
-    },
-    {
-      "breakeven_at_r": 1.0,
-      "direction": "long",
-      "entry_fee": 0.08453121277804053,
-      "entry_price": 0.063021495,
-      "entry_slippage": 0.07680815299443043,
-      "final_target_price": 0.06542145691806592,
-      "funding": 0.0,
-      "high_water": 0.06322,
-      "initial_qty": 2438.7411650880686,
-      "initial_stop_price": 0.0627644526451004,
-      "leverage": 10.0,
-      "liq_price": 0.05703445297499999,
-      "low_water": 0.06285,
-      "margin": 15.369311414189188,
-      "notes": "",
-      "opened_at": "2026-11-14T11:45:00+00:00",
-      "partial_done": false,
-      "partial_tp": {
-        "fraction": 0.5,
-        "r": 1.5
-      },
-      "qty": 2438.7411650880686,
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=0.0654215 (300 bar), σ=0.000188438; bu bar -13.24σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2.5×0.5σ (0.0627645), hedef VWAP mesafesinin %100'i (0.0654215); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp2 | combo_r=-0.1056 | combo_n=95 | pick=explore",
-      "stop_price": 0.0627644526451004,
-      "stop_rule": "",
-      "symbol": "DOGE-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 0.06542145691806592
         }
       ],
       "trail_giveback_pct": 0.5,
