@@ -1,109 +1,32 @@
 {
-  "cash": 2.2737367544323206e-13,
+  "cash": 3367.476162667157,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-11-17T01:15:00+00:00",
+  "last_processed_bar": "2026-11-17T01:30:00+00:00",
   "model": "scalp_fixed",
   "pending_orders": [
     {
       "breakeven_at_r": null,
-      "created_at": "2026-11-17T01:15:00+00:00",
+      "created_at": "2026-11-17T01:30:00+00:00",
       "direction": "long",
       "fraction": 1.0,
-      "kind": "exit",
+      "kind": "open",
       "notional_fraction": null,
       "partial_tp": null,
-      "reason": "zaman stop'u: pozisyon 17 bardır açık (16 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
+      "reason": "VWAP geri çekilme: gün çapası 2026-11-17 00:00 UTC, VWAP=590.662 (7 bar); bar aralığı [590.01, 593.17] VWAP'e dokundu ve 593.17 ile üstünde kapandı; trend EMA20=591.406 > EMA50=591.018; engel günün zirvesi 593.17; stop 1.40% (584.838), hedef 609.834 (2.00R), zaman stop'u 16 bar | arm=vwap_pullback | post_r=nan",
       "sizing": "risk",
-      "stop_price": null,
-      "symbol": "ADA-USDT-SWAP",
-      "take_profits": [],
-      "trail_giveback_pct": null,
-      "trailing_atr": null
-    },
-    {
-      "breakeven_at_r": null,
-      "created_at": "2026-11-17T01:15:00+00:00",
-      "direction": "short",
-      "fraction": 1.0,
-      "kind": "exit",
-      "notional_fraction": null,
-      "partial_tp": null,
-      "reason": "zaman stop'u: pozisyon 16 bardır açık (16 bar sınırı), piyasa fiyatından kapatılıyor | exit_rule=time_stop",
-      "sizing": "risk",
-      "stop_price": null,
-      "symbol": "PENGU-USDT-SWAP",
-      "take_profits": [],
+      "stop_price": 584.837857142857,
+      "symbol": "BNB-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 609.8342857142857
+        }
+      ],
       "trail_giveback_pct": null,
       "trailing_atr": null
     }
   ],
   "positions": [
-    {
-      "breakeven_at_r": null,
-      "direction": "long",
-      "entry_fee": 1.262064240698603,
-      "entry_price": 0.15327659999999999,
-      "entry_slippage": 1.1467577490330383,
-      "final_target_price": 0.16095714285714277,
-      "funding": 0.19185620553468535,
-      "high_water": 0.1542,
-      "initial_qty": 14970.727794168462,
-      "initial_stop_price": 0.14917142857142862,
-      "leverage": 1.0,
-      "liq_price": 0.0007663829999999816,
-      "low_water": 0.1515,
-      "margin": 2294.6622558156414,
-      "notes": "",
-      "opened_at": "2026-11-16T21:00:00+00:00",
-      "partial_done": false,
-      "partial_tp": null,
-      "qty": 14970.727794168462,
-      "reason": "RSI(2) aşırılık dönüşü: RSI=0.00 (≤ 5); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.173% < 0.200%; engel Bollinger(20) orta bandı 0.152955; stop 2.57% (0.149171), hedef 0.160957 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
-      "stop_price": 0.14917142857142862,
-      "stop_rule": "",
-      "symbol": "ADA-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 0.16095714285714277
-        }
-      ],
-      "trail_giveback_pct": null,
-      "trailing_atr": null
-    },
-    {
-      "breakeven_at_r": null,
-      "direction": "short",
-      "entry_fee": 1.1465096258364762,
-      "entry_price": 0.0048765605,
-      "entry_slippage": 1.0428028794727469,
-      "final_target_price": 0.004599999999999999,
-      "funding": 0.01448076009798593,
-      "high_water": 0.004893,
-      "initial_qty": 427465.82474806166,
-      "initial_stop_price": 0.00502,
-      "leverage": 1.9640080150497372,
-      "liq_price": 0.007335141342572755,
-      "low_water": 0.004772,
-      "margin": 1061.3821023604785,
-      "notes": "boyut komisyon+marj nakde sığsın diye 0.9989 oranında kırpıldı",
-      "opened_at": "2026-11-16T21:15:00+00:00",
-      "partial_done": false,
-      "partial_tp": null,
-      "qty": 427465.82474806166,
-      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.045% < 0.200%; engel Bollinger(20) orta bandı 0.00488355; stop 2.87% (0.00502), hedef 0.0046 (2.00R), zaman stop'u 16 bar | arm=rsi2_reversal | post_r=nan",
-      "stop_price": 0.00502,
-      "stop_rule": "",
-      "symbol": "PENGU-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 0.004599999999999999
-        }
-      ],
-      "trail_giveback_pct": null,
-      "trailing_atr": null
-    },
     {
       "breakeven_at_r": null,
       "direction": "short",
@@ -145,12 +68,12 @@
       "entry_slippage": 2.2379132229763417,
       "final_target_price": 575.4542857142857,
       "funding": 0.0,
-      "high_water": 591.48,
+      "high_water": 593.17,
       "initial_qty": 7.571388726977766,
       "initial_stop_price": 598.9828571428571,
       "leverage": 3.047353177206891,
       "liq_price": 781.7911758845347,
-      "low_water": 590.34,
+      "low_water": 590.01,
       "margin": 1468.0243058765777,
       "notes": "boyut komisyon+marj nakde sığsın diye 0.9983 oranında kırpıldı",
       "opened_at": "2026-11-17T01:15:00+00:00",
