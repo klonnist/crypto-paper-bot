@@ -1,12 +1,12 @@
 {
   "cash": 223.01475204582235,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-11-17T03:45:00+00:00",
+  "last_processed_bar": "2026-11-17T04:00:00+00:00",
   "model": "vwap_clone",
   "pending_orders": [
     {
       "breakeven_at_r": 1.0,
-      "created_at": "2026-11-17T03:45:00+00:00",
+      "created_at": "2026-11-17T04:00:00+00:00",
       "direction": "long",
       "fraction": 1.0,
       "kind": "open",
@@ -15,14 +15,14 @@
         "fraction": 0.5,
         "r": 1.5
       },
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=7.33358 (300 bar), σ=0.0340959; bu bar -4.54σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 1.5×0.5σ (7.15943), hedef VWAP mesafesinin %100'i (7.33358); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band0_tp2 | combo_r=-0.8798 | combo_n=8 | pick=explore",
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=7.33223 (300 bar), σ=0.0379014; bu bar -4.10σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (7.1501), hedef VWAP mesafesinin %100'i (7.33223); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp2 | combo_r=-0.0549 | combo_n=174 | pick=exploit",
       "sizing": "notional_fraction",
-      "stop_price": 7.159428038331648,
+      "stop_price": 7.15009864305446,
       "symbol": "AVAX-USDT-SWAP",
       "take_profits": [
         {
           "fraction": 1.0,
-          "price": 7.333575504881774
+          "price": 7.332234016069763
         }
       ],
       "trail_giveback_pct": 0.5,
@@ -30,7 +30,7 @@
     },
     {
       "breakeven_at_r": 1.0,
-      "created_at": "2026-11-17T03:45:00+00:00",
+      "created_at": "2026-11-17T04:00:00+00:00",
       "direction": "long",
       "fraction": 1.0,
       "kind": "open",
@@ -39,14 +39,38 @@
         "fraction": 0.5,
         "r": 1.5
       },
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=0.00505981 (300 bar), σ=2.48467e-05; bu bar -7.95σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2.5×0.5σ (0.00483894), hedef VWAP mesafesinin %75'i (0.00501236); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=0.1627 | combo_n=85 | pick=exploit",
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=0.500305 (300 bar), σ=0.00416412; bu bar -6.05σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2.5×0.5σ (0.470995), hedef VWAP mesafesinin %75'i (0.494279); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=0.08448 | combo_n=206 | pick=explore",
       "sizing": "notional_fraction",
-      "stop_price": 0.004838941660509302,
-      "symbol": "PENGU-USDT-SWAP",
+      "stop_price": 0.4709948557373172,
+      "symbol": "ETHFI-USDT-SWAP",
       "take_profits": [
         {
           "fraction": 1.0,
-          "price": 0.005012356669063174
+          "price": 0.49427904940368733
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    },
+    {
+      "breakeven_at_r": 1.0,
+      "created_at": "2026-11-17T04:00:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": 0.5,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=3.15398 (300 bar), σ=0.0411264; bu bar +2.60σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2.5×0.5σ (3.31041), hedef VWAP mesafesinin %75'i (3.18024); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=0.211 | combo_n=138 | pick=exploit",
+      "sizing": "notional_fraction",
+      "stop_price": 3.3104079761617573,
+      "symbol": "NEAR-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 3.180237529444521
         }
       ],
       "trail_giveback_pct": 0.5,
@@ -67,7 +91,7 @@
       "initial_stop_price": 7.144191072454357,
       "leverage": 10.0,
       "liq_price": 6.494810782499999,
-      "low_water": 7.161,
+      "low_water": 7.154,
       "margin": 13.130036040017128,
       "notes": "",
       "opened_at": "2026-11-17T03:30:00+00:00",
@@ -139,7 +163,7 @@
       "initial_stop_price": 0.004836233352616675,
       "leverage": 10.0,
       "liq_price": 0.004406837317499999,
-      "low_water": 0.004845,
+      "low_water": 0.004844,
       "margin": 13.11625640028762,
       "notes": "",
       "opened_at": "2026-11-17T03:30:00+00:00",
