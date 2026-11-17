@@ -1,13 +1,13 @@
 {
-  "cash": 215.1939401514902,
+  "cash": 227.34759713221425,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-11-17T10:30:00+00:00",
+  "last_processed_bar": "2026-11-17T10:45:00+00:00",
   "model": "vwap_clone",
   "pending_orders": [
     {
       "breakeven_at_r": 1.0,
-      "created_at": "2026-11-17T10:30:00+00:00",
-      "direction": "long",
+      "created_at": "2026-11-17T10:45:00+00:00",
+      "direction": "short",
       "fraction": 1.0,
       "kind": "open",
       "notional_fraction": 0.5,
@@ -15,14 +15,14 @@
         "fraction": 0.5,
         "r": 1.5
       },
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=64791.6 (300 bar), σ=171.969; bu bar -3.36σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (64059), hedef VWAP mesafesinin %100'i (64791.6); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp2 | combo_r=-0.511 | combo_n=331 | pick=exploit",
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=3.13792 (300 bar), σ=0.02132; bu bar +2.74σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2.5×0.5σ (3.22065), hedef VWAP mesafesinin %75'i (3.15194); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=0.1976 | combo_n=140 | pick=exploit",
       "sizing": "notional_fraction",
-      "stop_price": 64059.03103735669,
-      "symbol": "BTC-USDT-SWAP",
+      "stop_price": 3.2206500540941896,
+      "symbol": "NEAR-USDT-SWAP",
       "take_profits": [
         {
           "fraction": 1.0,
-          "price": 64791.64485086882
+          "price": 3.1519404584301722
         }
       ],
       "trail_giveback_pct": 0.5,
@@ -30,42 +30,6 @@
     }
   ],
   "positions": [
-    {
-      "breakeven_at_r": 1.0,
-      "direction": "long",
-      "entry_fee": 0.07045046084360199,
-      "entry_price": 64382.074949999995,
-      "entry_slippage": 0.06401386656088977,
-      "final_target_price": 64817.55458764555,
-      "funding": 0.0,
-      "high_water": 64495.9,
-      "initial_qty": 0.0019895560540390328,
-      "initial_stop_price": 64119.9038245056,
-      "leverage": 10.0,
-      "liq_price": 58265.77782974999,
-      "low_water": 64120.5,
-      "margin": 12.809174698836724,
-      "notes": "",
-      "opened_at": "2026-11-17T09:30:00+00:00",
-      "partial_done": false,
-      "partial_tp": {
-        "fraction": 0.5,
-        "r": 1.5
-      },
-      "qty": 0.0019895560540390328,
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=64817.6 (300 bar), σ=229.996; bu bar -2.31σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (64119.9), hedef VWAP mesafesinin %100'i (64817.6); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp2 | combo_r=-0.511 | combo_n=331 | pick=exploit",
-      "stop_price": 64119.9038245056,
-      "stop_rule": "",
-      "symbol": "BTC-USDT-SWAP",
-      "take_profits": [
-        {
-          "fraction": 1.0,
-          "price": 64817.55458764555
-        }
-      ],
-      "trail_giveback_pct": 0.5,
-      "trailing_atr": null
-    },
     {
       "breakeven_at_r": 1.0,
       "direction": "short",
@@ -79,7 +43,7 @@
       "initial_stop_price": 72.6517159677239,
       "leverage": 10.0,
       "liq_price": 79.20552742500003,
-      "low_water": 72.16,
+      "low_water": 72.01,
       "margin": 12.785139056001594,
       "notes": "",
       "opened_at": "2026-11-17T10:15:00+00:00",
@@ -90,8 +54,8 @@
       },
       "qty": 1.7675189751849243,
       "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=71.6703 (300 bar), σ=0.225373; bu bar +3.52σ ile bandın dışında kapandı ve kapanış short yönünde döndü; stop 2.5×0.5σ (72.6517), hedef VWAP mesafesinin %75'i (71.8452); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band2_tp1 | combo_r=-0.1045 | combo_n=279 | pick=exploit",
-      "stop_price": 72.6517159677239,
-      "stop_rule": "",
+      "stop_price": 72.33381500000002,
+      "stop_rule": "breakeven",
       "symbol": "SOL-USDT-SWAP",
       "take_profits": [
         {
@@ -115,7 +79,7 @@
       "initial_stop_price": 0.0047075877252713725,
       "leverage": 10.0,
       "liq_price": 0.004300899374999999,
-      "low_water": 0.004743,
+      "low_water": 0.004709,
       "margin": 12.731365198298247,
       "notes": "",
       "opened_at": "2026-11-17T10:30:00+00:00",
