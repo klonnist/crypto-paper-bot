@@ -1,9 +1,31 @@
 {
   "cash": -0.11399885562406374,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-11-18T11:15:00+00:00",
+  "last_processed_bar": "2026-11-18T11:30:00+00:00",
   "model": "scalp_patient",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-11-18T11:30:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "RSI(2) aşırılık dönüşü: RSI=100.00 (≥ 95); aralık rejimi doğrulandı: |EMA20−EMA50|/kapanış=0.043% < 0.200%; engel Bollinger(20) orta bandı 0.0595175; stop 1.64% (0.060265), hedef 0.05734 (2.00R), zaman stop'u 100 bar | arm=rsi2_reversal | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 0.060265000000000006,
+      "symbol": "DOGE-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.057339999999999995
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -150,7 +172,7 @@
       "initial_stop_price": 63514.2,
       "leverage": 2.744864290563573,
       "liq_price": 41549.98189654858,
-      "low_water": 64088.0,
+      "low_water": 64080.0,
       "margin": 1029.7561224384604,
       "notes": "boyut komisyon+marj nakde sığsın diye 0.9985 oranında kırpıldı",
       "opened_at": "2026-11-18T00:15:00+00:00",
