@@ -8,34 +8,34 @@
     "min_trades": 30,
     "models": [
       {
-        "avg_r": -0.04644778540268292,
-        "avg_stop_distance_pct": 8.581585853715861,
+        "avg_r": -0.0435919201781556,
+        "avg_stop_distance_pct": 8.60160183139175,
         "band": true,
-        "band_high": 13.56867861701133,
-        "band_low": 5.427471446804531,
-        "benchmark_return": -0.2714024639,
+        "band_high": 13.600326656536776,
+        "band_low": 5.44013066261471,
+        "benchmark_return": -0.26734233649999994,
         "ci_alpha": 0.05,
         "control_avg_r": -1.0689503328413996,
         "control_min_trades": 30,
         "control_trades": 18,
         "edge": false,
-        "edge_diff_ci_high": 1.1392305709979986,
-        "edge_diff_ci_low": 0.9129499358857796,
+        "edge_diff_ci_high": 1.1385451452196953,
+        "edge_diff_ci_low": 0.9144315098414725,
         "edge_margin_r": 0.15,
-        "measured_trades": 213,
+        "measured_trades": 214,
         "min_trades": 30,
         "model": "trend",
         "passed": false,
         "sample": true,
-        "total_return": -0.08466246180000003
+        "total_return": -0.08736010119999993
       },
       {
         "avg_r": -0.3006255394354497,
         "avg_stop_distance_pct": 9.326294511876794,
         "band": true,
-        "band_high": 13.56867861701133,
-        "band_low": 5.427471446804531,
-        "benchmark_return": -0.2714024639,
+        "band_high": 13.600326656536776,
+        "band_low": 5.44013066261471,
+        "benchmark_return": -0.26734233649999994,
         "ci_alpha": 0.05,
         "control_avg_r": -1.0689503328413996,
         "control_min_trades": 30,
@@ -49,15 +49,15 @@
         "model": "meanrev",
         "passed": false,
         "sample": true,
-        "total_return": -0.18386991949999998
+        "total_return": -0.18061691609999997
       },
       {
         "avg_r": -1.0689503328413996,
         "avg_stop_distance_pct": 5.774758319451299,
         "band": true,
-        "band_high": 13.56867861701133,
-        "band_low": 5.427471446804531,
-        "benchmark_return": -0.2714024639,
+        "band_high": 13.600326656536776,
+        "band_low": 5.44013066261471,
+        "benchmark_return": -0.26734233649999994,
         "ci_alpha": 0.05,
         "control_avg_r": -1.0689503328413996,
         "control_min_trades": 30,
@@ -71,21 +71,46 @@
         "model": "random_ctrl",
         "passed": false,
         "sample": false,
-        "total_return": -0.02500373510000009
+        "total_return": -0.02600504349999988
       }
     ],
     "stop_band_ratio": 2.5
   },
   "activity": {
-    "closed": 4,
-    "closed_avg_r": -0.39120469728945817,
-    "closed_pnl": -136.37503121999998,
-    "closed_wins": 1,
+    "closed": 3,
+    "closed_avg_r": -0.09241856864949649,
+    "closed_pnl": -19.123370870000002,
+    "closed_wins": 2,
     "hours": 24,
     "opened": 3,
-    "since": "2026-11-17T20:00:00+00:00",
-    "still_open": 2,
+    "since": "2026-11-18T00:00:00+00:00",
+    "still_open": 1,
     "trades": [
+      {
+        "closed_at": "2026-11-19T00:00:00+00:00",
+        "direction": "long",
+        "entry_price": 3.1703844,
+        "exit_price": 3.404504039,
+        "exit_reason": "stop",
+        "exit_rule": "trailing_atr",
+        "fee": 0.8052501724,
+        "funding": -0.03923385695,
+        "is_partial": false,
+        "leverage": 1.0,
+        "margin": 705.9788185,
+        "model": "trend",
+        "notes": "exit_rule=trailing_atr",
+        "notional": 705.9788185,
+        "opened_at": "2026-11-18T16:00:00+00:00",
+        "pnl": 51.28910151,
+        "qty": 222.6792494,
+        "r": 0.564707372646163,
+        "reason": "20 bar Donchian tepesi 2.5175, kapanış 3.1661 ile %25.76 üstünde; rejim yukarı (EMA50 1.89736 > EMA200 1.49471); stop 2×ATR(14)=0.403586 uzakta (2.76251), trailing 1×ATR",
+        "risk_amount": 90.8242109,
+        "slippage_cost": 0.7320588277,
+        "stop_price": 2.762514286,
+        "symbol": "PIEVERSE-USDT-SWAP"
+      },
       {
         "closed_at": "2026-11-18T16:00:00+00:00",
         "direction": "short",
@@ -135,60 +160,10 @@
         "slippage_cost": 0.4354212528,
         "stop_price": 38.78142857,
         "symbol": "AAOI-USDT-SWAP"
-      },
-      {
-        "closed_at": "2026-11-17T20:00:00+00:00",
-        "direction": "short",
-        "entry_price": 492.463645,
-        "exit_price": 501.9610996,
-        "exit_reason": "stop",
-        "exit_rule": "trailing_atr",
-        "fee": 1.52239318,
-        "funding": 0.0,
-        "is_partial": false,
-        "leverage": 1.0,
-        "margin": 1370.775687,
-        "model": "trend",
-        "notes": "exit_rule=trailing_atr",
-        "notional": 1370.775687,
-        "opened_at": "2026-11-17T16:00:00+00:00",
-        "pnl": -27.95861857,
-        "qty": 2.783506359,
-        "r": -0.30635879629162566,
-        "reason": "20 bar Donchian dibi 497.12, kapanış 492.8 ile %0.87 altında; rejim aşağı (EMA50 518.531 < EMA200 524.03); stop 2×ATR(14)=32.45 uzakta (525.25), trailing 1×ATR",
-        "risk_amount": 91.26102762,
-        "slippage_cost": 2.77840956,
-        "stop_price": 525.25,
-        "symbol": "AMD-USDT-SWAP"
-      },
-      {
-        "closed_at": "2026-11-17T20:00:00+00:00",
-        "direction": "long",
-        "entry_price": 62.020995,
-        "exit_price": 58.90981607,
-        "exit_reason": "stop",
-        "exit_rule": "trailing_atr",
-        "fee": 0.7954568666,
-        "funding": 0.0,
-        "is_partial": false,
-        "leverage": 1.0,
-        "margin": 741.7468477,
-        "model": "trend",
-        "notes": "exit_rule=trailing_atr",
-        "notional": 741.7468477,
-        "opened_at": "2026-11-17T16:00:00+00:00",
-        "pnl": -38.00394027,
-        "qty": 11.95960896,
-        "r": -0.41649691427155433,
-        "reason": "20 bar Donchian tepesi 61.78, kapanış 61.98 ile %0.32 üstünde; rejim yukarı (EMA50 55.2206 > EMA200 52.2977); stop 2×ATR(14)=7.58857 uzakta (54.3914), trailing 1×ATR",
-        "risk_amount": 91.24663105,
-        "slippage_cost": 0.7231334847,
-        "stop_price": 54.39142857,
-        "symbol": "SOXS-USDT-SWAP"
       }
     ]
   },
-  "as_of": "2026-11-18T20:00:00+00:00",
+  "as_of": "2026-11-19T00:00:00+00:00",
   "benchmarks": [
     "buyhold"
   ],
@@ -196,50 +171,50 @@
   "build_failures": {},
   "concentration": {
     "buyhold": {
-      "gross_exposure": 1.009564775616706,
-      "net_exposure": 1.009564775616706,
-      "top_symbol_share": 0.5323723528225256
+      "gross_exposure": 1.0095067109937232,
+      "net_exposure": 1.0095067109937232,
+      "top_symbol_share": 0.5305856559923835
     },
     "meanrev": {
-      "gross_exposure": 0.532073998049213,
-      "net_exposure": 0.2562048201386949,
-      "top_symbol_share": 0.47350021913666035
+      "gross_exposure": 0.5273368357616215,
+      "net_exposure": 0.25915575819794107,
+      "top_symbol_share": 0.47585704423832015
     },
     "random_ctrl": {
-      "gross_exposure": 0.6134879500478054,
-      "net_exposure": 0.07419117519556075,
-      "top_symbol_share": 0.47205524747249683
+      "gross_exposure": 0.6151584412124733,
+      "net_exposure": 0.07322764748356009,
+      "top_symbol_share": 0.4712573347213021
     },
     "trend": {
-      "gross_exposure": 0.24621145309052833,
-      "net_exposure": 0.14813207153896144,
-      "top_symbol_share": 0.45266451124548013
+      "gross_exposure": 0.16096526707075964,
+      "net_exposure": 0.06259597619968009,
+      "top_symbol_share": 0.6944393885053574
     }
   },
   "correlation": {
     "matrix": [
       [
+        1.0,
+        0.46052288602832725,
+        0.07385625978775419,
+        -0.033694878843291774
+      ],
+      [
+        0.46052288602832725,
+        1.0,
+        0.04099878568244125,
+        -0.1582772902338007
+      ],
+      [
+        0.07385625978775419,
+        0.04099878568244125,
         0.9999999999999998,
-        0.4598870101507298,
-        0.07404107407667278,
-        -0.032919834220671844
+        0.05395494279404293
       ],
       [
-        0.4598870101507298,
-        1.0000000000000002,
-        0.041149807454628276,
-        -0.15765451742362863
-      ],
-      [
-        0.07404107407667278,
-        0.041149807454628276,
-        1.0000000000000002,
-        0.05388180048081623
-      ],
-      [
-        -0.032919834220671844,
-        -0.15765451742362863,
-        0.05388180048081623,
+        -0.033694878843291774,
+        -0.1582772902338007,
+        0.05395494279404293,
         1.0
       ]
     ],
@@ -252,28 +227,28 @@
     ],
     "overlap": [
       [
-        357,
-        357,
-        357,
-        357
+        358,
+        358,
+        358,
+        358
       ],
       [
-        357,
-        357,
-        357,
-        357
+        358,
+        358,
+        358,
+        358
       ],
       [
-        357,
-        357,
-        357,
-        357
+        358,
+        358,
+        358,
+        358
       ],
       [
-        357,
-        357,
-        357,
-        357
+        358,
+        358,
+        358,
+        358
       ]
     ]
   },
@@ -1711,6 +1686,10 @@
       [
         "2026-11-18T20:00:00+00:00",
         7285.975361
+      ],
+      [
+        "2026-11-19T00:00:00+00:00",
+        7326.576635
       ]
     ],
     "meanrev": [
@@ -3145,6 +3124,10 @@
       [
         "2026-11-18T20:00:00+00:00",
         8161.300805
+      ],
+      [
+        "2026-11-19T00:00:00+00:00",
+        8193.830839
       ]
     ],
     "random_ctrl": [
@@ -4579,6 +4562,10 @@
       [
         "2026-11-18T20:00:00+00:00",
         9749.962649
+      ],
+      [
+        "2026-11-19T00:00:00+00:00",
+        9739.949565
       ]
     ],
     "trend": [
@@ -6013,10 +6000,14 @@
       [
         "2026-11-18T20:00:00+00:00",
         9153.375382
+      ],
+      [
+        "2026-11-19T00:00:00+00:00",
+        9126.398988
       ]
     ]
   },
-  "generated_at": "2026-11-19T00:01:02.872011+00:00",
+  "generated_at": "2026-11-19T06:30:13.678958+00:00",
   "layer": "base",
   "model_trades": {
     "limit": 100,
@@ -8136,8 +8127,33 @@
         ]
       },
       "trend": {
-        "total": 213,
+        "total": 214,
         "trades": [
+          {
+            "closed_at": "2026-11-19T00:00:00+00:00",
+            "direction": "long",
+            "entry_price": 3.1703844,
+            "exit_price": 3.404504039,
+            "exit_reason": "stop",
+            "exit_rule": "trailing_atr",
+            "fee": 0.8052501724,
+            "funding": -0.03923385695,
+            "is_partial": false,
+            "leverage": 1.0,
+            "margin": 705.9788185,
+            "model": "trend",
+            "notes": "exit_rule=trailing_atr",
+            "notional": 705.9788185,
+            "opened_at": "2026-11-18T16:00:00+00:00",
+            "pnl": 51.28910151,
+            "qty": 222.6792494,
+            "r": 0.564707372646163,
+            "reason": "20 bar Donchian tepesi 2.5175, kapanış 3.1661 ile %25.76 üstünde; rejim yukarı (EMA50 1.89736 > EMA200 1.49471); stop 2×ATR(14)=0.403586 uzakta (2.76251), trailing 1×ATR",
+            "risk_amount": 90.8242109,
+            "slippage_cost": 0.7320588277,
+            "stop_price": 2.762514286,
+            "symbol": "PIEVERSE-USDT-SWAP"
+          },
           {
             "closed_at": "2026-11-18T16:00:00+00:00",
             "direction": "short",
@@ -10612,31 +10628,6 @@
             "slippage_cost": 1.160225857,
             "stop_price": 0.8730285714,
             "symbol": "APT-USDT-SWAP"
-          },
-          {
-            "closed_at": "2026-10-11T20:00:00+00:00",
-            "direction": "long",
-            "entry_price": 83906.23215,
-            "exit_price": 83583.3874,
-            "exit_reason": "stop",
-            "exit_rule": "trailing_atr",
-            "fee": 8.043793306,
-            "funding": 0.0,
-            "is_partial": false,
-            "leverage": 1.30025814,
-            "margin": 5634.753929,
-            "model": "trend",
-            "notes": "boyut komisyon+marj nakde sığsın diye 0.9993 oranında kırpıldı | exit_rule=trailing_atr",
-            "notional": 7326.63466,
-            "opened_at": "2026-10-11T16:00:00+00:00",
-            "pnl": -36.23437552,
-            "qty": 0.08731931434,
-            "r": -0.4185139327717018,
-            "reason": "20 bar Donchian tepesi 83499, kapanış 83864.2 ile %0.44 üstünde; rejim yukarı (EMA50 83532.4 > EMA200 81806.4); stop 2×ATR(14)=949.486 uzakta (82914.7), trailing 1×ATR",
-            "risk_amount": 86.57866007,
-            "slippage_cost": 7.31253415,
-            "stop_price": 82914.71429,
-            "symbol": "BTC-USDT-SWAP"
           }
         ]
       }
@@ -10645,18 +10636,18 @@
   "models": [
     {
       "account": {
-        "bars": 358,
-        "days": 59.5,
-        "final_equity": 7285.975361,
+        "bars": 359,
+        "days": 59.666666666666664,
+        "final_equity": 7326.576635,
         "initial_capital": 10000.0,
         "max_drawdown": -0.327797282727904,
-        "sharpe": -4.1265864875707114,
-        "total_return": -0.2714024639
+        "sharpe": -4.041774058205074,
+        "total_return": -0.26734233649999994
       },
       "exposure": {
-        "bars": 358,
-        "cash_negative_bars": 356,
-        "cash_tight_bars": 357,
+        "bars": 359,
+        "cash_negative_bars": 357,
+        "cash_tight_bars": 358,
         "closed_positions": 0,
         "leveraged_positions": 0,
         "min_cash_ratio": -0.009644058540267984,
@@ -10666,7 +10657,7 @@
       },
       "friction": {
         "cost_drag_pct_per_day": 0.0,
-        "days": 59.5,
+        "days": 59.666666666666664,
         "trades_per_day": 0.0,
         "turnover_per_day": 0.0
       },
@@ -10773,19 +10764,19 @@
     },
     {
       "account": {
-        "bars": 358,
-        "days": 59.5,
-        "final_equity": 9153.375382,
+        "bars": 359,
+        "days": 59.666666666666664,
+        "final_equity": 9126.398988,
         "initial_capital": 10000.0,
         "max_drawdown": -0.15656274140000004,
-        "sharpe": -1.6729123413204887,
-        "total_return": -0.08466246180000003
+        "sharpe": -1.7307497912113599,
+        "total_return": -0.08736010119999993
       },
       "exposure": {
-        "bars": 358,
+        "bars": 359,
         "cash_negative_bars": 4,
         "cash_tight_bars": 40,
-        "closed_positions": 213,
+        "closed_positions": 214,
         "leveraged_positions": 25,
         "min_cash_ratio": -1.0599193093541304e-16,
         "opposite_at_entry": 0,
@@ -10793,44 +10784,44 @@
         "positions": 217
       },
       "friction": {
-        "cost_drag_pct_per_day": 0.16417967304819497,
-        "days": 59.5,
-        "trades_per_day": 3.5798319327731094,
-        "turnover_per_day": 0.6593274872866218
+        "cost_drag_pct_per_day": 0.16397872016260223,
+        "days": 59.666666666666664,
+        "trades_per_day": 3.58659217877095,
+        "turnover_per_day": 0.6586689951185027
       },
       "is_benchmark": false,
       "is_replica": false,
       "long": {
         "avg_loss_pct": -4.565725153417311,
         "avg_loss_r": -0.48905693026010655,
-        "avg_r": -0.14440437614443438,
-        "avg_r_ci_high": -0.030886309576134707,
-        "avg_r_ci_low": -0.25642626163715576,
-        "avg_stop_distance_pct": 8.865367609726976,
-        "avg_win_pct": 5.337914468486268,
-        "avg_win_r": 0.5311146299222831,
-        "cost_pct": 0.20922423227533365,
-        "cost_per_r": 0.037063218306264786,
+        "avg_r": -0.1396452368908062,
+        "avg_r_ci_high": -0.03006573328102067,
+        "avg_r_ci_low": -0.251713237739271,
+        "avg_stop_distance_pct": 8.892210814200997,
+        "avg_win_pct": 5.375699738137636,
+        "avg_win_r": 0.5317733111521631,
+        "cost_pct": 0.20924982271659087,
+        "cost_per_r": 0.03692807055024752,
         "direction": "long",
-        "fees": 257.16855290081,
-        "funding": 12.8112783431362,
+        "fees": 257.97380307321004,
+        "funding": 12.7720444861862,
         "liquidations": 0,
-        "market_measured": 148,
-        "market_r": -0.021071695523810798,
-        "market_tailwind_pct": -0.22114654070829856,
+        "market_measured": 149,
+        "market_r": -0.02056008755844158,
+        "market_tailwind_pct": -0.21489987565801433,
         "max_drawdown_pnl": -1977.7027075976002,
         "max_drawdown_r": -21.371847669376287,
-        "median_r": -0.21955480155447754,
-        "notional": 234656.26625351998,
-        "payoff": 1.169127419877869,
-        "pnl": -1977.7027075976002,
-        "profit_factor": 0.5540803845823121,
-        "r_sharpe": -0.20462716306676781,
-        "slippage_cost": 233.78921865407997,
-        "total_r": -21.371847669376287,
-        "trades": 148,
+        "median_r": -0.21824732039338285,
+        "notional": 235362.24507201998,
+        "payoff": 1.1774032727559351,
+        "pnl": -1926.4136060876003,
+        "profit_factor": 0.5658628985852888,
+        "r_sharpe": -0.19788130084529676,
+        "slippage_cost": 234.52127748177998,
+        "total_r": -20.807140296730125,
+        "trades": 149,
         "unmeasured": 0,
-        "win_rate": 0.33783783783783783
+        "win_rate": 0.3422818791946309
       },
       "model": "trend",
       "name": "trend",
@@ -10869,48 +10860,48 @@
       "total": {
         "avg_loss_pct": -4.030841342950322,
         "avg_loss_r": -0.4704938973641166,
-        "avg_r": -0.04644778540268292,
-        "avg_r_ci_high": 0.062317619737544336,
-        "avg_r_ci_low": -0.15100037463213065,
-        "avg_stop_distance_pct": 8.581585853715861,
-        "avg_win_pct": 5.535275001602321,
-        "avg_win_r": 0.6177208236935384,
-        "cost_pct": 0.24901081209863624,
-        "cost_per_r": 0.051660465270301215,
+        "avg_r": -0.0435919201781556,
+        "avg_r_ci_high": 0.06340091929558182,
+        "avg_r_ci_low": -0.14487357079651064,
+        "avg_stop_distance_pct": 8.60160183139175,
+        "avg_win_pct": 5.555866528020222,
+        "avg_win_r": 0.6170897111810697,
+        "cost_pct": 0.2489546667261914,
+        "cost_per_r": 0.05149815563193388,
         "direction": "total",
-        "fees": 429.9133307009199,
-        "funding": 33.4646181103452,
+        "fees": 430.7185808733199,
+        "funding": 33.4253842533952,
         "liquidations": 0,
-        "market_measured": 213,
-        "market_r": 0.029894915769860194,
-        "market_tailwind_pct": 0.01215705465333956,
+        "market_measured": 214,
+        "market_r": 0.03001296705745993,
+        "market_tailwind_pct": 0.015416164453015767,
         "max_drawdown_pnl": -1565.1118509790003,
         "max_drawdown_r": -17.482199749147483,
-        "median_r": -0.13770479395314783,
-        "notional": 392299.85493553994,
-        "payoff": 1.3732306808064165,
-        "pnl": -924.0309769305005,
-        "profit_factor": 0.8382488904630466,
-        "r_sharpe": -0.060883152381665806,
-        "slippage_cost": 546.9557239358401,
-        "total_r": -9.893378290771462,
-        "trades": 213,
+        "median_r": -0.13537441799264793,
+        "notional": 393005.83375403995,
+        "payoff": 1.3783391742116244,
+        "pnl": -872.7418754205005,
+        "profit_factor": 0.8474815349050789,
+        "r_sharpe": -0.05718823748226468,
+        "slippage_cost": 547.6877827635401,
+        "total_r": -9.3286709181253,
+        "trades": 214,
         "unmeasured": 0,
-        "win_rate": 0.38967136150234744
+        "win_rate": 0.3925233644859813
       }
     },
     {
       "account": {
-        "bars": 358,
-        "days": 59.5,
-        "final_equity": 8161.300805,
+        "bars": 359,
+        "days": 59.666666666666664,
+        "final_equity": 8193.830839,
         "initial_capital": 10000.0,
         "max_drawdown": -0.20861666784005206,
-        "sharpe": -3.5174462199772547,
-        "total_return": -0.18386991949999998
+        "sharpe": -3.438422222050611,
+        "total_return": -0.18061691609999997
       },
       "exposure": {
-        "bars": 358,
+        "bars": 359,
         "cash_negative_bars": 5,
         "cash_tight_bars": 12,
         "closed_positions": 66,
@@ -10921,10 +10912,10 @@
         "positions": 71
       },
       "friction": {
-        "cost_drag_pct_per_day": 0.062315221632991594,
-        "days": 59.5,
-        "trades_per_day": 1.1092436974789917,
-        "turnover_per_day": 0.29184887522605024
+        "cost_drag_pct_per_day": 0.06214115676809497,
+        "days": 59.666666666666664,
+        "trades_per_day": 1.106145251396648,
+        "turnover_per_day": 0.2910336549041898
       },
       "is_benchmark": false,
       "is_replica": false,
@@ -11029,16 +11020,16 @@
     },
     {
       "account": {
-        "bars": 358,
-        "days": 59.5,
-        "final_equity": 9749.962649,
+        "bars": 359,
+        "days": 59.666666666666664,
+        "final_equity": 9739.949565,
         "initial_capital": 10000.0,
         "max_drawdown": -0.16050376138058098,
-        "sharpe": 0.11023880194454731,
-        "total_return": -0.02500373510000009
+        "sharpe": 0.1008404161084112,
+        "total_return": -0.02600504349999988
       },
       "exposure": {
-        "bars": 358,
+        "bars": 359,
         "cash_negative_bars": 26,
         "cash_tight_bars": 63,
         "closed_positions": 18,
@@ -11049,10 +11040,10 @@
         "positions": 23
       },
       "friction": {
-        "cost_drag_pct_per_day": 0.016086267646773105,
-        "days": 59.5,
-        "trades_per_day": 0.3025210084033613,
-        "turnover_per_day": 0.05946259902235294
+        "cost_drag_pct_per_day": 0.016041333938262566,
+        "days": 59.666666666666664,
+        "trades_per_day": 0.3016759776536313,
+        "turnover_per_day": 0.05929650237703911
       },
       "is_benchmark": false,
       "is_replica": false,
@@ -11163,22 +11154,22 @@
       "direction": "long",
       "entry_fee": 2.75,
       "entry_price": 80485.0224,
-      "funding": -44.41003063766095,
-      "gross_pnl": -1084.0478066388662,
+      "funding": -44.37166641872741,
+      "gross_pnl": -1075.6673654103377,
       "initial_qty": 0.06212335973705339,
       "initial_stop_price": null,
       "leverage": 1.0,
       "liq_price": 402.42511199999717,
       "margin": 5000.0,
-      "mark_price": 63035.1,
+      "mark_price": 63170.0,
       "marked": true,
       "model": "buyhold",
       "notional": 5000.0,
       "opened_at": "2026-09-20T12:00:00+00:00",
       "partial_done": false,
       "partial_tp": null,
-      "pnl": -1131.2078372765272,
-      "pnl_pct": -22.624156745530545,
+      "pnl": -1122.7890318290652,
+      "pnl_pct": -22.455780636581302,
       "qty": 0.06212335973705339,
       "r": null,
       "reason": "alım-tut referansı: sermayenin %50'i, 1x, stopsuz",
@@ -11198,22 +11189,22 @@
       "direction": "long",
       "entry_fee": 2.7469766628354404,
       "entry_price": 2579.20896,
-      "funding": -25.2786888438801,
-      "gross_pnl": -1554.7911357226749,
+      "funding": -25.27998022189823,
+      "gross_pnl": -1522.6073764634543,
       "initial_qty": 1.936447608858014,
       "initial_stop_price": null,
       "leverage": 1.0,
       "liq_price": 12.896044800000254,
       "margin": 4994.503023337164,
-      "mark_price": 1776.3,
+      "mark_price": 1792.92,
       "marked": true,
       "model": "buyhold",
       "notional": 4994.503023337165,
       "opened_at": "2026-09-20T12:00:00+00:00",
       "partial_done": false,
       "partial_tp": null,
-      "pnl": -1582.8168012293904,
-      "pnl_pct": -31.691177156837586,
+      "pnl": -1550.6343333481882,
+      "pnl_pct": -31.046819395298,
       "qty": 1.936447608858014,
       "r": null,
       "reason": "alım-tut referansı: sermayenin %50'i, 1x, stopsuz",
@@ -11233,24 +11224,24 @@
       "direction": "long",
       "entry_fee": 0.5697104025097949,
       "entry_price": 0.15057525,
-      "funding": 0.10638423687123225,
-      "gross_pnl": 5.67361929992371,
+      "funding": 0.12685780780567038,
+      "gross_pnl": 11.176978426857776,
       "initial_qty": 6879.198908667622,
       "initial_stop_price": 0.13862857142857143,
       "leverage": 1.0,
       "liq_price": 0.0007528762499999786,
       "margin": 1035.8370954723543,
-      "mark_price": 0.1514,
+      "mark_price": 0.1522,
       "marked": true,
       "model": "meanrev",
       "notional": 1035.8370954723543,
       "opened_at": "2026-11-15T04:00:00+00:00",
       "partial_done": false,
       "partial_tp": null,
-      "pnl": 5.2102931342851475,
-      "pnl_pct": 0.5030031418124864,
+      "pnl": 10.734125832153651,
+      "pnl_pct": 1.0362754799063032,
       "qty": 6879.198908667622,
-      "r": 0.06339822685975537,
+      "r": 0.13061156581958908,
       "reason": "RSI(14) 23 (<30); alt Bollinger(20,2) 0.150468 bandının %0.05 altında kapanış (0.1504); stop 2×ATR(14)=0.0117714 uzakta (0.138629); TP orta bant 0.166435",
       "risk_amount": 82.18357819077421,
       "stop_moved": false,
@@ -11353,24 +11344,24 @@
       "direction": "short",
       "entry_fee": 0.22217510236336296,
       "entry_price": 0.24227880000000002,
-      "funding": 0.0,
-      "gross_pnl": 23.140311610055303,
+      "funding": -0.004277728607181884,
+      "gross_pnl": 50.150791484604625,
       "initial_qty": 1667.3135725030452,
       "initial_stop_price": 0.29105714285714285,
       "leverage": 1.0,
       "liq_price": 0.48334620600000006,
       "margin": 403.95473156975083,
-      "mark_price": 0.2284,
+      "mark_price": 0.2122,
       "marked": true,
       "model": "meanrev",
       "notional": 403.95473156975083,
       "opened_at": "2026-11-18T16:00:00+00:00",
       "partial_done": false,
       "partial_tp": null,
-      "pnl": 22.91813650769194,
-      "pnl_pct": 5.673441778645107,
+      "pnl": 49.924338653634074,
+      "pnl_pct": 12.358894388891107,
       "qty": 1667.3135725030452,
-      "r": 0.2817960975069739,
+      "r": 0.6138581031005245,
       "reason": "RSI(14) 86 (>70); üst Bollinger(20,2) 0.231427 bandının %4.74 üstünde kapanış (0.2424); stop 2×ATR(14)=0.0486571 uzakta (0.291057); TP orta bant 0.13505; short rejim kapısı açık: BTC 63100.7, 200 EMA 74614 altında",
       "risk_amount": 81.3287930899212,
       "stop_moved": false,
@@ -11503,24 +11494,24 @@
       "direction": "short",
       "entry_fee": 0.6462980089767766,
       "entry_price": 16.681655000000003,
-      "funding": 6.012551796662346,
-      "gross_pnl": 980.245024206937,
+      "funding": 6.01887064494138,
+      "gross_pnl": 977.4977905378018,
       "initial_qty": 70.44188895218636,
       "initial_stop_price": 18.062857142857144,
       "leverage": 1.0,
       "liq_price": 33.279901725,
       "margin": 1175.0872890486846,
-      "mark_price": 2.766,
+      "mark_price": 2.805,
       "marked": true,
       "model": "random_ctrl",
       "notional": 1175.0872890486846,
       "opened_at": "2026-10-02T16:00:00+00:00",
       "partial_done": false,
       "partial_tp": null,
-      "pnl": 985.6112779946226,
-      "pnl_pct": 83.87557989777457,
+      "pnl": 982.8703631737663,
+      "pnl_pct": 83.64232787927344,
       "qty": 70.44188895218636,
-      "r": 10.130186186109396,
+      "r": 10.102014859263345,
       "reason": "KONTROL GRUBU: bilgisiz çekiliş — 48 uygun sembol arasından SNXX-USDT-SWAP, yön short; tohum 20240217 + 2026-10-02 12:00 UTC; stop 2×ATR(14)=1.37286 uzakta (18.0629)",
       "risk_amount": 97.29448796766458,
       "stop_moved": false,
@@ -11573,24 +11564,24 @@
       "direction": "short",
       "entry_fee": 0.8276102630574484,
       "entry_price": 1270.20458,
-      "funding": 1.8662250838986694,
-      "gross_pnl": 422.81831689139653,
+      "funding": 1.974416660844216,
+      "gross_pnl": 415.4379568225156,
       "initial_qty": 1.1846484861767104,
       "initial_stop_price": 1351.1414285714284,
       "leverage": 1.0,
       "liq_price": 2534.0581371,
       "margin": 1504.7459328317243,
-      "mark_price": 913.29,
+      "mark_price": 919.52,
       "marked": true,
       "model": "random_ctrl",
       "notional": 1504.7459328317243,
       "opened_at": "2026-11-08T16:00:00+00:00",
       "partial_done": false,
       "partial_tp": null,
-      "pnl": 423.8569317122377,
-      "pnl_pct": 28.168006469676744,
+      "pnl": 416.58476322030236,
+      "pnl_pct": 27.68472431996193,
       "qty": 1.1846484861767104,
-      "r": 4.420623172111436,
+      "r": 4.344777965529387,
       "reason": "KONTROL GRUBU: bilgisiz çekiliş — 50 uygun sembol arasından ZEC-USDT-SWAP, yön short; tohum 20240217 + 2026-11-08 12:00 UTC; stop 2×ATR(14)=80.3014 uzakta (1351.14)",
       "risk_amount": 95.88171513605617,
       "stop_moved": false,
@@ -11675,41 +11666,6 @@
     {
       "breakeven_at_r": null,
       "breakeven_done": false,
-      "direction": "long",
-      "entry_fee": 0.3882883501637239,
-      "entry_price": 3.1703844,
-      "funding": 0.0,
-      "gross_pnl": 78.65378468192279,
-      "initial_qty": 222.67924939306982,
-      "initial_stop_price": 2.762514285714286,
-      "leverage": 1.0,
-      "liq_price": 0.01585192199999952,
-      "margin": 705.978818479498,
-      "mark_price": 3.5236,
-      "marked": true,
-      "model": "trend",
-      "notional": 705.978818479498,
-      "opened_at": "2026-11-18T16:00:00+00:00",
-      "partial_done": false,
-      "partial_tp": null,
-      "pnl": 78.26549633175907,
-      "pnl_pct": 11.086096959725136,
-      "qty": 222.67924939306982,
-      "r": 0.8617250351757642,
-      "reason": "20 bar Donchian tepesi 2.5175, kapanış 3.1661 ile %25.76 üstünde; rejim yukarı (EMA50 1.89736 > EMA200 1.49471); stop 2×ATR(14)=0.403586 uzakta (2.76251), trailing 1×ATR",
-      "risk_amount": 90.82421089900843,
-      "stop_moved": true,
-      "stop_price": 3.4062071428571428,
-      "stop_rule": "trailing_atr",
-      "symbol": "PIEVERSE-USDT-SWAP",
-      "take_profits": [],
-      "trail_giveback_pct": null,
-      "trailing_active": true,
-      "trailing_atr": 1.0
-    },
-    {
-      "breakeven_at_r": null,
-      "breakeven_done": false,
       "direction": "short",
       "entry_fee": 0.057691333029439816,
       "entry_price": 0.0008965515,
@@ -11748,34 +11704,34 @@
       "long": {
         "avg_loss_pct": -5.712227537060579,
         "avg_loss_r": -0.6922545056135495,
-        "avg_r": -0.2911116280335217,
-        "avg_r_ci_high": -0.17673707132547173,
-        "avg_r_ci_low": -0.4012405569792224,
-        "avg_stop_distance_pct": 8.585586586325153,
-        "avg_win_pct": 7.286576306665151,
-        "avg_win_r": 0.6690008330596592,
-        "cost_pct": 0.20868435325998966,
-        "cost_per_r": 0.043501651860281036,
+        "avg_r": -0.28699711360717706,
+        "avg_r_ci_high": -0.17305094139262145,
+        "avg_r_ci_low": -0.39824147263405746,
+        "avg_stop_distance_pct": 8.60616071368107,
+        "avg_win_pct": 7.28622770850452,
+        "avg_win_r": 0.6673186804723447,
+        "cost_pct": 0.2087006025822719,
+        "cost_per_r": 0.04337388527758589,
         "direction": "long",
-        "fees": 430.04373233081014,
-        "funding": -30.002162567083804,
+        "fees": 430.84898250321015,
+        "funding": -30.041396424033803,
         "liquidations": 0,
-        "market_measured": 207,
-        "market_r": -0.055130746904965604,
-        "market_tailwind_pct": -0.4920339617386121,
+        "market_measured": 208,
+        "market_r": -0.05460051306736383,
+        "market_tailwind_pct": -0.48625684388513774,
         "max_drawdown_pnl": -5388.4186465466,
         "max_drawdown_r": -60.260107002938994,
-        "median_r": -0.35383327486041244,
-        "notional": 393413.0339510203,
-        "payoff": 1.2756103042797744,
-        "pnl": -5388.4186465466,
-        "profit_factor": 0.4037735318769426,
-        "r_sharpe": -0.3543774875430327,
-        "slippage_cost": 390.94771321037996,
-        "total_r": -60.260107002938994,
-        "trades": 207,
+        "median_r": -0.35334531001464353,
+        "notional": 394119.0127695203,
+        "payoff": 1.2755492776210202,
+        "pnl": -5337.1295450366,
+        "profit_factor": 0.4093608681606211,
+        "r_sharpe": -0.349301168233742,
+        "slippage_cost": 391.67977203807993,
+        "total_r": -59.69539963029283,
+        "trades": 208,
         "unmeasured": 0,
-        "win_rate": 0.2946859903381642
+        "win_rate": 0.2980769230769231
       },
       "short": {
         "avg_loss_pct": -5.24964073585347,
@@ -11812,34 +11768,34 @@
       "total": {
         "avg_loss_pct": -5.599576865264028,
         "avg_loss_r": -0.6729721452207144,
-        "avg_r": -0.16490158210322003,
-        "avg_r_ci_high": -0.0647677341625558,
-        "avg_r_ci_low": -0.2651070816198654,
-        "avg_stop_distance_pct": 8.576965906988114,
-        "avg_win_pct": 7.570930283441959,
-        "avg_win_r": 0.7779601359898229,
-        "cost_pct": 0.24002751878822426,
-        "cost_per_r": 0.053847115486857854,
+        "avg_r": -0.16245322990607447,
+        "avg_r_ci_high": -0.05987329752260993,
+        "avg_r_ci_low": -0.25988370745177397,
+        "avg_stop_distance_pct": 8.591355300173912,
+        "avg_win_pct": 7.568016311415903,
+        "avg_win_r": 0.775929157291312,
+        "cost_pct": 0.24000140167910042,
+        "cost_per_r": 0.05372321980622978,
         "direction": "total",
-        "fees": 658.13384173372,
-        "funding": 6.663064047565204,
+        "fees": 658.93909190612,
+        "funding": 6.6238301906152035,
         "liquidations": 0,
-        "market_measured": 297,
-        "market_r": -0.010470399541306363,
-        "market_tailwind_pct": -0.2179798617641224,
+        "market_measured": 298,
+        "market_r": -0.010250170377354989,
+        "market_tailwind_pct": -0.21486715567839026,
         "max_drawdown_pnl": -4469.806720219502,
         "max_drawdown_r": -49.14099561874646,
-        "median_r": -0.30635879629162566,
-        "notional": 601330.1821133401,
-        "payoff": 1.3520539972237668,
-        "pnl": -4454.837037059501,
-        "profit_factor": 0.6229257517926213,
-        "r_sharpe": -0.18395753270449974,
-        "slippage_cost": 785.2240741176408,
-        "total_r": -48.97576988465635,
-        "trades": 297,
+        "median_r": -0.30285757562548943,
+        "notional": 602036.1609318401,
+        "payoff": 1.351533605755595,
+        "pnl": -4403.547935549501,
+        "profit_factor": 0.6272735468043018,
+        "r_sharpe": -0.18132999611741432,
+        "slippage_cost": 785.9561329453409,
+        "total_r": -48.41106251201019,
+        "trades": 298,
         "unmeasured": 0,
-        "win_rate": 0.3501683501683502
+        "win_rate": 0.3523489932885906
       }
     },
     "models": [
@@ -11849,6 +11805,31 @@
     ]
   },
   "recent_trades": [
+    {
+      "closed_at": "2026-11-19T00:00:00+00:00",
+      "direction": "long",
+      "entry_price": 3.1703844,
+      "exit_price": 3.404504039,
+      "exit_reason": "stop",
+      "exit_rule": "trailing_atr",
+      "fee": 0.8052501724,
+      "funding": -0.03923385695,
+      "is_partial": false,
+      "leverage": 1.0,
+      "margin": 705.9788185,
+      "model": "trend",
+      "notes": "exit_rule=trailing_atr",
+      "notional": 705.9788185,
+      "opened_at": "2026-11-18T16:00:00+00:00",
+      "pnl": 51.28910151,
+      "qty": 222.6792494,
+      "r": 0.564707372646163,
+      "reason": "20 bar Donchian tepesi 2.5175, kapanış 3.1661 ile %25.76 üstünde; rejim yukarı (EMA50 1.89736 > EMA200 1.49471); stop 2×ATR(14)=0.403586 uzakta (2.76251), trailing 1×ATR",
+      "risk_amount": 90.8242109,
+      "slippage_cost": 0.7320588277,
+      "stop_price": 2.762514286,
+      "symbol": "PIEVERSE-USDT-SWAP"
+    },
     {
       "closed_at": "2026-11-18T16:00:00+00:00",
       "direction": "short",
@@ -12323,47 +12304,22 @@
       "slippage_cost": 0.2901166813,
       "stop_price": 0.3195942857,
       "symbol": "INIT-USDT-SWAP"
-    },
-    {
-      "closed_at": "2026-11-11T04:00:00+00:00",
-      "direction": "short",
-      "entry_price": 4034.48175,
-      "exit_price": 4073.536868,
-      "exit_reason": "stop",
-      "exit_rule": "trailing_atr",
-      "fee": 6.036542508,
-      "funding": 0.8976900764,
-      "is_partial": false,
-      "leverage": 1.0,
-      "margin": 5461.332166,
-      "model": "trend",
-      "notes": "exit_rule=trailing_atr",
-      "notional": 5461.332166,
-      "opened_at": "2026-11-10T20:00:00+00:00",
-      "pnl": -58.00635428,
-      "qty": 1.353663867,
-      "r": -0.6174196634211939,
-      "reason": "20 bar Donchian dibi 4041, kapanış 4036.5 ile %0.11 altında; rejim aşağı (EMA50 4062.58 < EMA200 4083.23); stop 2×ATR(14)=67.3857 uzakta (4103.89), trailing 1×ATR",
-      "risk_amount": 93.94963866,
-      "slippage_cost": 10.99094323,
-      "stop_price": 4103.885714,
-      "symbol": "XAU-USDT-SWAP"
     }
   ],
   "replicas": [],
   "round": {
-    "as_of": "2026-11-18T20:00:00+00:00",
+    "as_of": "2026-11-19T00:00:00+00:00",
     "models": [
       {
         "ambiguous_stop_exits": 0,
-        "bars_processed": 2,
+        "bars_processed": 1,
         "closed": 0,
         "emitted": [
           {
-            "bar": "2026-11-18T20:00:00+00:00",
-            "close": 63035.1,
+            "bar": "2026-11-19T00:00:00+00:00",
+            "close": 63170.0,
             "direction": "long",
-            "fills_at": "2026-11-19T00:00:00+00:00",
+            "fills_at": "2026-11-19T04:00:00+00:00",
             "model": "buyhold",
             "reason": "alım-tut referansı: sermayenin %50'i, 1x, stopsuz",
             "reward_risk": null,
@@ -12372,10 +12328,10 @@
             "target_price": null
           },
           {
-            "bar": "2026-11-18T20:00:00+00:00",
-            "close": 1776.3,
+            "bar": "2026-11-19T00:00:00+00:00",
+            "close": 1792.92,
             "direction": "long",
-            "fills_at": "2026-11-19T00:00:00+00:00",
+            "fills_at": "2026-11-19T04:00:00+00:00",
             "model": "buyhold",
             "reason": "alım-tut referansı: sermayenin %50'i, 1x, stopsuz",
             "reward_risk": null,
@@ -12405,109 +12361,80 @@
       },
       {
         "ambiguous_stop_exits": 0,
-        "bars_processed": 2,
+        "bars_processed": 1,
         "closed": 1,
-        "emitted": [
-          {
-            "bar": "2026-11-18T20:00:00+00:00",
-            "close": 3.5236,
-            "direction": "long",
-            "fills_at": "2026-11-19T00:00:00+00:00",
-            "model": "trend",
-            "reason": "20 bar Donchian tepesi 3.4217, kapanış 3.5236 ile %2.98 üstünde; rejim yukarı (EMA50 2.01575 > EMA200 1.53316); stop 2×ATR(14)=0.462386 uzakta (3.06121), trailing 1×ATR",
-            "reward_risk": null,
-            "stop_price": 3.0612142857142857,
-            "symbol": "PIEVERSE-USDT-SWAP",
-            "target_price": null
-          }
-        ],
+        "emitted": [],
         "exits": 0,
-        "filled": 1,
+        "filled": 0,
         "missing_bars": 0,
         "model": "trend",
         "rejections": {
-          "max_positions": 3,
-          "max_short_positions": 4
+          "duplicate_position": 1
+        },
+        "rejections_by_open": {
+          "duplicate_position": {
+            "4": 1
+          }
+        },
+        "signals": 0,
+        "skipped": "",
+        "skipped_signals": 0,
+        "stop_exits": 1,
+        "survey": {},
+        "unchecked_position_bars": 3
+      },
+      {
+        "ambiguous_stop_exits": 0,
+        "bars_processed": 1,
+        "closed": 0,
+        "emitted": [
+          {
+            "bar": "2026-11-19T00:00:00+00:00",
+            "close": 0.02378,
+            "direction": "short",
+            "fills_at": "2026-11-19T04:00:00+00:00",
+            "model": "meanrev",
+            "reason": "RSI(14) 89 (>70); üst Bollinger(20,2) 0.0200307 bandının %18.72 üstünde kapanış (0.02378); stop 2×ATR(14)=0.00278429 uzakta (0.0265643); TP orta bant 0.015671; short rejim kapısı açık: BTC 63170, 200 EMA 74272.1 altında",
+            "reward_risk": 2.9124166239096962,
+            "stop_price": 0.026564285714285714,
+            "symbol": "IRYS-USDT-SWAP",
+            "target_price": 0.015671
+          }
+        ],
+        "exits": 0,
+        "filled": 0,
+        "missing_bars": 0,
+        "model": "meanrev",
+        "rejections": {
+          "max_positions": 2
         },
         "rejections_by_open": {
           "max_positions": {
-            "5": 3
-          },
-          "max_short_positions": {
-            "4": 4
+            "5": 2
           }
         },
         "signals": 1,
         "skipped": "",
         "skipped_signals": 0,
-        "stop_exits": 1,
-        "survey": {},
-        "unchecked_position_bars": 6
-      },
-      {
-        "ambiguous_stop_exits": 0,
-        "bars_processed": 2,
-        "closed": 0,
-        "emitted": [
-          {
-            "bar": "2026-11-18T20:00:00+00:00",
-            "close": 91.86,
-            "direction": "long",
-            "fills_at": "2026-11-19T00:00:00+00:00",
-            "model": "meanrev",
-            "reason": "RSI(14) 25 (<30); alt Bollinger(20,2) 92.1481 bandının %0.31 altında kapanış (91.86); stop 2×ATR(14)=6.57429 uzakta (85.2857); TP orta bant 100.267",
-            "reward_risk": 1.2788461538461522,
-            "stop_price": 85.28571428571428,
-            "symbol": "MSTR-USDT-SWAP",
-            "target_price": 100.2675
-          },
-          {
-            "bar": "2026-11-18T20:00:00+00:00",
-            "close": 3.5236,
-            "direction": "short",
-            "fills_at": "2026-11-19T00:00:00+00:00",
-            "model": "meanrev",
-            "reason": "RSI(14) 93 (>70); üst Bollinger(20,2) 3.21077 bandının %9.74 üstünde kapanış (3.5236); stop 2×ATR(14)=0.462386 uzakta (3.98599); TP orta bant 2.20657; short rejim kapısı açık: BTC 63035.1, 200 EMA 74383 altında",
-            "reward_risk": 2.8483362684215394,
-            "stop_price": 3.9859857142857145,
-            "symbol": "PIEVERSE-USDT-SWAP",
-            "target_price": 2.20657
-          }
-        ],
-        "exits": 0,
-        "filled": 1,
-        "missing_bars": 0,
-        "model": "meanrev",
-        "rejections": {
-          "max_positions": 6
-        },
-        "rejections_by_open": {
-          "max_positions": {
-            "5": 6
-          }
-        },
-        "signals": 2,
-        "skipped": "",
-        "skipped_signals": 0,
         "stop_exits": 0,
         "survey": {},
-        "unchecked_position_bars": 6
+        "unchecked_position_bars": 3
       },
       {
         "ambiguous_stop_exits": 0,
-        "bars_processed": 2,
+        "bars_processed": 1,
         "closed": 0,
         "emitted": [
           {
-            "bar": "2026-11-18T20:00:00+00:00",
-            "close": 533.69,
+            "bar": "2026-11-19T00:00:00+00:00",
+            "close": 110.06,
             "direction": "long",
-            "fills_at": "2026-11-19T00:00:00+00:00",
+            "fills_at": "2026-11-19T04:00:00+00:00",
             "model": "random_ctrl",
-            "reason": "KONTROL GRUBU: bilgisiz çekiliş — 50 uygun sembol arasından AMD-USDT-SWAP, yön long; tohum 20240217 + 2026-11-18 20:00 UTC; stop 2×ATR(14)=39.9686 uzakta (493.721)",
+            "reason": "KONTROL GRUBU: bilgisiz çekiliş — 50 uygun sembol arasından AAVE-USDT-SWAP, yön long; tohum 20240217 + 2026-11-19 00:00 UTC; stop 2×ATR(14)=6.31286 uzakta (103.747)",
             "reward_risk": null,
-            "stop_price": 493.7214285714286,
-            "symbol": "AMD-USDT-SWAP",
+            "stop_price": 103.74714285714286,
+            "symbol": "AAVE-USDT-SWAP",
             "target_price": null
           }
         ],
@@ -12528,7 +12455,7 @@
         "skipped_signals": 0,
         "stop_exits": 0,
         "survey": {},
-        "unchecked_position_bars": 6
+        "unchecked_position_bars": 3
       }
     ]
   },
