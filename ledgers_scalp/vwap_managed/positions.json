@@ -1,9 +1,34 @@
 {
   "cash": 3340.902791269047,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-11-19T21:45:00+00:00",
+  "last_processed_bar": "2026-11-19T22:00:00+00:00",
   "model": "vwap_managed",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": 1.0,
+      "created_at": "2026-11-19T22:00:00+00:00",
+      "direction": "long",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": {
+        "fraction": 0.5,
+        "r": 1.5
+      },
+      "reason": "VWAP sapma-dönüş: gün-çapalı VWAP=0.719531 (89 bar), sapma=0.00844354; önceki bar -2.35σ ile bandın dışında kapandı, bu bar -2.04σ ile VWAP'e döndü (yön long, ATR=0.00455); stop 2.5×ATR = %1.62 (0.690925), hedef 0.719531 (1.51R), zaman stop'u 16 bar; yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert | rr=1.515",
+      "sizing": "risk",
+      "stop_price": 0.6909250000000001,
+      "symbol": "SUI-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.7195310730315645
+        }
+      ],
+      "trail_giveback_pct": 0.5,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": 1.0,
@@ -13,7 +38,7 @@
       "entry_slippage": 3.4120735808509846,
       "final_target_price": 63007.4989686313,
       "funding": 0.0,
-      "high_water": 61722.0,
+      "high_water": 61810.2,
       "initial_qty": 0.11069176255803104,
       "initial_stop_price": 60761.857142857145,
       "leverage": 1.0,
