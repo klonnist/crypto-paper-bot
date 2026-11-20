@@ -1,46 +1,34 @@
 {
-  "cash": 155.47252592151523,
+  "cash": 162.13981595653345,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-11-20T19:00:00+00:00",
+  "last_processed_bar": "2026-11-20T19:15:00+00:00",
   "model": "vwap_clone",
-  "pending_orders": [],
-  "positions": [
+  "pending_orders": [
     {
       "breakeven_at_r": 1.0,
+      "created_at": "2026-11-20T19:15:00+00:00",
       "direction": "long",
-      "entry_fee": 0.04571772027180702,
-      "entry_price": 0.053906939999999993,
-      "entry_slippage": 0.04154079348671161,
-      "final_target_price": 0.05681429469534896,
-      "funding": 0.0,
-      "high_water": 0.05453,
-      "initial_qty": 1541.974516953139,
-      "initial_stop_price": 0.05289563712578113,
-      "leverage": 10.0,
-      "liq_price": 0.04878578069999999,
-      "low_water": 0.05325,
-      "margin": 8.312312776692185,
-      "notes": "",
-      "opened_at": "2026-11-20T18:15:00+00:00",
-      "partial_done": false,
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": 0.5,
       "partial_tp": {
         "fraction": 0.5,
         "r": 1.5
       },
-      "qty": 1541.974516953139,
-      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=0.0577924 (300 bar), σ=0.000984363; bu bar -4.01σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (0.0528956), hedef VWAP mesafesinin %75'i (0.0568143); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp1 | combo_r=-0.1662 | combo_n=28 | pick=exploit",
-      "stop_price": 0.05289563712578113,
-      "stop_rule": "",
-      "symbol": "DOGE-USDT-SWAP",
+      "reason": "VWAP sapma-dönüş (kaynak kuralları): kümülatif VWAP=62169.6 (300 bar), σ=815.141; bu bar -5.07σ ile bandın dışında kapandı ve kapanış long yönünde döndü; stop 2×0.5σ (57322.1), hedef VWAP mesafesinin %100'i (62169.6); yönetim: breakeven 1R, kısmi %50 @ 1.5R, takip geri verme %50 | arm=vwap_revert_src | combo=band1_tp2 | combo_r=-0.4681 | combo_n=368 | pick=exploit",
+      "sizing": "notional_fraction",
+      "stop_price": 57322.05920044218,
+      "symbol": "BTC-USDT-SWAP",
       "take_profits": [
         {
           "fraction": 1.0,
-          "price": 0.05681429469534896
+          "price": 62169.62903530106
         }
       ],
       "trail_giveback_pct": 0.5,
       "trailing_atr": null
     }
   ],
+  "positions": [],
   "version": 1
 }
