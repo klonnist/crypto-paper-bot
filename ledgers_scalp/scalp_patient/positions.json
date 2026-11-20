@@ -1,9 +1,31 @@
 {
   "cash": 0.0,
   "initial_capital": 10000.0,
-  "last_processed_bar": "2026-11-20T01:15:00+00:00",
+  "last_processed_bar": "2026-11-20T01:30:00+00:00",
   "model": "scalp_patient",
-  "pending_orders": [],
+  "pending_orders": [
+    {
+      "breakeven_at_r": null,
+      "created_at": "2026-11-20T01:30:00+00:00",
+      "direction": "short",
+      "fraction": 1.0,
+      "kind": "open",
+      "notional_fraction": null,
+      "partial_tp": null,
+      "reason": "Açılış aralığı kırılımı: ilk 4 bar [0.4835, 0.4872], kapanış 0.4768 altta (3. bar); hacim 273933 ≥ 1.5× SMA20(102847); engel ölçülü hareket 0.4798 (aralık genişliği 0.0037); stop 3.85% (0.495157), hedef 0.440086 (2.00R), zaman stop'u 100 bar | arm=opening_range_breakout | post_r=nan",
+      "sizing": "risk",
+      "stop_price": 0.4951571428571429,
+      "symbol": "ETHFI-USDT-SWAP",
+      "take_profits": [
+        {
+          "fraction": 1.0,
+          "price": 0.4400857142857142
+        }
+      ],
+      "trail_giveback_pct": null,
+      "trailing_atr": null
+    }
+  ],
   "positions": [
     {
       "breakeven_at_r": null,
@@ -84,7 +106,7 @@
       "initial_stop_price": 3.3255,
       "leverage": 1.0,
       "liq_price": 6.376819995,
-      "low_water": 3.178,
+      "low_water": 3.152,
       "margin": 1401.2330187794134,
       "notes": "",
       "opened_at": "2026-11-20T00:30:00+00:00",
